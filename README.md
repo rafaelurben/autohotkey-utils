@@ -1,6 +1,6 @@
 # AutoHotKey Hotkeys
 
-You can install these scripts without AutoHotKey under [Releases](https://github.com/rafaelurben/autohotkey-utils/releases).
+You can install this script without AutoHotKey with the .exe files found under [Releases](https://github.com/rafaelurben/autohotkey-utils/releases).
 
 ## Instant-Search
 
