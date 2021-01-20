@@ -40,7 +40,7 @@ gg|https://google.com
 
 Modifiers: (can be used together)
 
-- `Shift`: Open URL instead
+- `Shift`: Open URL instead of inserting it.
 - `Ctrl`: Open Input-Window to allow longer shortcuts and to have no time limit.
 
 
