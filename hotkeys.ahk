@@ -11,7 +11,6 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 ;; Initialize
 
 Menu, Controls, Add, Reload hotkey-urls.txt, LoadUrls
-Menu, Controls, Add, Unblock Input, UnblockInput
 Menu, Tray, Add, Controls, :Controls
 
 LoadUrls()
@@ -60,6 +59,7 @@ OpenSearch(engineName, engineUrl)
 UnblockInput()
 {
 	BlockInput, Off
+	Menu, Controls, Delete, Unblock Input
 }
 
 ;; Debug
@@ -142,4 +142,9 @@ Insert::
 
 ;; Soft-Lock (If Run As Admin)
 
-+#l::BlockInput On
++#l::
+{
+	Sleep, 500
+	Menu, Controls, Add, Unblock Input, UnblockInput
+	BlockInput On
+}
