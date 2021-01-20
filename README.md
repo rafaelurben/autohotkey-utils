@@ -10,6 +10,15 @@ Modifiers:
 
 - Shift: Use Google Instead
 
+## URL-Opener
+
+Press Win+O to open the URL from clipboard.
+
+Modifiers: (excluding eachother)
+
+- Shift: Open Input-Window to enter own URL.
+- Ctrl: Open Input-Window to modify URL before opening.
+
 ## URL-Shortcuts
 
 Press Insert and enter a 2-char keycode in 2 seconds to paste a pre-saved url.
@@ -21,7 +30,14 @@ yt|https://youtube.com
 gg|https://google.com
 ```
 
-Modifiers:
+Modifiers: (can be used together)
 
 - Shift: Open URL instead
 - Ctrl: Open Input-Window to allow longer shortcuts and to have no time limit.
+
+
+## Soft Lock
+
+Press Shift+Win+L to disable mouse and keyboard input. (Only works when run as administrator)
+
+Press Win+L or Ctrl+Alt+Delete to exit.

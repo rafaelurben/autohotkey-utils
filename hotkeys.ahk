@@ -44,7 +44,7 @@ Insert::
 	if urls.HasKey(key)
 		Send, % urls[key]
 	Else If key
-		MsgBox, Unknown key: %key%
+		MsgBox, 0, Insert URL, Unknown key: "%key%"
 	Return
 }
 
@@ -54,13 +54,16 @@ Insert::
 {
 	Input, key, L2 T2
 	if urls.HasKey(key)
-		try {
-			Run, % urls[key]
-		} catch e {
-			MsgBox, Can't open url!
+		{
+			url := urls[key]
+			try {
+				Run, %url%
+			} catch e {
+				MsgBox, 0, Opening URL failed, Can't open "%url%"! Is this a valid url?
+			}
 		}
 	Else If key
-		MsgBox, Unknown key: %key%
+		MsgBox, 0, Open URL, Unknown key: "%key%"
 	Return
 }
 
@@ -68,11 +71,11 @@ Insert::
 
 ^Insert::
 {
-	InputBox, key, Paste URL, Please enter shortcode:
+	InputBox, key, Insert URL, Please enter shortcode:
 	if urls.HasKey(key)
 		Send, % urls[key]
 	Else If key
-		MsgBox, Unknown key: %key%
+		MsgBox, 0, Insert URL, Unknown key: "%key%"
 	Return
 }
 
@@ -82,13 +85,16 @@ Insert::
 {
 	InputBox, key, Open URL, Please enter shortcode:
 	if urls.HasKey(key)
-		try {
-			Run, % urls[key]
-		} catch e {
-			MsgBox, Can't open url!
+		{
+			url := urls[key]
+			try {
+				Run, %url%
+			} catch e {
+				MsgBox, 0, Opening URL failed, Can't open "%url%"! Is this a valid url?
+			}
 		}
 	Else If key
-		MsgBox, Unknown key: %key%
+		MsgBox, 0, Open URL, Unknown key: "%key%"
 	Return
 }
 
@@ -109,3 +115,44 @@ Insert::
 		Run, "https://google.com/search?q=%search%"
 	Return
 }
+
+;; Open Clipboard URL
+
+#o::
+{
+	If !ErrorLevel
+		try {
+			Run, %Clipboard%
+		} catch e {
+			MsgBox, 0, Opening URL failed, Can't open "%Clipboard%"! Is this a valid url?
+		}
+	Return
+}
+
+^#o::
+{
+	InputBox, url, Open URL, Please enter your url:, , , , , , , , %Clipboard%
+	If !ErrorLevel
+		try {
+			Run, url
+		} catch e {
+			MsgBox, 0, Opening URL failed, Can't open "%url%"! Is this a valid url?
+		}
+	Return
+}
+
++#o::
+{
+	InputBox, url, Open URL, Please enter your url:, , , , , , , , https://
+	If !ErrorLevel
+		try {
+			Run, url
+		} catch e {
+			MsgBox, 0, Opening URL failed, Can't open "%url%"! Is this a valid url?
+		}
+	Return
+}
+
+;; Soft-Lock (If Run As Admin)
+
++#l::BlockInput On
