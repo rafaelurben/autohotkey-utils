@@ -38,11 +38,12 @@ yt|https://youtube.com
 gg|https://google.com
 ```
 
+If you edit this file while the script is already running, right-click the tray icon and click on `Controls -> Reload hotkey-urls.txt` to update the shortcuts.
+
 Modifiers: (can be used together)
 
 - `Shift`: Open URL instead of inserting it.
 - `Ctrl`: Open Input-Window to allow longer shortcuts and to have no time limit.
-
 
 ## Soft Lock
 
