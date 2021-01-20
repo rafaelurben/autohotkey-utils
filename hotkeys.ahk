@@ -1,14 +1,12 @@
-﻿#NoEnv  ; Recommended for performance and compatibility with future AutoHotkey releases.
-; #Warn  ; Enable warnings to assist with detecting common errors.
-SendMode Input  ; Recommended for new scripts due to its superior speed and reliability.
-SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
-
-; Rafael Urben, 2021
+﻿; Rafael Urben, 2021
 ; ------------------
 ;
 ; https://github.com/rafaelurben/autohotkey-utils
 
-; --------------------------------------------------------------------------------------
+#NoEnv  ; Recommended for performance and compatibility with future AutoHotkey releases.
+; #Warn  ; Enable warnings to assist with detecting common errors.
+SendMode Input  ; Recommended for new scripts due to its superior speed and reliability.
+SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 
 ;; Variables
 ; Urls
@@ -22,18 +20,49 @@ Loop, Read, hotkey-urls.txt
 	urls[key] := val
 }
 
+;; Functions
+
+OpenUrl(url)
+{
+	try {
+		Run, %url%
+	} catch e {
+		MsgBox, 0, Opening URL failed, Can't open "%url%"! Is this a valid url?
+	}
+	return
+}
+
+OpenUrlEditor(defaultUrl)
+{
+	InputBox, url, Open URL, Please enter your url:, , , , , , , , %defaultUrl%
+	If !ErrorLevel
+		OpenUrl(url)
+	return
+}
+
+OpenSearch(engineName, engineUrl)
+{
+	InputBox, search, Search on %engineName%, Please enter your query:
+	url = %engineUrl%%search%
+	If !ErrorLevel
+		OpenUrl(url)
+	return
+}
+
 ;; Debug
 ; Auto-reload
 
 ~^s:: 
-  IfWinActive, %A_ScriptName% 
-    { 
-       SplashTextOn,,,Updated script, 
-       Sleep, 500 
-       SplashTextOff 
-       Reload 
-    } 
-return
+{
+	IfWinActive, %A_ScriptName% 
+		{ 
+			SplashTextOn,,,Updated script, 
+			Sleep, 500 
+			SplashTextOff 
+			Reload 
+		} 
+	return
+}
 
 ;; Urls
 ; Paste Urls (L=2, Input)
@@ -43,9 +72,9 @@ Insert::
 	Input, key, L2 T2
 	if urls.HasKey(key)
 		Send, % urls[key]
-	Else If key
+	else If key
 		MsgBox, 0, Insert URL, Unknown key: "%key%"
-	Return
+	return
 }
 
 ; Open Urls (L=2, Input)
@@ -62,9 +91,9 @@ Insert::
 				MsgBox, 0, Opening URL failed, Can't open "%url%"! Is this a valid url?
 			}
 		}
-	Else If key
+	else If key
 		MsgBox, 0, Open URL, Unknown key: "%key%"
-	Return
+	return
 }
 
 ; Paste urls (InputBox)
@@ -74,9 +103,9 @@ Insert::
 	InputBox, key, Insert URL, Please enter shortcode:
 	if urls.HasKey(key)
 		Send, % urls[key]
-	Else If key
+	else If key
 		MsgBox, 0, Insert URL, Unknown key: "%key%"
-	Return
+	return
 }
 
 ; Open urls (InputBox)
@@ -93,65 +122,24 @@ Insert::
 				MsgBox, 0, Opening URL failed, Can't open "%url%"! Is this a valid url?
 			}
 		}
-	Else If key
+	else If key
 		MsgBox, 0, Open URL, Unknown key: "%key%"
-	Return
+	return
 }
 
 ;; Search
 
-#q::
-{
-	InputBox, search, Search on DuckDuckGo, Please enter your search:
-	If !ErrorLevel
-		Run, "https://duckduckgo.com/?q=%search%"
-	Return
-}
+#q::OpenSearch("DuckDuckGo", "https://duckduckgo.com/?q=")
 
-+#q::
-{
-	InputBox, search, Search on Google, Please enter your search:
-	If !ErrorLevel
-		Run, "https://google.com/search?q=%search%"
-	Return
-}
++#q::OpenSearch("Google", "https://google.com/search?q=")
 
 ;; Open Clipboard URL
 
-#o::
-{
-	If !ErrorLevel
-		try {
-			Run, %Clipboard%
-		} catch e {
-			MsgBox, 0, Opening URL failed, Can't open "%Clipboard%"! Is this a valid url?
-		}
-	Return
-}
+#o::OpenUrl(Clipboard)
 
-^#o::
-{
-	InputBox, url, Open URL, Please enter your url:, , , , , , , , %Clipboard%
-	If !ErrorLevel
-		try {
-			Run, url
-		} catch e {
-			MsgBox, 0, Opening URL failed, Can't open "%url%"! Is this a valid url?
-		}
-	Return
-}
+^#o::OpenUrlEditor(Clipboard)
 
-+#o::
-{
-	InputBox, url, Open URL, Please enter your url:, , , , , , , , https://
-	If !ErrorLevel
-		try {
-			Run, url
-		} catch e {
-			MsgBox, 0, Opening URL failed, Can't open "%url%"! Is this a valid url?
-		}
-	Return
-}
++#o::OpenUrlEditor("https://")
 
 ;; Soft-Lock (If Run As Admin)
 
