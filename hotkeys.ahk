@@ -8,19 +8,26 @@
 SendMode Input  ; Recommended for new scripts due to its superior speed and reliability.
 SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 
-;; Variables
-; Urls
+;; Initialize
 
-urls := {}
-Loop, Read, hotkey-urls.txt
-{
-	row := StrSplit(A_LoopReadLine, "|")
-	key := row[1]
-	val := row[2]
-	urls[key] := val
-}
+Menu, Controls, Add, Reload hotkey-urls.txt, LoadUrls
+Menu, Tray, Add, Controls, :Controls
+
+LoadUrls()
 
 ;; Functions
+
+LoadUrls() 
+{
+	Global urls := {}
+	Loop, Read, hotkey-urls.txt
+		{
+			row := StrSplit(A_LoopReadLine, "|")
+			key := row[1]
+			val := row[2]
+			urls[key] := val
+		}
+}
 
 OpenUrl(url)
 {
@@ -83,14 +90,7 @@ Insert::
 {
 	Input, key, L2 T2
 	if urls.HasKey(key)
-		{
-			url := urls[key]
-			try {
-				Run, %url%
-			} catch e {
-				MsgBox, 0, Opening URL failed, Can't open "%url%"! Is this a valid url?
-			}
-		}
+		OpenUrl(urls[key])
 	else If key
 		MsgBox, 0, Open URL, Unknown key: "%key%"
 	return
@@ -114,14 +114,7 @@ Insert::
 {
 	InputBox, key, Open URL, Please enter shortcode:
 	if urls.HasKey(key)
-		{
-			url := urls[key]
-			try {
-				Run, %url%
-			} catch e {
-				MsgBox, 0, Opening URL failed, Can't open "%url%"! Is this a valid url?
-			}
-		}
+		OpenUrl(urls[key])
 	else If key
 		MsgBox, 0, Open URL, Unknown key: "%key%"
 	return
