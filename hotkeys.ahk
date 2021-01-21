@@ -117,6 +117,7 @@ UrlShortcutsBoxOpen()
 	return
 }
 
+
 ;;;; Instant-Search
 
 InstantSearch(engineName, engineUrl)
@@ -128,15 +129,16 @@ InstantSearch(engineName, engineUrl)
 	return
 }
 
+
 ;;;; Quick-Notes
 
 Global QuickNotesGUITextEdit
 
 QuickNotesQuickCreate()
 {
-	InputBox, note, Create a quick note, Please enter your text:
+	InputBox, note, QuickNote, Please enter a text to create a note:
 	if note
-		FileAppend, %note%, hotkey-notes.txt
+		FileAppend, `n%note%, hotkey-notes.txt
 }
 
 QuickNotesGUISave()
@@ -147,6 +149,14 @@ QuickNotesGUISave()
 	file.Close()
 }
 
+QuickNotesGUIReset()
+{
+	Gui, QuickNotes:Submit
+	file := FileOpen("hotkey-notes.txt", "w")
+	file.Close()
+	QuickNotesGUIOpen()
+}
+
 QuickNotesGUIExit()
 {
 	Gui, QuickNotes:Destroy
@@ -154,20 +164,22 @@ QuickNotesGUIExit()
 
 QuickNotesGUIOpen() 
 {
-	Gui, QuickNotes:New, , Notes
+	Gui, QuickNotes:New, , QuickNotes
 	Gui, QuickNotes:Add, Text, , Edit your notes:
 
 	Gui, QuickNotes:Add, Edit, R20 W500 vQuickNotesGUITextEdit
 	FileRead, FileContent, hotkey-notes.txt
 	GuiControl,, QuickNotesGUITextEdit, %FileContent%
 
-	Menu, FileMenu, Add, &Save`tCtrl+S, QuickNotesGUISave 
+	Menu, FileMenu, Add, &Save`tCtrl+S, QuickNotesGUISave
+	Menu, FileMenu, Add, &Reset`tCtrl+R, QuickNotesGUIReset
 	Menu, FileMenu, Add, E&xit`tCtrl+W, QuickNotesGUIExit
 	Menu, MenuBar, Add, &File, :FileMenu 
 	Gui, QuickNotes:Menu, MenuBar
 
 	Gui, Show
 }
+
 
 ;;;; Soft-Lock (Only works when run As Admin)
 
@@ -186,6 +198,7 @@ SoftLockBlock()
 	Menu, Controls, Check, [SoftLock] Block Input
 	BlockInput On
 }
+
 
 ;;;; Settings
 
