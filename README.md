@@ -18,7 +18,7 @@ Modifiers:
 
 - `Shift`: Use Google Instead
 
-## URL-Opener
+## Clipboard-URL-Opener
 
 Press `Win+O` to open the URL from clipboard.
 

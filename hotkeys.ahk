@@ -11,6 +11,7 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 ;; Initialize
 
 Menu, Controls, Add, Reload hotkey-urls.txt, LoadUrls
+Menu, Tray, Add, Settings, UtilsGUIOpen
 Menu, Tray, Add, Controls, :Controls
 
 LoadUrls()
@@ -56,12 +57,6 @@ OpenSearch(engineName, engineUrl)
 	return
 }
 
-UnblockInput()
-{
-	BlockInput, Off
-	Menu, Controls, Delete, Unblock Input
-}
-
 ;; Debug
 ; Auto-reload
 
@@ -77,7 +72,7 @@ UnblockInput()
 	return
 }
 
-;; Urls
+;; Urls-Shortcuts
 ; Paste Urls (L=2, Input)
 
 Insert::
@@ -132,7 +127,7 @@ Insert::
 
 +#q::OpenSearch("Google", "https://google.com/search?q=")
 
-;; Open Clipboard URL
+;; Clipboard-URL-Opener
 
 #o::OpenUrl(Clipboard)
 
@@ -142,9 +137,50 @@ Insert::
 
 ;; Soft-Lock (If Run As Admin)
 
+UnblockInput()
+{
+	BlockInput, Off
+	Menu, Controls, Delete, Unblock Input
+}
+
 +#l::
 {
 	Sleep, 500
 	Menu, Controls, Add, Unblock Input, UnblockInput
 	BlockInput On
+}
+
+;;;; GUI Editor
+
+Global UtilsGUIShortcutEdit
+
+UtilsGUISave()
+{
+	Gui, Settings:Submit
+	file := FileOpen("hotkey-urls.txt", "w")
+	file.Write(UtilsGUIShortcutEdit)
+	file.Close()
+	LoadUrls()
+}
+
+UtilsGUIExit()
+{
+	Gui, Settings:Destroy
+}
+
+UtilsGUIOpen() 
+{
+	Gui, Settings:New, , Settings
+	Gui, Settings:Add, Text, , Edit URL shortcuts: (Format: "Shortcut|URL" -> one per line)
+
+	Gui, Settings:Add, Edit, R20 W500 vUtilsGUIShortcutEdit
+	FileRead, FileContent, hotkey-urls.txt
+	GuiControl,, UtilsGUIShortcutEdit, %FileContent%
+
+	Menu, FileMenu, Add, &Save`tCtrl+S, UtilsGUISave 
+	Menu, FileMenu, Add, E&xit`tCtrl+W, UtilsGUIExit
+	Menu, MyMenuBar, Add, &File, :FileMenu 
+	Gui, Settings:Menu, MyMenuBar
+
+	Gui, Show
 }
