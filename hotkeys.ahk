@@ -10,25 +10,30 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 
 ;; Initialize
 
-Menu, Controls, Add, Reload hotkey-urls.txt, LoadUrls
-Menu, Tray, Add, Settings, UtilsGUIOpen
+Menu, Controls, Add, [UrlShortcuts] Reload, UrlShortcutsReloadUrls
+Menu, Controls, Add, [SoftLock] Block Input, SoftLockBlock
+Menu, Tray, Add, Settings, SettingsGUIOpen
 Menu, Tray, Add, Controls, :Controls
 
-LoadUrls()
+UrlShortcutsReloadUrls()
 
-;; Functions
+;;;; Debug
+;; Auto-reload
 
-LoadUrls() 
+~^s:: 
 {
-	Global urls := {}
-	Loop, Read, hotkey-urls.txt
-		{
-			row := StrSplit(A_LoopReadLine, "|")
-			key := row[1]
-			val := row[2]
-			urls[key] := val
-		}
+	IfWinActive, %A_ScriptName% 
+		{ 
+			SplashTextOn,,,Updated script, 
+			Sleep, 500 
+			SplashTextOff 
+			Reload 
+		} 
+	return
 }
+
+
+;;;; Functions
 
 OpenUrl(url)
 {
@@ -48,7 +53,73 @@ OpenUrlEditor(defaultUrl)
 	return
 }
 
-OpenSearch(engineName, engineUrl)
+;;;; Url-Shortcuts
+
+Global UrlShortcutsData := {}
+
+UrlShortcutsReloadUrls() 
+{
+	Global UrlShortcutsData := {}
+	Loop, Read, hotkey-urls.txt
+		{
+			row := StrSplit(A_LoopReadLine, "|")
+			key := row[1]
+			val := row[2]
+			UrlShortcutsData[key] := val
+		}
+}
+
+;; Insert Urls (L=2, Input)
+
+UrlShortcutsInsert()
+{
+	Input, key, L2 T2
+	if UrlShortcutsData.HasKey(key)
+		Send, % UrlShortcutsData[key]
+	else If key
+		MsgBox, 0, Insert URL, Unknown shortcut: "%key%"
+	return
+}
+
+;; Open Urls (L=2, Input)
+
+UrlShortcutsOpen()
+{
+	Input, key, L2 T2
+	if UrlShortcutsData.HasKey(key)
+		OpenUrl(UrlShortcutsData[key])
+	else If key
+		MsgBox, 0, Open URL, Unknown shortcut: "%key%"
+	return
+}
+
+;; Insert urls (InputBox)
+
+UrlShortcutsBoxInsert()
+{
+	InputBox, key, Insert URL, Please enter shortcode:
+	if UrlShortcutsData.HasKey(key)
+		Send, % UrlShortcutsData[key]
+	else If key
+		MsgBox, 0, Insert URL, Unknown key: "%key%"
+	return
+}
+
+;; Open urls (InputBox)
+
+UrlShortcutsBoxOpen()
+{
+	InputBox, key, Open URL, Please enter shortcode:
+	if UrlShortcutsData.HasKey(key)
+		OpenUrl(UrlShortcutsData[key])
+	else If key
+		MsgBox, 0, Open URL, Unknown key: "%key%"
+	return
+}
+
+;;;; Instant-Search
+
+InstantSearch(engineName, engineUrl)
 {
 	InputBox, search, Search on %engineName%, Please enter your query:
 	url = %engineUrl%%search%
@@ -57,130 +128,116 @@ OpenSearch(engineName, engineUrl)
 	return
 }
 
-;; Debug
-; Auto-reload
+;;;; Quick-Notes
 
-~^s:: 
+Global QuickNotesGUITextEdit
+
+QuickNotesQuickCreate()
 {
-	IfWinActive, %A_ScriptName% 
-		{ 
-			SplashTextOn,,,Updated script, 
-			Sleep, 500 
-			SplashTextOff 
-			Reload 
-		} 
-	return
+	InputBox, note, Create a quick note, Please enter your text:
+	if note
+		FileAppend, %note%, hotkey-notes.txt
 }
 
-;; Urls-Shortcuts
-; Paste Urls (L=2, Input)
-
-Insert::
+QuickNotesGUISave()
 {
-	Input, key, L2 T2
-	if urls.HasKey(key)
-		Send, % urls[key]
-	else If key
-		MsgBox, 0, Insert URL, Unknown key: "%key%"
-	return
+	Gui, QuickNotes:Submit
+	file := FileOpen("hotkey-notes.txt", "w")
+	file.Write(QuickNotesGUITextEdit)
+	file.Close()
 }
 
-; Open Urls (L=2, Input)
-
-+Insert::
+QuickNotesGUIExit()
 {
-	Input, key, L2 T2
-	if urls.HasKey(key)
-		OpenUrl(urls[key])
-	else If key
-		MsgBox, 0, Open URL, Unknown key: "%key%"
-	return
+	Gui, QuickNotes:Destroy
 }
 
-; Paste urls (InputBox)
-
-^Insert::
+QuickNotesGUIOpen() 
 {
-	InputBox, key, Insert URL, Please enter shortcode:
-	if urls.HasKey(key)
-		Send, % urls[key]
-	else If key
-		MsgBox, 0, Insert URL, Unknown key: "%key%"
-	return
+	Gui, QuickNotes:New, , Notes
+	Gui, QuickNotes:Add, Text, , Edit your notes:
+
+	Gui, QuickNotes:Add, Edit, R20 W500 vQuickNotesGUITextEdit
+	FileRead, FileContent, hotkey-notes.txt
+	GuiControl,, QuickNotesGUITextEdit, %FileContent%
+
+	Menu, FileMenu, Add, &Save`tCtrl+S, QuickNotesGUISave 
+	Menu, FileMenu, Add, E&xit`tCtrl+W, QuickNotesGUIExit
+	Menu, MenuBar, Add, &File, :FileMenu 
+	Gui, QuickNotes:Menu, MenuBar
+
+	Gui, Show
 }
 
-; Open urls (InputBox)
+;;;; Soft-Lock (Only works when run As Admin)
 
-+^Insert::
-{
-	InputBox, key, Open URL, Please enter shortcode:
-	if urls.HasKey(key)
-		OpenUrl(urls[key])
-	else If key
-		MsgBox, 0, Open URL, Unknown key: "%key%"
-	return
-}
-
-;; Search
-
-#q::OpenSearch("DuckDuckGo", "https://duckduckgo.com/?q=")
-
-+#q::OpenSearch("Google", "https://google.com/search?q=")
-
-;; Clipboard-URL-Opener
-
-#o::OpenUrl(Clipboard)
-
-^#o::OpenUrlEditor(Clipboard)
-
-+#o::OpenUrlEditor("https://")
-
-;; Soft-Lock (If Run As Admin)
-
-UnblockInput()
+SoftLockUnBlock()
 {
 	BlockInput, Off
-	Menu, Controls, Delete, Unblock Input
+	Menu, Controls, Delete, [SoftLock] Block Input
+	Menu, Controls, Add, [SoftLock] Block Input, SoftLockBlock
 }
 
-+#l::
+SoftLockBlock()
 {
 	Sleep, 500
-	Menu, Controls, Add, Unblock Input, UnblockInput
+	Menu, Controls, Delete, [SoftLock] Block Input
+	Menu, Controls, Add, [SoftLock] Block Input, SoftLockUnBlock
+	Menu, Controls, Check, [SoftLock] Block Input
 	BlockInput On
 }
 
-;;;; GUI Editor
+;;;; Settings
 
-Global UtilsGUIShortcutEdit
+Global SettingsGUIShortcutEdit
 
-UtilsGUISave()
+SettingsGUISave()
 {
 	Gui, Settings:Submit
 	file := FileOpen("hotkey-urls.txt", "w")
-	file.Write(UtilsGUIShortcutEdit)
+	file.Write(SettingsGUIShortcutEdit)
 	file.Close()
-	LoadUrls()
+	UrlShortcutsReloadUrls()
 }
 
-UtilsGUIExit()
+SettingsGUIExit()
 {
 	Gui, Settings:Destroy
 }
 
-UtilsGUIOpen() 
+SettingsGUIOpen() 
 {
 	Gui, Settings:New, , Settings
 	Gui, Settings:Add, Text, , Edit URL shortcuts: (Format: "Shortcut|URL" -> one per line)
 
-	Gui, Settings:Add, Edit, R20 W500 vUtilsGUIShortcutEdit
+	Gui, Settings:Add, Edit, R20 W500 vSettingsGUIShortcutEdit
 	FileRead, FileContent, hotkey-urls.txt
-	GuiControl,, UtilsGUIShortcutEdit, %FileContent%
+	GuiControl,, SettingsGUIShortcutEdit, %FileContent%
 
-	Menu, FileMenu, Add, &Save`tCtrl+S, UtilsGUISave 
-	Menu, FileMenu, Add, E&xit`tCtrl+W, UtilsGUIExit
-	Menu, MyMenuBar, Add, &File, :FileMenu 
-	Gui, Settings:Menu, MyMenuBar
+	Menu, FileMenu, Add, &Save`tCtrl+S, SettingsGUISave 
+	Menu, FileMenu, Add, E&xit`tCtrl+W, SettingsGUIExit
+	Menu, MenuBar, Add, &File, :FileMenu 
+	Gui, Settings:Menu, MenuBar
 
 	Gui, Show
 }
+
+
+;;;;;;;;;;; Shortcuts
+
+Insert::UrlShortcutsInsert()
++Insert::UrlShortcutsOpen()
+^Insert::UrlShortcutsBoxInsert()
++^Insert::UrlShortcutsBoxOpen()
+
+#q::InstantSearch("DuckDuckGo", "https://duckduckgo.com/?q=")
++#q::InstantSearch("Google", "https://google.com/search?q=")
+
+#o::OpenUrl(Clipboard)
+^#o::OpenUrlEditor(Clipboard)
++#o::OpenUrlEditor("https://")
+
+#n::QuickNotesQuickCreate()
+^#n::QuickNotesGUIOpen()
+
++#l::SoftLockBlock()

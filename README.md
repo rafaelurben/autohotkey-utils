@@ -4,13 +4,14 @@ You can install this script without AutoHotKey using the .exe files found under 
 
 Current Features:
 
-- [Instant Search](#instant-search)
-- [URL-Opener](#url-opener)
-- [URL-Shortcuts](#url-shortcuts)
+- [InstantSearch](#instantsearch)
+- [ClipboardURLOpener](#clipboardurlopener)
+- [URLShortcuts](#urlshortcuts)
+- [QuickNotes](#quicknotes)
 
-- [Soft Lock](#soft-lock)
+- [SoftLock](#softlock)*
 
-## Instant-Search
+## InstantSearch
 
 Press `Win+Q` and enter a query to open in it in DuckDuckGo.
 
@@ -18,7 +19,7 @@ Modifiers:
 
 - `Shift`: Use Google Instead
 
-## Clipboard-URL-Opener
+## ClipboardURLOpener
 
 Press `Win+O` to open the URL from clipboard.
 
@@ -27,7 +28,7 @@ Modifiers: (excluding eachother)
 - `Shift`: Open Input-Window to enter own URL.
 - `Ctrl`: Open Input-Window to modify URL before opening.
 
-## URL-Shortcuts
+## URLShortcuts
 
 Press `Insert` and enter a 2-char keycode in 2 seconds to paste a pre-saved url.
 
@@ -45,8 +46,16 @@ Modifiers: (can be used together)
 - `Shift`: Open URL instead of inserting it.
 - `Ctrl`: Open Input-Window to allow longer shortcuts and to have no time limit.
 
-## Soft Lock
+## QuickNotes
 
-Press `Shift+Win+L` to disable mouse and keyboard input. (Only works when run as administrator)
+Create a quick note with pressing `Win+N`. View and edit your notes with `Ctrl+Win+N`.
+
+## SoftLock*
+
+Press `Shift+Win+L` to disable mouse and keyboard input. 
 
 Press `Win+L` or `Ctrl+Alt+Delete` to exit.
+
+### Notes
+
+\* = Only works when run as administrator
