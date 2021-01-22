@@ -16,6 +16,7 @@ Menu, Tray, Add, Settings, SettingsGUIOpen
 Menu, Tray, Add, Controls, :Controls
 
 UrlShortcutsReloadUrls()
+RegisterKeybinds()
 
 ;;;; Debug
 ;; Auto-reload
@@ -260,19 +261,27 @@ SettingsGUIOpen()
 
 ;;;;;;;;;;; Shortcuts
 
-Insert::UrlShortcutsInsert()
-+Insert::UrlShortcutsOpen()
-^Insert::UrlShortcutsBoxInsert()
-+^Insert::UrlShortcutsBoxOpen()
+RegisterKeybinds()
+{
+	keybinds := { "Insert": "UrlShortcutsInsert"
+				, "+Insert": "UrlShortcutsOpen"
+				, "^Insert": "UrlShortcutsBoxInsert"
+				, "+^Insert": "UrlShortcutsBoxOpen"
+				, "#q": "InstantSearchDuckDuckGo"
+				, "+#q": "InstantSearchGoogle"
+				, "#o": "ClipboardUrlOpenerOpen"
+				, "^#o": "ClipboardUrlOpenerOpenEditor"
+				, "+#o": "OpenUrlEditor"
+				, "#n": "QuickNotesQuickCreate"
+				, "^#n": "QuickNotesGUIOpen"
+				, "+#l": "SoftLockBlock" }
 
-#q::InstantSearchDuckDuckGo()
-+#q::InstantSearchGoogle()
-
-#o::ClipBoardUrlOpenerOpen()
-^#o::ClipBoardUrlOpenerOpenEditor()
-+#o::OpenUrlEditor()
-
-#n::QuickNotesQuickCreate()
-^#n::QuickNotesGUIOpen()
-
-+#l::SoftLockBlock()
+	for key, value in keybinds
+	{
+		try {
+			Hotkey, %key%, %value%, On
+		} catch {
+			MsgBox, 0, Keybind Error, Unknown action for key "%key%": "%value%"
+		}
+	}
+}
