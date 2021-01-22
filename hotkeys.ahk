@@ -45,7 +45,7 @@ OpenUrl(url)
 	return
 }
 
-OpenUrlEditor(defaultUrl)
+OpenUrlEditor(defaultUrl="https://")
 {
 	InputBox, url, Open URL, Please enter your url:, , , , , , , , %defaultUrl%
 	If !ErrorLevel
@@ -127,6 +127,28 @@ InstantSearch(engineName, engineUrl)
 	If !ErrorLevel
 		OpenUrl(url)
 	return
+}
+
+InstantSearchDuckDuckGo()
+{ 
+	InstantSearch("DuckDuckGo", "https://duckduckgo.com/?q=")
+}
+
+InstantSearchGoogle()
+{
+	InstantSearch("Google", "https://google.com/search?q=")
+}
+
+
+;;;; Clipboard-Url-Opener
+
+ClipBoardUrlOpenerOpen() 
+{ 	
+	OpenUrl(Clipboard)
+}
+ClipBoardUrlOpenerOpenEditor() 
+{
+	OpenUrlEditor(Clipboard)
 }
 
 
@@ -243,12 +265,12 @@ Insert::UrlShortcutsInsert()
 ^Insert::UrlShortcutsBoxInsert()
 +^Insert::UrlShortcutsBoxOpen()
 
-#q::InstantSearch("DuckDuckGo", "https://duckduckgo.com/?q=")
-+#q::InstantSearch("Google", "https://google.com/search?q=")
+#q::InstantSearchDuckDuckGo()
++#q::InstantSearchGoogle()
 
-#o::OpenUrl(Clipboard)
-^#o::OpenUrlEditor(Clipboard)
-+#o::OpenUrlEditor("https://")
+#o::ClipBoardUrlOpenerOpen()
+^#o::ClipBoardUrlOpenerOpenEditor()
++#o::OpenUrlEditor()
 
 #n::QuickNotesQuickCreate()
 ^#n::QuickNotesGUIOpen()
