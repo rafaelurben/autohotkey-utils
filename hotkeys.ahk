@@ -220,11 +220,13 @@ QuickNotes_Open() {
 	FileRead, FileContent, hotkey-notes.txt
 	GuiControl,, _QuickNotes_GUITextEdit, %FileContent%
 
-	Menu, FileMenu, Add, &Save`tCtrl+S, _QuickNotes_GUISave
-	Menu, FileMenu, Add, &Reset`tCtrl+R, _QuickNotes_GUIReset
-	Menu, FileMenu, Add, E&xit`tCtrl+W, _QuickNotes_GUIExit
-	Menu, MenuBar, Add, &File, :FileMenu 
-	Gui, QuickNotes:Menu, MenuBar
+	Gui, QuickNotes:Add, Text, , Press Ctrl+S to save and exit or Ctrl+W to exit without saving.`nPress Ctrl+R to reset the file. (irreversible)
+
+	Menu, QuickNotesFileMenu, Add, &Save`tCtrl+S, _QuickNotes_GUISave
+	Menu, QuickNotesFileMenu, Add, &Reset`tCtrl+R, _QuickNotes_GUIReset
+	Menu, QuickNotesFileMenu, Add, E&xit`tCtrl+W, _QuickNotes_GUIExit
+	Menu, QuickNotesMenuBar, Add, &File, :QuickNotesFileMenu 
+	Gui, QuickNotes:Menu, QuickNotesMenuBar
 
 	Gui, Show
 }
@@ -263,20 +265,22 @@ _Settings_GUIExit() {
 Settings_Open() {
 	Gui, Settings:New, , Settings
 
-	Gui, Settings:Add, Text, , Edit URL shortcodes: (Format: "Shortcode|URL" -> one per line)
+	Gui, Settings:Add, Link, , Edit URL shortcodes: <a href="https://github.com/rafaelurben/autohotkey-utils/#create-url-shortcodes">Syntax and Infos</a>
 	Gui, Settings:Add, Edit, R20 W500 v_Settings_GUIUrlShortcutEdit
 	FileRead, FileContent, hotkey-urls.txt
 	GuiControl,, _Settings_GUIUrlShortcutEdit, %FileContent%
 
-	Gui, Settings:Add, Link, , Edit Keybinds: (Format: "Action|Keybind") <a href="https://github.com/rafaelurben/autohotkey-utils/#modify-keybinds">Help</a>
+	Gui, Settings:Add, Link, , Edit Keybinds: <a href="https://github.com/rafaelurben/autohotkey-utils/#modify-keybinds">Syntax and Infos</a>
 	Gui, Settings:Add, Edit, R15 W500 v_Settings_GUIHotkeyEdit
 	FileRead, FileContent, hotkey-keybinds.txt
 	GuiControl,, _Settings_GUIHotkeyEdit, %FileContent%
 
-	Menu, FileMenu, Add, &Save`tCtrl+S, _Settings_GUISave 
-	Menu, FileMenu, Add, E&xit`tCtrl+W, _Settings_GUIExit
-	Menu, MenuBar, Add, &File, :FileMenu 
-	Gui, Settings:Menu, MenuBar
+	Gui, Settings:Add, Text, , Press Ctrl+S to save and reload or Ctrl+W to exit without saving.
+
+	Menu, SettingsFileMenu, Add, &Save`tCtrl+S, _Settings_GUISave 
+	Menu, SettingsFileMenu, Add, E&xit`tCtrl+W, _Settings_GUIExit
+	Menu, SettingsMenuBar, Add, &File, :SettingsFileMenu 
+	Gui, Settings:Menu, SettingsMenuBar
 
 	Gui, Show
 }
