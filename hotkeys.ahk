@@ -99,6 +99,14 @@ _OverwriteFile(filename, content="") {
 	file.Close()
 }
 
+_CloseProcess(name) {
+	try {
+		Process, Close, %name%
+	} catch {
+		MsgBox, 0, Error, Couldn't close process "%name%"
+	}
+}
+
 ;; Public
 
 ReloadFiles() {
@@ -107,6 +115,13 @@ ReloadFiles() {
 
 OpenUrl() {
 	_OpenUrlEditor("https://")
+}
+
+CloseProcess() {
+	InputBox, name, Close Process, Please enter process name:
+	if !ErrorLevel
+		_CloseProcess(name)
+	return
 }
 
 ;;;; Url-Shortcuts
