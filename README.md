@@ -2,71 +2,98 @@
 
 You can install this script without AutoHotKey using the .exe files found under [Releases](https://github.com/rafaelurben/autohotkey-utils/releases). Sorry to all non-Windows-users, but this is a Windows-only thing. :(
 
-Jump to [config](#config).
+Jump to [config](#config). Jump to [important notes](#important-notes).
 
-## Current Features
+## Current Modules
 
 - [InstantSearch](#instantsearch)
 - [QRGenerator](#qrgenerator)
 - [ClipboardURL](#clipboardurl)
-- [URLShortcuts](#urlshortcuts)
+- [UrlShortcuts](#UrlShortcuts)
 - [QuickNotes](#quicknotes)
-
-- [SoftLock](#softlock)*
+- [SoftLock](#softlock)[*](#important-notes)
 
 ### InstantSearch
 
 Enter a query to open it in a search engine.
 
-Default keybinds:
+| Action                   | Description          | Default shortcut |
+| ------------------------ | -------------------- | ---------------- |
+| InstantSearch_DuckDuckGo | Search on DuckDuckGo | `Win+Q`          |
+| InstantSearch_Google     | Search on Google     | `Shift+Win+Q`    |
 
-- `Win+Q`: Search on DuckDuckGo
-- `Shift+Win+Q`: Search on Google
+---
 
 ### QRGenerator
 
-Generate a QRCode from an url or plaintext. If you use a url, please escape the url.
+Generate a QRCode from an url or plaintext. If you use an url, please escape it is passed as the data parameter (see [goqr.me](http://goqr.me/de/api/doc/create-qr-code/)).
 
-Default keybinds:
+| Action                    | Description                         | Default shortcut |
+| ------------------------- | ----------------------------------- | ---------------- |
+| QRGenerator_InputBox      | Open Input-Window to enter text/url | `Ctrl+Win+Q`     |
+| QRGenerator_FromClipboard | Use data in Clipboard               | `Alt+Win+Q`      |
 
-- `Ctrl+Win+Q`: Open Input-Window to enter text/url
-- `Alt+Win+Q`: Use data in Clipboard
+---
 
 ### ClipboardURL
 
 Open the URL from the clipboard directly in your default browser.
 
-Default keybinds:
+| Action                  | Description                                    | Default shortcut |
+| ----------------------- | ---------------------------------------------- | ---------------- |
+| ClipboardURL_Open       | Open Url directly                              | `Win+O`          |
+| ClipboardURL_OpenEditor | Open Input-Window to modify URL before opening | `Ctrl+Win+O`     |
 
-- `Win+O`: Open Url directly
-- `Ctrl+Win+O`: Open Input-Window to modify URL before opening
+---
 
-### URLShortcuts
+### UrlShortcuts
 
 Save URLs to open easily via shortcodes.
 
 This module needs some configuration. (see [here](#create-url-shortcodes))
 
-Default keybinds:
+| Action                 | Description                                                                              | Default shortcut    |
+| ---------------------- | ---------------------------------------------------------------------------------------- | ------------------- |
+| UrlShortcuts_Insert    | Press and enter a 2-char shortcode during a 2-second-timeframe to **paste** url or text. | `Insert`            |
+| UrlShortcuts_Open      | Press and enter a 2-char shortcode during a 2-second-timeframe to **open** url.          | `Shift+Insert`      |
+| UrlShortcuts_BoxInsert | Open Input-Window and enter shortcode to **paste** url or text.                          | `Ctrl+Insert`       |
+| UrlShortcuts_BoxOpen   | Open Input-Window and enter shortcode to **open** url.                                   | `Ctrl+Shift+Insert` |
+| UrlShortcuts_ReloadUrls | Reload hotkey-urls.txt     | - | 
 
-- `Insert`: Press and enter a 2-char shortcode during a 2-second-timeframe to **paste** url or text.
-- `Shift+Insert`: Press and enter a 2-char shortcode during a 2-second-timeframe to **open** url.
-- `Ctrl+Insert`: Open Input-Window and enter shortcode to **paste** url or text.
-- `Ctrl+Shift+Insert`: Open Input-Window and enter shortcode to **open** url.
+---
 
 ### QuickNotes
 
-Create a quick note with pressing `Win+N`. View and edit your notes with `Ctrl+Win+N`.
+Create notes on the fly.
+
+| Action            | Description         | Default shortcut |
+| ----------------- | ------------------- | ---------------- |
+| QuickNotes_Create | Create e new note   | `Win+N`          |
+| QuickNotes_Open   | Edit existing notes | `Ctrl+Win+N`     |
+
+---
 
 ### SoftLock*
 
 Disable mouse and keyboard input via shortcut.
 
-Default keybinds:
-
-- `Shift+Win+L`: Block input
-
 Press `Win+L` or `Ctrl+Alt+Delete` to exit.
+
+| Action         | Description     | Default shortcut |
+| -------------- | --------------- | ---------------- |
+| SoftLock_Block | Block the input | `Shift+Win+L`    |
+
+---
+
+### General actions
+
+| Action                  | Description                     |
+| ----------------------- | ------------------------------- |
+| ReloadFiles             | Reload the script and all files |
+| CloseProcess            | Close a process by name         |
+| Settings_Open           | Open the settings page          |
+
+---
 
 ## Config
 
@@ -74,7 +101,7 @@ You can configurate and change some things in this little "app". You can open th
 
 ### Create URL-Shortcodes
 
-You can modify the shortcodes used for the [UrlShortcuts](#urlshortcuts) module in the file called "hotkey-urls.txt" or in the settings. Use the following syntax: `shortcode|url`
+You can modify the shortcodes used for the [UrlShortcuts](#UrlShortcuts) module in the file called "hotkey-urls.txt" or in the settings. Use the following syntax: `shortcode|url`
 
 Example:
 
@@ -89,7 +116,7 @@ You can modify the keybinds used in this app in the file called "hotkey-keybinds
 
 The keybind syntax can be found [here](https://www.autohotkey.com/docs/Hotkeys.htm#Symbols).
 
-Default keybinds: (hotkey-urls.txt)
+Default hotkey-urls.txt file:
 
 ```txt
 UrlShortcuts_Insert|Insert
@@ -108,14 +135,8 @@ SoftLock_Block|+#l
 OpenUrl|+#o
 ```
 
-Additionally, hotkeys for the following actions can be created:
+## Important notes
 
-- ReloadFiles
-- UrlShortcuts_ReloadUrls
-- Settings_Open
+Modules marked with \* are only available when the script is run with elevated permissions ("as administrator").
 
-## Notes
-
-\* = Only works when run as administrator
-
-PS: All the shortcuts and modifiers shown on this page are working in the default configuration.
+When updating to a newer version, you may need to update the hotkey-keybinds.txt file if you want to use the new features.
