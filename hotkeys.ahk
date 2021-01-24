@@ -18,6 +18,8 @@ UrlShortcuts_BoxInsert|^Insert
 UrlShortcuts_BoxOpen|+^Insert
 InstantSearch_DuckDuckGo|#q
 InstantSearch_Google|+#q
+QRGenerator_InputBox|^#q
+QRGenerator_FromClipboard|!#q
 ClipboardUrl_Open|#o
 ClipboardUrl_OpenEditor|^#o
 QuickNotes_Create|#n
@@ -177,6 +179,27 @@ InstantSearch_Google() {
 }
 
 
+;;;; QR-Generator
+
+_QRGenerator(data) {
+	UrlDownloadToFile, http://api.qrserver.com/v1/create-qr-code/?format=png&size=500x500&data=%data%, hotkey-qrcode.png
+	Gui, Add, Picture, x0 y0 w500 h500, hotkey-qrcode.png
+	Gui, Add, Link, , <a href="http://api.qrserver.com/v1/create-qr-code/?format=svg&size=500x500&data=%data%">Open svg in Browser</a> - <a href="hotkey-qrcode.png">Open Image</a> - <a href="%A_WorkingDir%">Open Folder</a>
+	Gui, Show, Center w500, QRGenerator (via goqr.me)
+}
+
+QRGenerator_InputBox() {
+	InputBox, data, Create a QR-Code, Please enter your text or an escaped url:
+	if !ErrorLevel
+		_QRGenerator(data)
+	return
+}
+
+QRGenerator_FromClipboard() {
+	_QRGenerator(Clipboard)
+}
+
+
 ;;;; Clipboard-Url-Opener
 
 ClipboardUrl_Open() { 	
@@ -297,10 +320,14 @@ _RegisterHotkeys() {
 
 	for function, shortcut in keybinds
 	{
-		try {
-			Hotkey, %shortcut%, %function%, On
-		} catch {
-			MsgBox, 0, Hotkey Error, Unknown shortcut (%shortcut%) or action (%function%).
+		if IsFunc(function) {
+			try {
+				Hotkey, %shortcut%, %function%, On
+			} catch {
+				MsgBox, 0, Hotkey Error, Couldn't create shortcut "%shortcut%" for action "%function%".
+			}
+		} else {
+			MsgBox, 0, Hotkey Error, Unknown action: "%function%".
 		}
 	}
 }
