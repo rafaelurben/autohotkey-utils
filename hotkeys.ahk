@@ -206,6 +206,7 @@ _QRGenerator(data) {
 
 	if !ErrorLevel {
 		Gui, QRGenerator:New
+		Gui, QRGenerator: +AlwaysOnTop
 
 		Gui, QRGenerator:Add, Picture, x0 y0 w500 h500, hotkey-qrcode.png
 		Gui, QRGenerator:Add, Text, , Data: "%data%"
@@ -270,6 +271,7 @@ _QuickNotes_GUIExit() {
 
 QuickNotes_Open() {
 	Gui, QuickNotes:New, , QuickNotes
+	Gui, QuickNotes: +AlwaysOnTop
 	Gui, QuickNotes:Add, Text, , Edit your notes:
 
 	Gui, QuickNotes:Add, Edit, R20 W500 v_QuickNotes_GUITextEdit
@@ -320,6 +322,7 @@ _Settings_GUIExit() {
 
 Settings_Open() {
 	Gui, Settings:New, , Settings
+	Gui, Settings: +AlwaysOnTop
 
 	Gui, Settings:Add, Link, , Edit URL shortcodes: <a href="https://github.com/rafaelurben/autohotkey-utils/#create-url-shortcodes">Syntax and Infos</a>
 	Gui, Settings:Add, Edit, R20 W500 v_Settings_GUIUrlShortcutEdit
