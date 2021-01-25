@@ -107,9 +107,6 @@ _CloseProcess(name) {
 	}
 }
 
-_CloseGUI() {
-	Gui, Destroy
-}
 
 ;; Public
 
@@ -200,19 +197,25 @@ InstantSearch_Google() {
 
 ;;;; QR-Generator
 
+_QRGenerator_GUIExit() {
+	Gui, QRGenerator:Destroy
+}
+
 _QRGenerator(data) {
 	UrlDownloadToFile, http://api.qrserver.com/v1/create-qr-code/?format=png&size=500x500&data=%data%, hotkey-qrcode.png
 
 	if !ErrorLevel {
-		Gui, Add, Picture, x0 y0 w500 h500, hotkey-qrcode.png
-		Gui, Add, Text, , Data: "%data%"
-		Gui, Add, Link, , <a href="http://api.qrserver.com/v1/create-qr-code/?format=svg&size=500x500&data=%data%">Open svg in Browser</a> - <a href="hotkey-qrcode.png">Open Image</a> - <a href="%A_WorkingDir%">Open Folder</a>
+		Gui, QRGenerator:New
 
-		Menu, QRGeneratorFileMenu, Add, E&xit`tCtrl+W, _CloseGUI
+		Gui, QRGenerator:Add, Picture, x0 y0 w500 h500, hotkey-qrcode.png
+		Gui, QRGenerator:Add, Text, , Data: "%data%"
+		Gui, QRGenerator:Add, Link, , <a href="http://api.qrserver.com/v1/create-qr-code/?format=svg&size=500x500&data=%data%">Open svg in Browser</a> - <a href="hotkey-qrcode.png">Open Image</a> - <a href="%A_WorkingDir%">Open Folder</a>
+
+		Menu, QRGeneratorFileMenu, Add, E&xit`tCtrl+W, _QRGenerator_GUIExit
 		Menu, QRGeneratorMenuBar, Add, &File, :QRGeneratorFileMenu 
-		Gui, Menu, QRGeneratorMenuBar
+		Gui, QRGenerator:Menu, QRGeneratorMenuBar
 		
-		Gui, Show, Center w500, QRGenerator (via goqr.me)
+		Gui, QRGenerator:Show, Center w500, QRGenerator (via goqr.me)
 	} else {
 		MsgBox, 0, QRGenerator Error, An error occured
 	}
