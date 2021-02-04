@@ -26,7 +26,7 @@ Enter a query to open it in a search engine.
 
 ### QRGenerator
 
-Generate a QRCode from any text. 
+Generate a QRCode from any text.
 
 Note: Please use the clipboard action if you need to use multiline data.
 
