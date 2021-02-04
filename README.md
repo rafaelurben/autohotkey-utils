@@ -52,13 +52,13 @@ Save URLs to open easily via shortcodes.
 
 This module needs some configuration. (see [here](#create-url-shortcodes))
 
-| Action                 | Description                                                                              | Default shortcut    |
-| ---------------------- | ---------------------------------------------------------------------------------------- | ------------------- |
-| UrlShortcuts_Insert    | Press and enter a 2-char shortcode during a 2-second-timeframe to **paste** url or text. | `Insert`            |
-| UrlShortcuts_Open      | Press and enter a 2-char shortcode during a 2-second-timeframe to **open** url.          | `Shift+Insert`      |
-| UrlShortcuts_BoxInsert | Open Input-Window and enter shortcode to **paste** url or text.                          | `Ctrl+Insert`       |
-| UrlShortcuts_BoxOpen   | Open Input-Window and enter shortcode to **open** url.                                   | `Ctrl+Shift+Insert` |
-| UrlShortcuts_ReloadUrls | Reload hotkey-urls.txt     | - | 
+| Action                  | Description                                                                              | Default shortcut    |
+| ----------------------- | ---------------------------------------------------------------------------------------- | ------------------- |
+| UrlShortcuts_Insert     | Press and enter a 2-char shortcode during a 2-second-timeframe to **paste** url or text. | `Insert`            |
+| UrlShortcuts_Open       | Press and enter a 2-char shortcode during a 2-second-timeframe to **open** url.          | `Shift+Insert`      |
+| UrlShortcuts_BoxInsert  | Open Input-Window and enter shortcode to **paste** url or text.                          | `Ctrl+Insert`       |
+| UrlShortcuts_BoxOpen    | Open Input-Window and enter shortcode to **open** url.                                   | `Ctrl+Shift+Insert` |
+| UrlShortcuts_ReloadUrls | Reload hotkey-urls.txt                                                                   | -                   |
 
 ---
 
@@ -87,11 +87,11 @@ Press `Win+L` or `Ctrl+Alt+Delete` to exit.
 
 ### General actions
 
-| Action                  | Description                     |
-| ----------------------- | ------------------------------- |
-| ReloadFiles             | Reload the script and all files |
-| CloseProcess            | Close a process by name         |
-| Settings_Open           | Open the settings page          |
+| Action        | Description                     |
+| ------------- | ------------------------------- |
+| ReloadFiles   | Reload the script and all files |
+| CloseProcess  | Close a process by name         |
+| Settings_Open | Open the settings page          |
 
 ---
 
@@ -103,6 +103,8 @@ You can configurate and change some things in this little "app". You can open th
 
 You can modify the shortcodes used for the [UrlShortcuts](#UrlShortcuts) module in the file called "hotkey-urls.txt" or in the settings. Use the following syntax: `shortcode|url`
 
+**ProTip**: You can also enter a file path or command to be executed instead of an url!
+
 Example:
 
 ```txt
@@ -110,11 +112,37 @@ gg|https://google.com
 yt|https://youtube.com
 ```
 
+### Create Hotstrings
+
+Hotstrings automatically replaces certain strings while you're typing. E.g. you type "btw" and an ending character ("-()[]{}:;'"/\,.?!\`n \`t") and btw automatically gets replaced with "by the way".
+
+You can create hotstrings in the file called "hotkey-hotstrings.txt". Use the following syntax: `hotstring|replacement`
+
+The hotstring syntax can be found [here](https://www.autohotkey.com/docs/Hotstrings.htm#Options). Note: Replace "::" between hotstring and replacement with "|"!
+
+Example:
+
+```txt
+:o:@gm|@gmail.com
+::btw|by the way
+:*:hi|hello
+```
+
+Common options:
+
+| Option | Behaviour                                               |
+| ------ | ------------------------------------------------------- |
+| o      | Automatically remove ending character after replacement |
+| ?      | Allow hotstring to be IN a word                         |
+| *      | Don't require ending character                          |
+
+---
+
 ### Modify keybinds
 
 You can modify the keybinds used in this app in the file called "hotkey-keybinds.txt" or in the settings. Use the following syntax: `action|keybind`
 
-The keybind syntax can be found [here](https://www.autohotkey.com/docs/Hotkeys.htm#Symbols).
+The keybind syntax can be found [here](https://www.autohotkey.com/docs/Hotkeys.htm#Symbols), all actions are listed in the tables on this page.
 
 Default hotkey-urls.txt file:
 

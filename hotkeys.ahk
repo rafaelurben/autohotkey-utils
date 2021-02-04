@@ -1,4 +1,4 @@
-; Rafael Urben, 2021
+﻿; Rafael Urben, 2021
 ; ------------------
 ;
 ; https://github.com/rafaelurben/autohotkey-utils
@@ -411,9 +411,9 @@ _RegisterHotstrings() {
 	for key, value in hostrings
 	{
 		try {
-			Hotstring(%key%, %value%, On)
+			Hotstring(key, value, On)
 		} catch {
-			MsgBox, 0, Hotstring Error, Couldn't add Hostring! (%key%) -> (%value%).
+			MsgBox, 0, Hotstring Error, Invalid hostring: ("%key%" -> "%value%").
 		}
 	}
 }
