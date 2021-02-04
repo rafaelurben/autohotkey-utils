@@ -10,7 +10,7 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 
 ;; Variables
 
-Global defaultkeybinds :=
+Global _DEFAULTKEYBINDFILE :=
 (   
 "UrlShortcuts_Insert|Insert
 UrlShortcuts_Open|+Insert
@@ -28,11 +28,15 @@ SoftLock_Block|+#l
 OpenUrl|+#o"
 )
 
-Global _UrlShortcuts_Data
+Global _DEFAULTSETTINGS := {  "SEARCHENGINE1": "DuckDuckGo|https://duckduckgo.com/?q="
+  							, "SEARCHENGINE2": "Google|https://google.com/search?q="
+							, "SEARCHENGINE3": "Wikipedia|https://en.wikipedia.org/wiki/Special:Search?search="  }
+
 Global _QuickNotes_GUITextEdit
 Global _Settings_GUIUrlShortcutEdit
 Global _Settings_GUIHotkeyEdit
-
+Global _Settings_GUIHotstringEdit
+Global _Settings_GUISettingsEdit
 
 ;; Initialize
 
@@ -41,7 +45,9 @@ Menu, Controls, Add, [SoftLock] Block Input, SoftLock_Block
 Menu, Tray, Add, Settings, Settings_Open
 Menu, Tray, Add, Controls, :Controls
 
-UrlShortcuts_ReloadUrls()
+Global _UrlShortcuts_Data := _LoadDictFromFile("hotkey-urls.txt", "|")
+Global _Settings_Data := _LoadDictFromFile("hotkey-settings.txt", "||")
+
 _RegisterHotkeys()
 _RegisterHotstrings()
 
@@ -79,6 +85,13 @@ _OpenUrlEditor(defaultUrl) {
 	If !ErrorLevel
 		_OpenUrl(url)
 	return
+}
+
+_GetSetting(key) {
+	if _Settings_Data.HasKey(key) 
+		return _Settings_Data[key]
+	else 
+		return _DEFAULTSETTINGS[key]
 }
 
 _LoadDictFromFile(filename, seperator="|") {
@@ -147,10 +160,6 @@ CloseProcess() {
 
 ;;;; Url-Shortcuts
 
-UrlShortcuts_ReloadUrls()  {
-	Global _UrlShortcuts_Data := _LoadDictFromFile("hotkey-urls.txt")
-}
-
 ;; Insert Urls (L=2, Input)
 
 UrlShortcuts_Insert() {
@@ -198,8 +207,11 @@ UrlShortcuts_BoxOpen() {
 
 ;;;; Instant-Search
 
-_InstantSearch(engineName, engineUrl) {
-	InputBox, search, Search on %engineName%, Please enter your query:
+_InstantSearch(engineName, engineUrl, fromclipboard=false) {
+	if fromclipboard
+		search := Clipboard
+	else
+		InputBox, search, Search on %engineName%, Please enter your query:
 	search := _UrlEncode(search)
 	url = %engineUrl%%search%
 	If !ErrorLevel
@@ -207,28 +219,35 @@ _InstantSearch(engineName, engineUrl) {
 	return
 }
 
-_InstantSearch_Clipboard(engineUrl) {
-	search := _UrlEncode(Clipboard)
-	url = %engineUrl%%search%
-	If !ErrorLevel
-		_OpenUrl(url)
-	return
+_InstantSearch_FromSetting(key, fromclipboard=false) {
+	row := StrSplit(_GetSetting(key), "|")
+	name := row[1]
+	url := row[2]
+	_InstantSearch(name, url, fromclipboard)
 }
 
-InstantSearch_DuckDuckGo() { 
-	_InstantSearch("DuckDuckGo", "https://duckduckgo.com/?q=")
+InstantSearch_1() { 
+	_InstantSearch_FromSetting("SEARCHENGINE1") 
 }
 
-InstantSearch_Clipboard_DuckDuckGo() { 
-	_InstantSearch_Clipboard("https://duckduckgo.com/?q=")
+InstantSearch_2() {
+	_InstantSearch_FromSetting("SEARCHENGINE2")
 }
 
-InstantSearch_Google() {
-	_InstantSearch("Google", "https://google.com/search?q=")
+InstantSearch_3() {
+	_InstantSearch_FromSetting("SEARCHENGINE3")
 }
 
-InstantSearch_Clipboard_Google() {
-	_InstantSearch_Clipboard("https://google.com/search?q=")
+InstantSearch_1_Clipboard() { 
+	_InstantSearch_FromSetting("SEARCHENGINE1", fromclipboard=true) 
+}
+
+InstantSearch_2_Clipboard() {
+	_InstantSearch_FromSetting("SEARCHENGINE2", fromclipboard=true)
+}
+
+InstantSearch_3_Clipboard() {
+	_InstantSearch_FromSetting("SEARCHENGINE3", fromclipboard=true)
 }
 
 ;;;; QR-Generator
@@ -350,6 +369,8 @@ _Settings_GUISave() {
 	Gui, Settings:Submit
 	_OverwriteFile("hotkey-urls.txt", _Settings_GUIUrlShortcutEdit)
 	_OverwriteFile("hotkey-keybinds.txt", _Settings_GUIHotkeyEdit)
+	_OverwriteFile("hotkey-hotstrings.txt", _Settings_GUIHotstringEdit)
+	_OverwriteFile("hotkey-settings.txt", _Settings_GUISettingsEdit)
 	Reload
 }
 
@@ -360,9 +381,10 @@ _Settings_GUIExit() {
 Settings_Open() {
 	Gui, Settings:New, , Settings
 	Gui, Settings: +AlwaysOnTop
+	
 
-	Gui, Settings:Add, Link, , Edit URL shortcodes: <a href="https://github.com/rafaelurben/autohotkey-utils/#create-url-shortcodes">Syntax and Infos</a>
-	Gui, Settings:Add, Edit, R20 W500 v_Settings_GUIUrlShortcutEdit
+	Gui, Settings:Add, Link, Y5 X5, Edit URL shortcodes: <a href="https://github.com/rafaelurben/autohotkey-utils/#create-url-shortcodes">Syntax and Infos</a>
+	Gui, Settings:Add, Edit, R15 W500 v_Settings_GUIUrlShortcutEdit
 	FileRead, FileContent, hotkey-urls.txt
 	GuiControl,, _Settings_GUIUrlShortcutEdit, %FileContent%
 
@@ -372,6 +394,19 @@ Settings_Open() {
 	GuiControl,, _Settings_GUIHotkeyEdit, %FileContent%
 
 	Gui, Settings:Add, Text, , Press Ctrl+S to save and reload or Ctrl+W to exit without saving.
+
+	Gui, Settings:Add, Link, Y5 X515 , Edit Hotstrings: <a href="https://github.com/rafaelurben/autohotkey-utils/#create-hotstrings">Syntax and Infos</a>
+	Gui, Settings:Add, Edit, R15 W500 v_Settings_GUIHotstringEdit
+	FileRead, FileContent, hotkey-hotstrings.txt
+	GuiControl,, _Settings_GUIHotstringEdit, %FileContent%
+
+	Gui, Settings:Add, Link, , Edit Settings: <a href="https://github.com/rafaelurben/autohotkey-utils/#settings">Syntax and Infos</a>
+	Gui, Settings:Add, Edit, R15 W500 v_Settings_GUISettingsEdit
+	FileRead, FileContent, hotkey-settings.txt
+	GuiControl,, _Settings_GUISettingsEdit, %FileContent%
+
+	Gui, Settings:Add, Link, , <a href="%A_WorkingDir%">Open Folder</a> (Please do NOT edit files while the settings are opened!)
+
 
 	Menu, SettingsFileMenu, Add, &Save`tCtrl+S, _Settings_GUISave 
 	Menu, SettingsFileMenu, Add, E&xit`tCtrl+W, _Settings_GUIExit
@@ -386,7 +421,7 @@ Settings_Open() {
 
 _RegisterHotkeys() {
 	if !FileExist("hotkey-keybinds.txt") {
-		_OverwriteFile("hotkey-keybinds.txt", defaultkeybinds)
+		_OverwriteFile("hotkey-keybinds.txt", _DEFAULTKEYBINDFILE)
 	}
 
 	keybinds := _LoadDictFromFile("hotkey-keybinds.txt")
@@ -394,10 +429,12 @@ _RegisterHotkeys() {
 	for function, shortcut in keybinds
 	{
 		if IsFunc(function) {
-			try {
-				Hotkey, %shortcut%, %function%, On
-			} catch {
-				MsgBox, 0, Hotkey Error, Couldn't create shortcut "%shortcut%" for action "%function%".
+			if (shortcut != "") {
+				try {
+					Hotkey, %shortcut%, %function%, On
+				} catch {
+					MsgBox, 0, Hotkey Error, Couldn't create shortcut "%shortcut%" for action "%function%".
+				}
 			}
 		} else {
 			MsgBox, 0, Hotkey Error, Unknown action: "%function%".
@@ -406,9 +443,9 @@ _RegisterHotkeys() {
 }
 
 _RegisterHotstrings() {
-	hostrings := _LoadDictFromFile("hotkey-hotstrings.txt")
+	hotstrings := _LoadDictFromFile("hotkey-hotstrings.txt")
 
-	for key, value in hostrings
+	for key, value in hotstrings
 	{
 		try {
 			Hotstring(key, value, On)

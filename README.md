@@ -17,10 +17,16 @@ Jump to [config](#config). Jump to [important notes](#important-notes).
 
 Enter a query to open it in a search engine.
 
-| Action                   | Description          | Default shortcut |
-| ------------------------ | -------------------- | ---------------- |
-| InstantSearch_DuckDuckGo | Search on DuckDuckGo | `Win+Q`          |
-| InstantSearch_Google     | Search on Google     | `Shift+Win+Q`    |
+You can modify the used search engines via [settings](#settings). Settings format: `SEARCHENGINE?||EngineName|EngineUrl` (where ? in [1,2,3])
+
+| Action                    | Description                         | Default shortcut |
+| ------------------------- | ----------------------------------- | ---------------- |
+| InstantSearch_1           | Search on DuckDuckGo                | `Win+Q`          |
+| InstantSearch_2           | Search on Google                    | `Shift+Win+Q`    |
+| InstantSearch_3           | Search on Wikipedia                 | -                |
+| InstantSearch_1_Clipboard | Search on DuckDuckGo from Clipboard | -                |
+| InstantSearch_2_Clipboard | Search on Google from Clipboard     | -                |
+| InstantSearch_3_Clipboard | Search on Wikipedia from Clipboard  | -                |
 
 ---
 
@@ -56,13 +62,12 @@ Save URLs to open easily via shortcodes.
 
 This module needs some configuration. (see [here](#create-url-shortcodes))
 
-| Action                  | Description                                                                              | Default shortcut    |
-| ----------------------- | ---------------------------------------------------------------------------------------- | ------------------- |
-| UrlShortcuts_Insert     | Press and enter a 2-char shortcode during a 2-second-timeframe to **paste** url or text. | `Insert`            |
-| UrlShortcuts_Open       | Press and enter a 2-char shortcode during a 2-second-timeframe to **open** url.          | `Shift+Insert`      |
-| UrlShortcuts_BoxInsert  | Open Input-Window and enter shortcode to **paste** url or text.                          | `Ctrl+Insert`       |
-| UrlShortcuts_BoxOpen    | Open Input-Window and enter shortcode to **open** url.                                   | `Ctrl+Shift+Insert` |
-| UrlShortcuts_ReloadUrls | Reload the url file                                                                      | -                   |
+| Action                 | Description                                                                              | Default shortcut    |
+| ---------------------- | ---------------------------------------------------------------------------------------- | ------------------- |
+| UrlShortcuts_Insert    | Press and enter a 2-char shortcode during a 2-second-timeframe to **paste** url or text. | `Insert`            |
+| UrlShortcuts_Open      | Press and enter a 2-char shortcode during a 2-second-timeframe to **open** url.          | `Shift+Insert`      |
+| UrlShortcuts_BoxInsert | Open Input-Window and enter shortcode to **paste** url or text.                          | `Ctrl+Insert`       |
+| UrlShortcuts_BoxOpen   | Open Input-Window and enter shortcode to **open** url.                                   | `Ctrl+Shift+Insert` |
 
 ---
 
@@ -99,17 +104,20 @@ This module needs some configuration. (see [here](#create-hostrings))
 
 ### General actions
 
-| Action        | Description                     |
-| ------------- | ------------------------------- |
-| ReloadFiles   | Reload the script and all files |
-| CloseProcess  | Close a process by name         |
-| Settings_Open | Open the settings page          |
+| Action        | Description                     | Default shortcut |
+| ------------- | ------------------------------- | ---------------- |
+| CloseProcess  | Close a process by name         |                  |
+| ReloadFiles   | Reload the script and all files | `Ctrl+Win+i`     |
+| Settings_Open | Open the settings page          | `Shift+Win+i`    |
 
 ---
 
 ## Config
 
-You can configurate and change some things in this little "app". You can open the settings via right click on the tray icon -> Settings.
+You can configurate and change some things in this little "app". You can open the settings via right click on the tray icon -> Settings or via the defined keybind (default: `Shift+Win+i`).
+
+You can also edit the settings in their corresponding files, but don't forget to reload afterwards if you edit the files directly. (default: `Ctrl+Win+i`) 
+If you edit them in the settings, this is automatically done for you after saving.
 
 ### Create URL-Shortcodes
 
@@ -161,8 +169,12 @@ UrlShortcuts_Insert|Insert
 UrlShortcuts_Open|+Insert
 UrlShortcuts_BoxInsert|^Insert
 UrlShortcuts_BoxOpen|+^Insert
-InstantSearch_DuckDuckGo|#q
-InstantSearch_Google|+#q
+InstantSearch_1|#q
+InstantSearch_2|+#q
+InstantSearch_3|
+InstantSearch_1_Clipboard|
+InstantSearch_2_Clipboard|
+InstantSearch_3_Clipboard|
 QRGenerator_InputBox|^#q
 QRGenerator_FromClipboard|!#q
 ClipboardUrl_Open|#o
@@ -171,6 +183,23 @@ QuickNotes_Create|#n
 QuickNotes_Open|^#n
 SoftLock_Block|+#l
 OpenUrl|+#o
+CloseProcess|
+ReloadFiles|^#i
+Settings_Open|+#i
+```
+
+### Settings
+
+Some things like the search engines can be changed via settings. These are found in the settings page or the file called "hotkey-settings.txt". Use the following format: `Key||Value` Note: Use "||" here!
+
+Note: If the keys are not present in the file, the default values are used.
+
+Default:
+
+```txt
+SEARCHENGINE_1||DuckDuckGo|https://duckduckgo.com/?q
+SEARCHENGINE_2||Google|https://google.com/search?q=
+SEARCHENGINE_3||Wikipedia|https://en.wikipedia.org/wiki/Special:Search?search=
 ```
 
 ## Important notes
