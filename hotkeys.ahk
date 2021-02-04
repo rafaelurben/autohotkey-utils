@@ -1,4 +1,4 @@
-﻿; Rafael Urben, 2021
+; Rafael Urben, 2021
 ; ------------------
 ;
 ; https://github.com/rafaelurben/autohotkey-utils
@@ -107,6 +107,26 @@ _CloseProcess(name) {
 	}
 }
 
+_UrlEncode(String)
+{
+	OldFormat := A_FormatInteger
+	SetFormat, Integer, H
+
+	Loop, Parse, String
+	{
+		if A_LoopField is alnum
+		{
+			Out .= A_LoopField
+			continue
+		}
+		Hex := SubStr( Asc( A_LoopField ), 3 )
+		Out .= "%" . ( StrLen( Hex ) = 1 ? "0" . Hex : Hex )
+	}
+
+	SetFormat, Integer, %OldFormat%
+
+	return Out
+}
 
 ;; Public
 
@@ -180,6 +200,7 @@ UrlShortcuts_BoxOpen() {
 
 _InstantSearch(engineName, engineUrl) {
 	InputBox, search, Search on %engineName%, Please enter your query:
+	search := _UrlEncode(search)
 	url = %engineUrl%%search%
 	If !ErrorLevel
 		_OpenUrl(url)
@@ -202,15 +223,16 @@ _QRGenerator_GUIExit() {
 }
 
 _QRGenerator(data) {
-	UrlDownloadToFile, http://api.qrserver.com/v1/create-qr-code/?format=png&size=500x500&data=%data%, hotkey-qrcode.png
+	newdata := _UrlEncode(data)
+	UrlDownloadToFile, http://api.qrserver.com/v1/create-qr-code/?format=png&size=500x500&data=%newdata%, hotkey-qrcode.png
 
 	if !ErrorLevel {
 		Gui, QRGenerator:New
-		Gui, QRGenerator: +AlwaysOnTop
+		Gui, QRGenerator: +AlwaysOnTop +Resize -MaximizeBox
 
 		Gui, QRGenerator:Add, Picture, x0 y0 w500 h500, hotkey-qrcode.png
+		Gui, QRGenerator:Add, Link, , <a href="http://api.qrserver.com/v1/create-qr-code/?format=svg&size=500x500&data=%newdata%">Open svg in Browser</a> - <a href="hotkey-qrcode.png">Open Image</a> - <a href="%A_WorkingDir%">Open Folder</a>
 		Gui, QRGenerator:Add, Text, , Data: "%data%"
-		Gui, QRGenerator:Add, Link, , <a href="http://api.qrserver.com/v1/create-qr-code/?format=svg&size=500x500&data=%data%">Open svg in Browser</a> - <a href="hotkey-qrcode.png">Open Image</a> - <a href="%A_WorkingDir%">Open Folder</a>
 
 		Menu, QRGeneratorFileMenu, Add, E&xit`tCtrl+W, _QRGenerator_GUIExit
 		Menu, QRGeneratorMenuBar, Add, &File, :QRGeneratorFileMenu 
@@ -223,7 +245,7 @@ _QRGenerator(data) {
 }
 
 QRGenerator_InputBox() {
-	InputBox, data, Create a QR-Code, Please enter your text or an escaped url:
+	InputBox, data, Create a QR-Code, Please enter your data:
 	if !ErrorLevel
 		_QRGenerator(data)
 	return
