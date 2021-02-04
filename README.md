@@ -2,6 +2,8 @@
 
 You can install this script without AutoHotKey using the .exe files found under [Releases](https://github.com/rafaelurben/autohotkey-utils/releases). Sorry to all non-Windows-users, but this is a Windows-only thing. :(
 
+Note: Windows may warn you that this script is insecure, but you can ignore this warning as long as you download the exe file from this repository.
+
 Jump to [config](#config). Jump to [important notes](#important-notes).
 
 ## Current Modules
