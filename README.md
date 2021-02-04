@@ -26,7 +26,9 @@ Enter a query to open it in a search engine.
 
 ### QRGenerator
 
-Generate a QRCode from an url or plaintext. If you use an url, please escape it is passed as the data parameter (see [goqr.me](http://goqr.me/de/api/doc/create-qr-code/)).
+Generate a QRCode from any text. 
+
+Note: Please use the clipboard action if you need to use multiline data.
 
 | Action                    | Description                         | Default shortcut |
 | ------------------------- | ----------------------------------- | ---------------- |
@@ -50,6 +52,8 @@ Open the URL from the clipboard directly in your default browser.
 
 Save URLs to open easily via shortcodes.
 
+**ProTip**: You can also enter a file path or command to be executed instead of an url!
+
 This module needs some configuration. (see [here](#create-url-shortcodes))
 
 | Action                  | Description                                                                              | Default shortcut    |
@@ -58,18 +62,20 @@ This module needs some configuration. (see [here](#create-url-shortcodes))
 | UrlShortcuts_Open       | Press and enter a 2-char shortcode during a 2-second-timeframe to **open** url.          | `Shift+Insert`      |
 | UrlShortcuts_BoxInsert  | Open Input-Window and enter shortcode to **paste** url or text.                          | `Ctrl+Insert`       |
 | UrlShortcuts_BoxOpen    | Open Input-Window and enter shortcode to **open** url.                                   | `Ctrl+Shift+Insert` |
-| UrlShortcuts_ReloadUrls | Reload hotkey-urls.txt                                                                   | -                   |
+| UrlShortcuts_ReloadUrls | Reload the url file                                                                      | -                   |
 
 ---
 
 ### QuickNotes
 
-Create notes on the fly.
+Create notes on the fly or paste your clipboard for later use.
 
-| Action            | Description         | Default shortcut |
-| ----------------- | ------------------- | ---------------- |
-| QuickNotes_Create | Create e new note   | `Win+N`          |
-| QuickNotes_Open   | Edit existing notes | `Ctrl+Win+N`     |
+Note: Please use the open action if you need to enter multiple lines.
+
+| Action            | Description                  | Default shortcut |
+| ----------------- | ---------------------------- | ---------------- |
+| QuickNotes_Create | Create e new note            | `Win+N`          |
+| QuickNotes_Open   | View and edit existing notes | `Ctrl+Win+N`     |
 
 ---
 
@@ -82,6 +88,12 @@ Press `Win+L` or `Ctrl+Alt+Delete` to exit.
 | Action         | Description     | Default shortcut |
 | -------------- | --------------- | ---------------- |
 | SoftLock_Block | Block the input | `Shift+Win+L`    |
+
+---
+
+### Hotstrings
+
+This module needs some configuration. (see [here](#create-hostrings))
 
 ---
 
@@ -102,8 +114,6 @@ You can configurate and change some things in this little "app". You can open th
 ### Create URL-Shortcodes
 
 You can modify the shortcodes used for the [UrlShortcuts](#UrlShortcuts) module in the file called "hotkey-urls.txt" or in the settings. Use the following syntax: `shortcode|url`
-
-**ProTip**: You can also enter a file path or command to be executed instead of an url!
 
 Example:
 
@@ -144,7 +154,7 @@ You can modify the keybinds used in this app in the file called "hotkey-keybinds
 
 The keybind syntax can be found [here](https://www.autohotkey.com/docs/Hotkeys.htm#Symbols), all actions are listed in the tables on this page.
 
-Default hotkey-urls.txt file:
+Default:
 
 ```txt
 UrlShortcuts_Insert|Insert
