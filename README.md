@@ -9,7 +9,7 @@ Jump to [config](#config). Jump to [important notes](#important-notes).
 - [InstantSearch](#instantsearch)
 - [QRGenerator](#qrgenerator)
 - [ClipboardURL](#clipboardurl)
-- [UrlShortcuts](#UrlShortcuts)
+- [UrlShortcuts](#urlshortcuts)
 - [QuickNotes](#quicknotes)
 - [SoftLock](#softlock)[*](#important-notes)
 
