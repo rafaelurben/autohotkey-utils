@@ -10,6 +10,8 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 
 ;; Variables
 
+Global CurrentVersion := "v2.1"
+
 Global _DEFAULTKEYBINDFILE :=
 (   
 "UrlShortcuts_Insert|Insert
@@ -43,6 +45,7 @@ Global _Settings_GUISettingsEdit
 Menu, Controls, Add, Reload files, ReloadFiles
 Menu, Controls, Add, [SoftLock] Block Input, SoftLock_Block
 Menu, Tray, Add, Settings, Settings_Open
+Menu, Tray, Add, Check for updates, CheckForUpdate
 Menu, Tray, Add, Controls, :Controls
 
 Global _UrlShortcuts_Data := _LoadDictFromFile("hotkey-urls.txt", "|")
@@ -50,6 +53,7 @@ Global _Settings_Data := _LoadDictFromFile("hotkey-settings.txt", "||")
 
 _RegisterHotkeys()
 _RegisterHotstrings()
+CheckForUpdate(false)
 
 ;;;; Debug
 ;; Auto-reload
@@ -156,6 +160,21 @@ CloseProcess() {
 	if !ErrorLevel
 		_CloseProcess(name)
 	return
+}
+
+CheckForUpdate(shownonewupdatemessage=true) {
+	UrlDownloadToFile, https://raw.githubusercontent.com/rafaelurben/autohotkey-utils/master/version.txt, .hotkey-temp.txt
+	FileRead, NewestVersion, .hotkey-temp.txt
+	if (NewestVersion != CurrentVersion) {
+		MsgBox, 292, Update available, Your current version: %CurrentVersion% `nNewest version available: %NewestVersion%`n`nWould you like to download the new version?
+		IfMsgBox, Yes
+			{
+				UrlDownloadToFile, https://github.com/rafaelurben/autohotkey-utils/releases/download/%NewestVersion%/hotkeys-%NewestVersion%.exe, hotkey-%NewestVersion%.exe
+				Run, %A_ScriptDir%
+			}
+	} else if shownonewupdatemessage {
+		MsgBox, 1, No Update available, Your current version (%CurrentVersion%) is the newest version available.
+	}
 }
 
 ;;;; Url-Shortcuts
