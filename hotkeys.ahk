@@ -207,14 +207,29 @@ _InstantSearch(engineName, engineUrl) {
 	return
 }
 
+_InstantSearch_Clipboard(engineUrl) {
+	search := _UrlEncode(Clipboard)
+	url = %engineUrl%%search%
+	If !ErrorLevel
+		_OpenUrl(url)
+	return
+}
+
 InstantSearch_DuckDuckGo() { 
 	_InstantSearch("DuckDuckGo", "https://duckduckgo.com/?q=")
+}
+
+InstantSearch_Clipboard_DuckDuckGo() { 
+	_InstantSearch_Clipboard("https://duckduckgo.com/?q=")
 }
 
 InstantSearch_Google() {
 	_InstantSearch("Google", "https://google.com/search?q=")
 }
 
+InstantSearch_Clipboard_Google() {
+	_InstantSearch_Clipboard("https://google.com/search?q=")
+}
 
 ;;;; QR-Generator
 
