@@ -10,7 +10,7 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 
 ;; Variables
 
-Global CurrentVersion := "v2.1"
+Global CurrentVersion := "v2.2"
 
 Global _DEFAULTKEYBINDFILE :=
 (   
@@ -170,10 +170,20 @@ CheckForUpdate(shownonewupdatemessage=true) {
 		IfMsgBox, Yes
 			{
 				UrlDownloadToFile, https://github.com/rafaelurben/autohotkey-utils/releases/download/%NewestVersion%/hotkeys-%NewestVersion%.exe, hotkey-%NewestVersion%.exe
-				Run, %A_ScriptDir%
+				if !ErrorLevel {
+					MsgBox, 291, Downloaded %NewestVersion%, The new version has been downloaded and will be launched after you close this window.`nDo you want to open the script folder after updating?`n`nDon't want to update now? Press cancel!.
+					IfMsgBox, Yes
+						Run, %A_ScriptDir%
+					IfMsgBox, Cancel
+						return
+					Run, hotkey-%NewestVersion%.exe
+					ExitApp
+				} else {
+					MsgBox, 16, Update failed, The update to %NewestVersion% failed.
+				}
 			}
 	} else if shownonewupdatemessage {
-		MsgBox, 1, No Update available, Your current version (%CurrentVersion%) is the newest version available.
+		MsgBox, 0, No Update available, Your current version (%CurrentVersion%) is the newest version available.
 	}
 }
 
