@@ -116,7 +116,7 @@ This module needs some configuration. (see [here](#create-hostrings))
 
 You can configurate and change some things in this little "app". You can open the settings via right click on the tray icon -> Settings or via the defined keybind (default: `Shift+Win+i`).
 
-You can also edit the settings in their corresponding files, but don't forget to reload afterwards if you edit the files directly. (default: `Ctrl+Win+i`) 
+You can also edit the settings in their corresponding files, but don't forget to reload afterwards if you edit the files directly. (default: `Ctrl+Win+i`)
 If you edit them in the settings, this is automatically done for you after saving.
 
 ### Create URL-Shortcodes
