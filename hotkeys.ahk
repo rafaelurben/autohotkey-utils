@@ -10,7 +10,7 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 
 ;; Variables
 
-Global CurrentVersion := "v2.2"
+Global CurrentVersion := "v2.3"
 
 Global _DEFAULTKEYBINDFILE :=
 (   
@@ -53,6 +53,7 @@ Global _Settings_Data := _LoadDictFromFile("hotkey-settings.txt", "||")
 
 _RegisterHotkeys()
 _RegisterHotstrings()
+_CleanupUpdate()
 CheckForUpdate(false)
 
 ;;;; Debug
@@ -171,19 +172,41 @@ CheckForUpdate(shownonewupdatemessage=true) {
 			{
 				UrlDownloadToFile, https://github.com/rafaelurben/autohotkey-utils/releases/download/%NewestVersion%/hotkeys-%NewestVersion%.exe, hotkey-%NewestVersion%.exe
 				if !ErrorLevel {
-					MsgBox, 291, Downloaded %NewestVersion%, The new version has been downloaded and will be launched after you close this window.`nDo you want to open the script folder after updating?`n`nDon't want to update now? Press cancel!.
+					_OverwriteFile("hotkey-run.bat", "start '%A_ScriptDir%/hotkeys-%NewestVersion%.exe'")
+					MsgBox, 291, Downloaded %NewestVersion%, The newest version has been downloaded.`n`nDo you want to update now?
 					IfMsgBox, Yes
-						Run, %A_ScriptDir%
-					IfMsgBox, Cancel
+						{
+							_OverwriteFile(".hotkey-temp.txt", "UpdateDone")
+							Run, hotkey-%NewestVersion%.exe
+							ExitApp
+						}
+					IfMsgBox, No
 						return
-					Run, hotkey-%NewestVersion%.exe
-					ExitApp
 				} else {
 					MsgBox, 16, Update failed, The update to %NewestVersion% failed.
 				}
 			}
 	} else if shownonewupdatemessage {
 		MsgBox, 0, No Update available, Your current version (%CurrentVersion%) is the newest version available.
+	}
+}
+
+_CleanupUpdate() {
+	FileRead, TempData, .hotkey-temp.txt
+	_OverwriteFile("hotkey-run.bat", "start '" . A_ScriptFullPath . "'")
+	if (TempData = "UpdateDone") {
+		_OverwriteFile(".hotkey-temp.txt", "-")
+		MsgBox, 65, Update successful, Your script has been updated to the newest version (%CurrentVersion%). You can delete the old version now.`n`nWould you like to open the folder?
+		IfMsgBox, Ok
+			Run, %A_ScriptDir%
+	} else if (!TempData) {
+		MsgBox, 68, Welcome!, Welcome to this script!`n`nDo you want to add this script to autostart?
+		IfMsgBox, Yes
+			{
+				EnvGet, A_UserProfile, UserProfile
+				Run, %comspec% /c mklink "%A_UserProfile%\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup\hotkey-run.bat" "%A_ScriptDir%\hotkey-run.bat"
+			}
+		_OverwriteFile(".hotkey-temp.txt", "-")
 	}
 }
 
