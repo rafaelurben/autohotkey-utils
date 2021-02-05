@@ -10,7 +10,7 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 
 ;; Variables
 
-Global CurrentVersion := "v2.3"
+Global CurrentVersion := "v2.4"
 
 Global _DEFAULTKEYBINDFILE :=
 (   
@@ -18,8 +18,12 @@ Global _DEFAULTKEYBINDFILE :=
 UrlShortcuts_Open|+Insert
 UrlShortcuts_BoxInsert|^Insert
 UrlShortcuts_BoxOpen|+^Insert
-InstantSearch_DuckDuckGo|#q
-InstantSearch_Google|+#q
+InstantSearch_1|#q
+InstantSearch_2|+#q
+InstantSearch_3|
+InstantSearch_1_Clipboard|
+InstantSearch_2_Clipboard|
+InstantSearch_3_Clipboard|
 QRGenerator_InputBox|^#q
 QRGenerator_FromClipboard|!#q
 ClipboardUrl_Open|#o
@@ -27,7 +31,10 @@ ClipboardUrl_OpenEditor|^#o
 QuickNotes_Create|#n
 QuickNotes_Open|^#n
 SoftLock_Block|+#l
-OpenUrl|+#o"
+OpenUrl|+#o
+CloseProcess|
+ReloadFiles|^#i
+Settings_Open|+#i"
 )
 
 Global _DEFAULTSETTINGS := {  "SEARCHENGINE1": "DuckDuckGo|https://duckduckgo.com/?q="
