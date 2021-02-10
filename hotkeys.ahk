@@ -293,15 +293,15 @@ InstantSearch_3() {
 }
 
 InstantSearch_1_Clipboard() { 
-	_InstantSearch_FromSetting("SEARCHENGINE1", fromclipboard=true) 
+	_InstantSearch_FromSetting("SEARCHENGINE1", true) 
 }
 
 InstantSearch_2_Clipboard() {
-	_InstantSearch_FromSetting("SEARCHENGINE2", fromclipboard=true)
+	_InstantSearch_FromSetting("SEARCHENGINE2", true)
 }
 
 InstantSearch_3_Clipboard() {
-	_InstantSearch_FromSetting("SEARCHENGINE3", fromclipboard=true)
+	_InstantSearch_FromSetting("SEARCHENGINE3", true)
 }
 
 ;;;; QR-Generator
