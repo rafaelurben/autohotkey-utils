@@ -158,11 +158,11 @@ Example:
 
 Common options:
 
-| Option | Behaviour                                               |
-| ------ | ------------------------------------------------------- |
-| o      | Automatically remove ending character after replacement |
-| ?      | Allow hotstring to be IN a word                         |
-| *      | Don't require ending character                          |
+| Option | Behaviour                                                |
+| ------ | -------------------------------------------------------- |
+| o      | Automatically removes ending character after replacement |
+| ?      | Allows hotstring to be IN a word                         |
+| *      | Doesn't require ending character to trigger              |
 
 ---
 
