@@ -1,4 +1,4 @@
-﻿; Rafael Urben, 2021
+; Rafael Urben, 2021
 ; ------------------
 ;
 ; https://github.com/rafaelurben/autohotkey-utils
@@ -49,15 +49,10 @@ Global _Settings_GUISettingsEdit
 
 ;; Initialize
 
-Menu, Controls, Add, Reload files, ReloadFiles
-Menu, Controls, Add, [SoftLock] Block Input, SoftLock_Block
-Menu, Tray, Add, Settings, Settings_Open
-Menu, Tray, Add, Check for updates, CheckForUpdate
-Menu, Tray, Add, Controls, :Controls
-
 Global _UrlShortcuts_Data := _LoadDictFromFile("hotkey-urls.txt", "|")
 Global _Settings_Data := _LoadDictFromFile("hotkey-settings.txt", "||")
 
+_CreateTrayMenu()
 _RegisterHotkeys()
 _RegisterHotstrings()
 _CleanupUpdate()
@@ -409,15 +404,15 @@ QuickNotes_Open() {
 
 SoftLock_UnBlock() {
 	BlockInput, Off
-	Menu, Controls, Delete, [SoftLock] Block Input
-	Menu, Controls, Add, [SoftLock] Block Input, SoftLock_Block
+	Menu, ActionsMenu, Delete, [SoftLock] Block Input
+	Menu, ActionsMenu, Add, [SoftLock] Block Input, SoftLock_Block
 }
 
 SoftLock_Block() {
 	Sleep, 500
-	Menu, Controls, Delete, [SoftLock] Block Input
-	Menu, Controls, Add, [SoftLock] Block Input, SoftLock_UnBlock
-	Menu, Controls, Check, [SoftLock] Block Input
+	Menu, ActionsMenu, Delete, [SoftLock] Block Input
+	Menu, ActionsMenu, Add, [SoftLock] Block Input, SoftLock_UnBlock
+	Menu, ActionsMenu, Check, [SoftLock] Block Input
 	BlockInput On
 }
 
@@ -476,7 +471,34 @@ Settings_Open() {
 }
 
 
-;;;;;;;;;;; Shortcuts
+;;;;;;;;;;; Main
+
+_CreateTrayMenu() {
+	Menu, UrlShortcutsMenu, Add, Insert, UrlShortcuts_BoxInsert
+	Menu, UrlShortcutsMenu, Add, Open, UrlShortcuts_BoxOpen
+	Menu, QRGeneratorMenu, Add, Create from input, QRGenerator_InputBox
+	Menu, QRGeneratorMenu, Add, Create from clipbaord, QRGenerator_FromClipboard
+	Menu, InstantSearchMenu, Add, Search 1, InstantSearch_1
+	Menu, InstantSearchMenu, Add, Search 2, InstantSearch_2
+	Menu, InstantSearchMenu, Add, Search 3, InstantSearch_3
+	Menu, InstantSearchMenu, Add
+	Menu, InstantSearchMenu, Add, Search 1 from clipboard, InstantSearch_1_Clipboard
+	Menu, InstantSearchMenu, Add, Search 2 from clipboard, InstantSearch_2_Clipboard
+	Menu, InstantSearchMenu, Add, Search 3 from clipboard, InstantSearch_3_Clipboard
+	Menu, ActionsMenu, Add, Close a Process, CloseProcess
+	Menu, ActionsMenu, Add
+	Menu, ActionsMenu, Add, [QRGenerator], :QRGeneratorMenu
+	Menu, ActionsMenu, Add, [InstantSearch], :InstantSearchMenu
+	Menu, ActionsMenu, Add, [UrlShortcuts], :UrlShortcutsMenu
+	Menu, ActionsMenu, Add
+	Menu, ActionsMenu, Add, [QuickNotes] Open, QuickNotes_Open
+	Menu, ActionsMenu, Add, [SoftLock] Block Input, SoftLock_Block
+	Menu, Tray, Add
+	Menu, Tray, Add, Reload, ReloadFiles
+	Menu, Tray, Add, Settings, Settings_Open
+	Menu, Tray, Add, Check for updates, CheckForUpdate
+	Menu, Tray, Add, Actions, :ActionsMenu
+}
 
 _RegisterHotkeys() {
 	if !FileExist("hotkey-keybinds.txt") {
