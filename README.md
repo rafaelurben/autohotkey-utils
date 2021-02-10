@@ -1,10 +1,18 @@
 # AutoHotKey Utils
 
+Autohotkey-utils gives you some very useful utils.
+
+Jump to [config](#config).
+
+## Installation
+
 You can install this script without AutoHotKey using the .exe files found under [Releases](https://github.com/rafaelurben/autohotkey-utils/releases). Sorry to all non-Windows-users, but this is a Windows-only thing. :(
 
-Note: Windows may warn you that this script is insecure, but you can ignore this warning as long as you download the exe file from this repository.
+The first time you launch the script, it will ask you if you want it to automatically start everytime you log in. If you missed the chance to click yes, you can just delete the ".hotkey-temp.txt" file and reload the script.
 
-Jump to [config](#config). Jump to [important notes](#important-notes).
+Everytime the script reloads, it will check if there is a newer version of it available on this page and will ask you if you want to update.
+
+Note: Windows may warn you that this script is insecure, but you can ignore this warning as long as you download the exe file from this repository. If you don't trust this exe file, you can also download the current .ahk file, but then you must also install AutoHotkey. But please note, that the update engine doesn't work when using the .ahk file!
 
 ## Current Modules
 
@@ -134,7 +142,7 @@ yt|https://youtube.com
 
 ### Create Hotstrings
 
-Hotstrings automatically replaces certain strings while you're typing. E.g. you type "btw" and an ending character ("-()[]{}:;'"/\,.?!\`n \`t") and btw automatically gets replaced with "by the way".
+Hotstrings automatically replaces certain strings while you're typing. E.g. you type "btw" and an ending character (`-()[]{}:;'"/\,.?!`, tab or newline) and btw automatically gets replaced with "by the way".
 
 You can create hotstrings in the file called "hotkey-hotstrings.txt". Use the following syntax: `hotstring|replacement`
 
@@ -162,33 +170,29 @@ Common options:
 
 You can modify the keybinds used in this app in the file called "hotkey-keybinds.txt" or in the settings. Use the following syntax: `action|keybind`
 
-The keybind syntax can be found [here](https://www.autohotkey.com/docs/Hotkeys.htm#Symbols), all actions are listed in the tables on this page.
+Note: If the actions are not present in the file, the default values are used. If you want do disable a default hotkey, enter the action without a keybind. (e.g. 4th line in example)
 
-Default:
+The keybind syntax can be found [here](https://www.autohotkey.com/docs/Hotkeys.htm#Symbols), all actions are listed in the tables on this page. Common modifiers are also found in the table below.
+
+Example:
 
 ```txt
-UrlShortcuts_Insert|Insert
-UrlShortcuts_Open|+Insert
-UrlShortcuts_BoxInsert|^Insert
-UrlShortcuts_BoxOpen|+^Insert
-InstantSearch_1|#q
-InstantSearch_2|+#q
-InstantSearch_3|
-InstantSearch_1_Clipboard|
-InstantSearch_2_Clipboard|
-InstantSearch_3_Clipboard|
-QRGenerator_InputBox|^#q
-QRGenerator_FromClipboard|!#q
-ClipboardUrl_Open|#o
-ClipboardUrl_OpenEditor|^#o
-QuickNotes_Create|#n
-QuickNotes_Open|^#n
-SoftLock_Block|+#l
-OpenUrl|+#o
-CloseProcess|
-ReloadFiles|^#i
-Settings_Open|+#i
+InstantSearch_1_Clipboard|#Numpad1
+InstantSearch_2_Clipboard|#Numpad2
+InstantSearch_3_Clipboard|#Numpad3
+ReloadFiles|
 ```
+
+Common modifiers:
+
+| Modifier | Meaning           |
+| -------- | ----------------- |
+| #        | Windows-Key (Win) |
+| +        | Shift             |
+| ^        | Control (Ctrl)    |
+| !        | Alt               |
+
+---
 
 ### Settings
 
@@ -203,9 +207,3 @@ SEARCHENGINE_1||DuckDuckGo|https://duckduckgo.com/?q
 SEARCHENGINE_2||Google|https://google.com/search?q=
 SEARCHENGINE_3||Wikipedia|https://en.wikipedia.org/wiki/Special:Search?search=
 ```
-
-## Important notes
-
-Modules marked with \* are only available when the script is run with elevated permissions ("as administrator").
-
-When updating to a newer version, you may need to update the hotkey-keybinds.txt file if you want to use the new features.

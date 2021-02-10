@@ -1,4 +1,4 @@
-; Rafael Urben, 2021
+﻿; Rafael Urben, 2021
 ; ------------------
 ;
 ; https://github.com/rafaelurben/autohotkey-utils
@@ -12,34 +12,33 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 
 Global CurrentVersion := "v2.4"
 
-Global _DEFAULTKEYBINDFILE :=
-(   
-"UrlShortcuts_Insert|Insert
-UrlShortcuts_Open|+Insert
-UrlShortcuts_BoxInsert|^Insert
-UrlShortcuts_BoxOpen|+^Insert
-InstantSearch_1|#q
-InstantSearch_2|+#q
-InstantSearch_3|
-InstantSearch_1_Clipboard|
-InstantSearch_2_Clipboard|
-InstantSearch_3_Clipboard|
-QRGenerator_InputBox|^#q
-QRGenerator_FromClipboard|!#q
-ClipboardUrl_Open|#o
-ClipboardUrl_OpenEditor|^#o
-QuickNotes_Create|#n
-QuickNotes_Open|^#n
-SoftLock_Block|+#l
-OpenUrl|+#o
-CloseProcess|
-ReloadFiles|^#i
-Settings_Open|+#i"
-)
-
 Global _DEFAULTSETTINGS := {  "SEARCHENGINE1": "DuckDuckGo|https://duckduckgo.com/?q="
   							, "SEARCHENGINE2": "Google|https://google.com/search?q="
 							, "SEARCHENGINE3": "Wikipedia|https://en.wikipedia.org/wiki/Special:Search?search="  }
+
+Global _DEFAULTKEYBINDS := {  "UrlShortcuts_Insert": "Insert"
+							, "UrlShortcuts_Open": "+Insert"
+							, "UrlShortcuts_BoxInsert": "^Insert"
+							, "UrlShortcuts_BoxOpen": "+^Insert"
+							, "InstantSearch_1": "#q"
+							, "InstantSearch_2": "+#q"
+							, "InstantSearch_3": ""
+							, "InstantSearch_1_Clipboard": ""
+							, "InstantSearch_2_Clipboard": ""
+							, "InstantSearch_3_Clipboard": ""
+							, "QRGenerator_InputBox": "^#q"
+							, "QRGenerator_FromClipboard": "!#q"
+							, "ClipboardUrl_Open": "#o"
+							, "ClipboardUrl_OpenEditor": "^#o"
+							, "QuickNotes_Create": "#n"
+							, "QuickNotes_Open": "^#n"
+							, "SoftLock_Block": "+#l"
+							, "OpenUrl": "+#o"
+							, "CloseProcess": ""
+							, "ReloadFiles": "^#i"
+							, "Settings_Open": "+#i" }
+
+;; GUI Veriables
 
 Global _QuickNotes_GUITextEdit
 Global _Settings_GUIUrlShortcutEdit
@@ -50,6 +49,7 @@ Global _Settings_GUISettingsEdit
 ;; Initialize
 
 Global _UrlShortcuts_Data := _LoadDictFromFile("hotkey-urls.txt", "|")
+Global _Keybinds_Data := _LoadDictFromFile("hotkey-keybinds.txt", "|")
 Global _Settings_Data := _LoadDictFromFile("hotkey-settings.txt", "||")
 
 _CreateTrayMenu()
@@ -94,11 +94,11 @@ _OpenUrlEditor(defaultUrl) {
 	return
 }
 
-_GetSetting(key) {
-	if _Settings_Data.HasKey(key) 
-		return _Settings_Data[key]
+_GetSetting(key, dict, defaultdict) {
+	if dict.HasKey(key) 
+		return dict[key]
 	else 
-		return _DEFAULTSETTINGS[key]
+		return defaultdict[key]
 }
 
 _LoadDictFromFile(filename, seperator="|") {
@@ -202,7 +202,7 @@ _CleanupUpdate() {
 		IfMsgBox, Ok
 			Run, %A_ScriptDir%
 	} else if (!TempData) {
-		MsgBox, 68, Welcome!, Welcome to this script!`n`nDo you want to add this script to autostart?
+		MsgBox, 68, Welcome!, Welcome to autohotkey-utils!`n`nDo you want to add this script to autostart?
 		IfMsgBox, Yes
 			{
 				EnvGet, A_UserProfile, UserProfile
@@ -274,7 +274,7 @@ _InstantSearch(engineName, engineUrl, fromclipboard=false) {
 }
 
 _InstantSearch_FromSetting(key, fromclipboard=false) {
-	row := StrSplit(_GetSetting(key), "|")
+	row := StrSplit(_GetSetting(key, _Settings_Data, _DEFAULTSETTINGS), "|")
 	name := row[1]
 	url := row[2]
 	_InstantSearch(name, url, fromclipboard)
@@ -501,15 +501,11 @@ _CreateTrayMenu() {
 }
 
 _RegisterHotkeys() {
-	if !FileExist("hotkey-keybinds.txt") {
-		_OverwriteFile("hotkey-keybinds.txt", _DEFAULTKEYBINDFILE)
-	}
-
-	keybinds := _LoadDictFromFile("hotkey-keybinds.txt")
-
-	for function, shortcut in keybinds
+	for function, _ in _DEFAULTKEYBINDS
 	{
 		if IsFunc(function) {
+			shortcut := _GetSetting(function, _Keybinds_Data, _DEFAULTKEYBINDS)
+
 			if (shortcut != "") {
 				try {
 					Hotkey, %shortcut%, %function%, On
