@@ -36,7 +36,9 @@ Global _DEFAULTKEYBINDS := {  "UrlShortcuts_Insert": "Insert"
 							, "OpenUrl": "+#o"
 							, "CloseProcess": ""
 							, "ReloadFiles": "^#i"
-							, "Settings_Open": "+#i" }
+							, "Settings_Open": "+#i"
+							, "HoldLeftMouse": ""
+							, "HoldRightMouse": "" }
 
 ;; GUI Veriables
 
@@ -416,6 +418,16 @@ SoftLock_Block() {
 	BlockInput On
 }
 
+
+;;;; Random
+
+HoldLeftMouse() {
+	Click, Down Left
+}
+
+HoldRightMouse() {
+	Click, Down Right
+}
 
 ;;;; Settings
 

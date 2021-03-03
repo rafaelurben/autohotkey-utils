@@ -114,11 +114,13 @@ This module needs some configuration. (see [here](#create-hostrings))
 
 ### General actions
 
-| Action        | Description                     | Default shortcut |
-| ------------- | ------------------------------- | ---------------- |
-| CloseProcess  | Close a process by name         |                  |
-| ReloadFiles   | Reload the script and all files | `Ctrl+Win+i`     |
-| Settings_Open | Open the settings page          | `Shift+Win+i`    |
+| Action         | Description                      | Default shortcut |
+| -------------- | -------------------------------- | ---------------- |
+| CloseProcess   | Close a process by name          |                  |
+| ReloadFiles    | Reload the script and all files  | `Ctrl+Win+i`     |
+| Settings_Open  | Open the settings page           | `Shift+Win+i`    |
+| HoldRightMouse | Hold down the right mouse button |                  |
+| HoldLeftMouse  | Hold down the left mouse button  |                  |
 
 ---
 
