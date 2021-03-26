@@ -14,7 +14,8 @@ Global CurrentVersion := "v2.6"
 
 Global _DEFAULTSETTINGS := {  "SEARCHENGINE1": "DuckDuckGo|https://duckduckgo.com/?q="
   							, "SEARCHENGINE2": "Google|https://google.com/search?q="
-							, "SEARCHENGINE3": "Wikipedia|https://en.wikipedia.org/wiki/Special:Search?search="  }
+							, "SEARCHENGINE3": "Wikipedia|https://en.wikipedia.org/wiki/Special:Search?search=" 
+							, "DATETIMEFORMAT": "" }
 
 Global _DEFAULTKEYBINDS := {  "UrlShortcuts_Insert": "Insert"
 							, "UrlShortcuts_Open": "+Insert"
@@ -38,7 +39,8 @@ Global _DEFAULTKEYBINDS := {  "UrlShortcuts_Insert": "Insert"
 							, "ReloadFiles": "^#i"
 							, "Settings_Open": "+#i"
 							, "HoldLeftMouse": ""
-							, "HoldRightMouse": "" }
+							, "HoldRightMouse": ""
+							, "PasteDateTime": "" }
 
 ;; GUI Veriables
 
@@ -427,6 +429,12 @@ HoldLeftMouse() {
 
 HoldRightMouse() {
 	Click, Down Right
+}
+
+PasteDateTime() {
+	format := _GetSetting("DATETIMEFORMAT", _Settings_Data, _DEFAULTSETTINGS)
+	FormatTime, currentdatetime,, %format%
+	SendInput, %currentdatetime%
 }
 
 ;;;; Settings

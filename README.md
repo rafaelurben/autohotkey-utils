@@ -121,6 +121,7 @@ This module needs some configuration. (see [here](#create-hostrings))
 | Settings_Open  | Open the settings page           | `Shift+Win+i`    |
 | HoldRightMouse | Hold down the right mouse button |                  |
 | HoldLeftMouse  | Hold down the left mouse button  |                  |
+| PasteDateTime  | Paste the current date and time  |                  |
 
 ---
 
@@ -208,4 +209,7 @@ Default:
 SEARCHENGINE_1||DuckDuckGo|https://duckduckgo.com/?q
 SEARCHENGINE_2||Google|https://google.com/search?q=
 SEARCHENGINE_3||Wikipedia|https://en.wikipedia.org/wiki/Special:Search?search=
+DATETIMEFORMAT||
 ```
+
+Check [this page](https://www.autohotkey.com/docs/commands/FormatTime.htm#Date_Formats) for date formats.
