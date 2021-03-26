@@ -10,7 +10,7 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 
 ;; Variables
 
-Global CurrentVersion := "v2.6"
+Global CurrentVersion := "v2.7"
 
 Global _DEFAULTSETTINGS := {  "SEARCHENGINE1": "DuckDuckGo|https://duckduckgo.com/?q="
   							, "SEARCHENGINE2": "Google|https://google.com/search?q="
