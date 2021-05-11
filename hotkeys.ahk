@@ -163,7 +163,7 @@ OpenUrl() {
 }
 
 CloseProcess() {
-	InputBox, name, Close Process, Please enter process name:
+	InputBox, name, Close Process, Please enter process name:,,,,,,,,explorer.exe
 	if !ErrorLevel
 		_CloseProcess(name)
 	return
