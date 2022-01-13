@@ -91,6 +91,18 @@ Quickly open an explorer window with the desired drive.
 
 ---
 
+### Greek alphabet
+
+Quickly enter a character from the greek alphabet.
+
+| Action          | Description                                               | Default shortcut |
+| --------------- | --------------------------------------------------------- | ---------------- |
+| GreekAlphabet | Press and enter the name of the letter | `Shift+Win+G`    |
+
+Example: `Shift+Win+G Pi Enter` or `Shift+Win+G pi Enter` (these are not the same)
+
+---
+
 ### QuickNotes
 
 Create notes on the fly or paste your clipboard for later use.

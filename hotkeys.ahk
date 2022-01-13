@@ -22,6 +22,7 @@ Global _DEFAULTKEYBINDS := {  "UrlShortcuts_Insert": "Insert"
 							, "UrlShortcuts_BoxInsert": "^Insert"
 							, "UrlShortcuts_BoxOpen": "+^Insert"
 							, "DriveLetterOpen": "+#e"
+							, "GreekAlphabet": "+#g"
 							, "InstantSearch_1": "#q"
 							, "InstantSearch_2": "+#q"
 							, "InstantSearch_3": ""
@@ -41,8 +42,7 @@ Global _DEFAULTKEYBINDS := {  "UrlShortcuts_Insert": "Insert"
 							, "Settings_Open": "+#i"
 							, "HoldLeftMouse": ""
 							, "HoldRightMouse": ""
-							, "PasteDateTime": ""
-							, "GreekAlphabet": "+#g" }
+							, "PasteDateTime": "" }
 
 Global _GREEKALPHABET := {"Alpha": "Α", "Beta": "Β", "Gamma": "Γ", "Delta": "Δ", "Epsilon": "Ε", "Zeta": "Ζ", "Eta": "Η", "Theta": "Θ", "Iota": "Ι", "Kappa": "Κ", "Lamda": "Λ", "Mu": "Μ", "Nu": "Ν", "Xi": "Ξ", "Omicron": "Ο", "Pi": "Π", "Rho": "Ρ", "Sigma": "Σ", "Tau": "Τ", "Upsilon": "Υ", "Phi": "Φ", "Chi": "Χ", "Psi": "Ψ", "Omega": "Ω", "alpha": "α", "beta": "β", "gamma": "γ", "delta": "δ", "epsilon": "ε", "zeta": "ζ", "eta": "η", "theta": "θ", "iota": "ι", "kappa": "κ", "lamda": "λ", "mu": "μ", "nu": "ν", "xi": "ξ", "omicron": "ο", "pi": "π", "rho": "ρ", "sigma": "σ", "tau": "τ", "upsilon": "υ", "phi": "φ", "chi": "χ", "psi": "ψ", "omega": "ω"}
 
@@ -291,6 +291,21 @@ DriveLetterOpen() {
 }
 
 
+;;;; GreekAlphabet
+
+GreekAlphabet() {
+	SplashTextOn,300,50,Greek alphabet, Please enter a letter...
+	Input, letter, T5, {Esc}{Enter}
+	SplashTextOff
+	if _GREEKALPHABET.HasKey(letter) {
+		greekletter := _GREEKALPHABET[letter]
+		Send, % greekletter
+		MsgBox, 0, Greek alphabet, Letter: "%letter%" -> %greekletter%
+	} else If letter
+		MsgBox, 0, Greek alphabet, Unknown letter: "%letter%"
+	return
+}
+
 ;;;; Instant-Search
 
 _InstantSearch(engineName, engineUrl, fromclipboard=false) {
@@ -463,17 +478,6 @@ PasteDateTime() {
 	format := _GetSetting("DATETIMEFORMAT", _Settings_Data, _DEFAULTSETTINGS)
 	FormatTime, currentdatetime,, %format%
 	SendInput, %currentdatetime%
-}
-
-GreekAlphabet() {
-	SplashTextOn,300,50,Greek alphabet, Please enter a letter...
-	Input, letter, T5, {Esc}{Enter}
-	SplashTextOff
-	if _GREEKALPHABET.HasKey(letter)
-		Send, % _GREEKALPHABET[letter]
-	else If key
-		MsgBox, 0, Greek alphabet, Unknown letter: "%letter%"
-	return
 }
 
 ;;;; Settings
