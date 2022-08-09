@@ -480,6 +480,10 @@ PasteDateTime() {
 	SendInput, %currentdatetime%
 }
 
+Screenshot() {
+	Send, +#s
+}
+
 ;;;; Settings
 
 _Settings_GUISave() {
@@ -560,7 +564,9 @@ _CreateTrayMenu() {
 	Menu, Tray, Add, Reload, ReloadFiles
 	Menu, Tray, Add, Settings, Settings_Open
 	Menu, Tray, Add, Check for updates, CheckForUpdate
+	Menu, Tray, Add
 	Menu, Tray, Add, Actions, :ActionsMenu
+	Menu, Tray, Add, Screenshot, Screenshot
 }
 
 _RegisterHotkeys() {
