@@ -360,13 +360,14 @@ _QRGenerator_GUIExit() {
 _QRGenerator(data) {
 	newdata := _UrlEncode(data)
 	UrlDownloadToFile, http://api.qrserver.com/v1/create-qr-code/?format=png&size=500x500&data=%newdata%, hotkey-qrcode.png
+	UrlDownloadToFile, http://api.qrserver.com/v1/create-qr-code/?format=svg&size=500x500&data=%newdata%, hotkey-qrcode.svg
 
 	if !ErrorLevel {
 		Gui, QRGenerator:New
 		Gui, QRGenerator: +AlwaysOnTop +Resize -MaximizeBox
 
 		Gui, QRGenerator:Add, Picture, x0 y0 w500 h500, hotkey-qrcode.png
-		Gui, QRGenerator:Add, Link, , <a href="http://api.qrserver.com/v1/create-qr-code/?format=svg&size=500x500&data=%newdata%">Open svg in Browser</a> - <a href="hotkey-qrcode.png">Open Image</a> - <a href="%A_WorkingDir%">Open Folder</a>
+		Gui, QRGenerator:Add, Link, , <a href="hotkey-qrcode.svg">Open svg</a> - <a href="hotkey-qrcode.png">Open Image</a> - <a href="%A_WorkingDir%">Open Folder</a> - <a href="http://api.qrserver.com/v1/create-qr-code/?format=svg&size=500x500&data=%newdata%">Open in Browser</a>
 		Gui, QRGenerator:Add, Text, , Data: "%data%"
 
 		Menu, QRGeneratorFileMenu, Add, E&xit`tCtrl+W, _QRGenerator_GUIExit
