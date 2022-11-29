@@ -56,15 +56,23 @@ Global _Settings_GUISettingsEdit
 
 ;; Initialize
 
-Global _UrlShortcuts_Data := _LoadDictFromFile("hotkey-urls.txt", "|")
-Global _Keybinds_Data := _LoadDictFromFile("hotkey-keybinds.txt", "|")
-Global _Settings_Data := _LoadDictFromFile("hotkey-settings.txt", "||")
+Global _UrlShortcuts_Data := _LoadDictFromFile("config/hotkey-urls.txt", "|")
+Global _Keybinds_Data := _LoadDictFromFile("config/hotkey-keybinds.txt", "|")
+Global _Settings_Data := _LoadDictFromFile("config/hotkey-settings.txt", "||")
 
 _CreateTrayMenu()
 _RegisterHotkeys()
 _RegisterHotstrings()
 _CleanupUpdate()
 CheckForUpdate(false)
+
+;;;; Migrations
+
+FileCreateDir, %A_WorkingDir%/data
+FileCreateDir, %A_WorkingDir%/data/qr
+FileMove, hotkey-qr*.*, data\qr
+FileCreateDir, %A_WorkingDir%/config
+FileMove, hotkey-*.txt, config
 
 ;;;; Debug
 ;; Auto-reload
@@ -359,15 +367,15 @@ _QRGenerator_GUIExit() {
 
 _QRGenerator(data) {
 	newdata := _UrlEncode(data)
-	UrlDownloadToFile, http://api.qrserver.com/v1/create-qr-code/?format=png&size=500x500&data=%newdata%, hotkey-qrcode.png
-	UrlDownloadToFile, http://api.qrserver.com/v1/create-qr-code/?format=svg&size=500x500&data=%newdata%, hotkey-qrcode.svg
+	UrlDownloadToFile, http://api.qrserver.com/v1/create-qr-code/?format=png&size=500x500&data=%newdata%, %A_WorkingDir%/data/qr/qrcode.png
+	UrlDownloadToFile, http://api.qrserver.com/v1/create-qr-code/?format=svg&size=500x500&data=%newdata%, %A_WorkingDir%/data/qr/qrcode.svg
 
 	if !ErrorLevel {
 		Gui, QRGenerator:New
 		Gui, QRGenerator: +AlwaysOnTop +Resize -MaximizeBox
 
-		Gui, QRGenerator:Add, Picture, x0 y0 w500 h500, hotkey-qrcode.png
-		Gui, QRGenerator:Add, Link, , <a href="hotkey-qrcode.svg">Open svg</a> - <a href="hotkey-qrcode.png">Open Image</a> - <a href="%A_WorkingDir%">Open Folder</a> - <a href="http://api.qrserver.com/v1/create-qr-code/?format=svg&size=500x500&data=%newdata%">Open in Browser</a>
+		Gui, QRGenerator:Add, Picture, x0 y0 w500 h500, %A_WorkingDir%/data/qr/qrcode.png
+		Gui, QRGenerator:Add, Link, , <a href="%A_WorkingDir%/data/qr/qrcode.svg">Open svg</a> - <a href="%A_WorkingDir%/data/qr/qrcode.png">Open Image</a> - <a href="%A_WorkingDir%/data/qr">Open Folder</a> - <a href="http://api.qrserver.com/v1/create-qr-code/?format=svg&size=500x500&data=%newdata%">Open in Browser</a>
 		Gui, QRGenerator:Add, Text, , Data: "%data%"
 
 		Menu, QRGeneratorFileMenu, Add, E&xit`tCtrl+W, _QRGenerator_GUIExit
@@ -408,17 +416,17 @@ ClipboardUrl_OpenEditor() {
 QuickNotes_Create() {
 	InputBox, note, QuickNote, Please enter a text to create a note:
 	if note
-		FileAppend, `n%note%, hotkey-notes.txt
+		FileAppend, `n%note%, config/hotkey-notes.txt
 }
 
 _QuickNotes_GUISave() {
 	Gui, QuickNotes:Submit
-	_OverwriteFile("hotkey-notes.txt", _QuickNotes_GUITextEdit)
+	_OverwriteFile("config/hotkey-notes.txt", _QuickNotes_GUITextEdit)
 }
 
 _QuickNotes_GUIReset() {
 	Gui, QuickNotes:Submit
-	file := FileOpen("hotkey-notes.txt", "w")
+	file := FileOpen("config/hotkey-notes.txt", "w")
 	file.Close()
 	QuickNotes_Open()
 }
@@ -433,7 +441,7 @@ QuickNotes_Open() {
 	Gui, QuickNotes:Add, Text, , Edit your notes:
 
 	Gui, QuickNotes:Add, Edit, R20 W500 v_QuickNotes_GUITextEdit
-	FileRead, FileContent, hotkey-notes.txt
+	FileRead, FileContent, config/hotkey-notes.txt
 	GuiControl,, _QuickNotes_GUITextEdit, %FileContent%
 
 	Gui, QuickNotes:Add, Text, , Press Ctrl+S to save and exit or Ctrl+W to exit without saving.`nPress Ctrl+R to reset the file. (irreversible)
@@ -489,10 +497,10 @@ Screenshot() {
 
 _Settings_GUISave() {
 	Gui, Settings:Submit
-	_OverwriteFile("hotkey-urls.txt", _Settings_GUIUrlShortcutEdit)
-	_OverwriteFile("hotkey-keybinds.txt", _Settings_GUIHotkeyEdit)
-	_OverwriteFile("hotkey-hotstrings.txt", _Settings_GUIHotstringEdit)
-	_OverwriteFile("hotkey-settings.txt", _Settings_GUISettingsEdit)
+	_OverwriteFile("config/hotkey-urls.txt", _Settings_GUIUrlShortcutEdit)
+	_OverwriteFile("config/hotkey-keybinds.txt", _Settings_GUIHotkeyEdit)
+	_OverwriteFile("config/hotkey-hotstrings.txt", _Settings_GUIHotstringEdit)
+	_OverwriteFile("config/hotkey-settings.txt", _Settings_GUISettingsEdit)
 	Reload
 }
 
@@ -507,27 +515,27 @@ Settings_Open() {
 
 	Gui, Settings:Add, Link, Y5 X5, Edit URL shortcodes: <a href="https://github.com/rafaelurben/autohotkey-utils/#create-url-shortcodes">Syntax and Infos</a>
 	Gui, Settings:Add, Edit, R15 W500 v_Settings_GUIUrlShortcutEdit
-	FileRead, FileContent, hotkey-urls.txt
+	FileRead, FileContent, config/hotkey-urls.txt
 	GuiControl,, _Settings_GUIUrlShortcutEdit, %FileContent%
 
 	Gui, Settings:Add, Link, , Edit Keybinds: <a href="https://github.com/rafaelurben/autohotkey-utils/#modify-keybinds">Syntax and Infos</a>
 	Gui, Settings:Add, Edit, R15 W500 v_Settings_GUIHotkeyEdit
-	FileRead, FileContent, hotkey-keybinds.txt
+	FileRead, FileContent, config/hotkey-keybinds.txt
 	GuiControl,, _Settings_GUIHotkeyEdit, %FileContent%
 
 	Gui, Settings:Add, Text, , Press Ctrl+S to save and reload or Ctrl+W to exit without saving.
 
 	Gui, Settings:Add, Link, Y5 X515 , Edit Hotstrings: <a href="https://github.com/rafaelurben/autohotkey-utils/#create-hotstrings">Syntax and Infos</a>
 	Gui, Settings:Add, Edit, R15 W500 v_Settings_GUIHotstringEdit
-	FileRead, FileContent, hotkey-hotstrings.txt
+	FileRead, FileContent, config/hotkey-hotstrings.txt
 	GuiControl,, _Settings_GUIHotstringEdit, %FileContent%
 
 	Gui, Settings:Add, Link, , Edit Settings: <a href="https://github.com/rafaelurben/autohotkey-utils/#settings">Syntax and Infos</a>
 	Gui, Settings:Add, Edit, R15 W500 v_Settings_GUISettingsEdit
-	FileRead, FileContent, hotkey-settings.txt
+	FileRead, FileContent, config/hotkey-settings.txt
 	GuiControl,, _Settings_GUISettingsEdit, %FileContent%
 
-	Gui, Settings:Add, Link, , <a href="%A_WorkingDir%">Open Folder</a> (Please do NOT edit files while the settings are opened!)
+	Gui, Settings:Add, Link, , <a href="%A_WorkingDir%/config">Open Config Folder</a> (Please do NOT edit files while the settings are opened!)
 
 
 	Menu, SettingsFileMenu, Add, &Save`tCtrl+S, _Settings_GUISave 
@@ -590,7 +598,7 @@ _RegisterHotkeys() {
 }
 
 _RegisterHotstrings() {
-	hotstrings := _LoadDictFromFile("hotkey-hotstrings.txt")
+	hotstrings := _LoadDictFromFile("config/hotkey-hotstrings.txt")
 
 	for key, value in hotstrings
 	{

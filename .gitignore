@@ -1,0 +1,6 @@
+hotkeys*.exe
+config/*
+data/*
+.hotkey-temp.txt
+hotkey-run.bat
+Thumbs.db
