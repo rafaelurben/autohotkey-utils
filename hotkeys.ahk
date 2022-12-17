@@ -214,7 +214,7 @@ CheckForUpdate(shownonewupdatemessage=true) {
 
 _CleanupUpdate() {
 	FileRead, TempData, .hotkey-temp.txt
-	command := """" . A_ScriptFullPath . """"
+	command := "@echo off`n`start """" """ . A_ScriptFullPath . """"
 	_OverwriteFile("hotkey-run.bat", command)
 	if (TempData = "UpdateDone") {
 		_OverwriteFile(".hotkey-temp.txt", "-")
@@ -226,7 +226,11 @@ _CleanupUpdate() {
 		IfMsgBox, Yes
 			{
 				EnvGet, A_UserProfile, UserProfile
-				Run, %comspec% /c mklink "%A_UserProfile%\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup\hotkey-run.bat" "%A_ScriptDir%\hotkey-run.bat"
+				cmd := "mklink """ . A_UserProfile . "\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup\Run autohotkey-utils by rafaelurben"" """ . A_ScriptDir . "\hotkey-run.bat"""
+				_OverwriteFile(".hotkey-add-to-autostart.bat", cmd)
+				RunWait *RunAs ".hotkey-add-to-autostart.bat"
+				MsgBox, 64, Added to autostart, The script has been added to autostart.
+				FileDelete, .hotkey-add-to-autostart.bat
 			}
 		_OverwriteFile(".hotkey-temp.txt", "-")
 	}
