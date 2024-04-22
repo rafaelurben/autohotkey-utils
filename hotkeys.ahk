@@ -1,4 +1,4 @@
-﻿; Rafael Urben, 2022-2024
+; Rafael Urben, 2022-2024
 ; ------------------
 ;
 ; https://github.com/rafaelurben/autohotkey-utils
@@ -153,7 +153,7 @@ _OpenUrl(url, *) {
 	try {
 		Run(url)
 	} catch Error as e {
-		MsgBox("Can't open `"" url "`"! Is this a valid url? `n`nError: `"" e, "Opening URL failed", 0)
+		MsgBox("Can't open `"" url "`"! Is this a valid url? `n`nError: `"" e.Message, "Opening URL failed", 0)
 	}
 	return
 }
