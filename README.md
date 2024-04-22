@@ -1,18 +1,26 @@
 # AutoHotKey Utils
 
-Autohotkey-utils gives you some very useful utils.
+Autohotkey-utils gives you some useful utils as shortcuts in Windows.
+
+This script...
+
+- is completely portable (requires no installation)
+- does not ask you for admin permissions
+- allows you to use AutoHotkey hotkeys and hotstrings with no code knowledge and no AutoHotkey installation
+- will update automatically if you accept its prompt to do so
+- is written in [AutoHotkey v2](https://www.autohotkey.com/)
 
 Jump to [config](#config).
 
-## Installation
+## Setup
 
-You can install this script without AutoHotKey using the .exe files found under [Releases](https://github.com/rafaelurben/autohotkey-utils/releases). Sorry to all non-Windows-users, but this is a Windows-only thing. :(
+You can setup this script without AutoHotKey using the .exe files found under [Releases](https://github.com/rafaelurben/autohotkey-utils/releases).
 
 The first time you launch the script, it will ask you if you want it to automatically start everytime you log in. If you missed the chance to click yes, you can just delete the ".hotkey-temp.txt" file and reload the script.
 
 Everytime the script reloads, it will check if there is a newer version of it available on this page and will ask you if you want to update.
 
-Note: Windows may warn you that this script is insecure, but you can ignore this warning as long as you download the exe file from this repository. If you don't trust this exe file, you can also download the current .ahk file, but then you must also install AutoHotkey. But please note, that the update engine doesn't work when using the .ahk file!
+Note: Windows may warn you that this script is insecure, but you can ignore this warning as long as you download the exe file from this repository. If you don't trust this exe file, you can also download the current .ahk file, but then you must also install AutoHotkey v2. But please note that the update engine doesn't work when using the .ahk file!
 
 ## Current Modules
 
@@ -130,7 +138,7 @@ Press `Win+L` or `Ctrl+Alt+Delete` to exit.
 
 ### Hotstrings
 
-This module needs some configuration. (see [here](#create-hostrings))
+This module needs some configuration. (see [here](#create-hotstrings))
 
 ---
 
