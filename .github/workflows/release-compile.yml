@@ -18,10 +18,10 @@ jobs:
         id: ahk2exe
         with:
           in: hotkeys.ahk
-          out: out/hotkeys.exe
+          out: out/hotkeys-${{  github.ref_name }}.exe
           # icon: res/icon.ico
 
       - name: Add to release
         uses: softprops/action-gh-release@v2
         with:
-          files: out/hotkeys.exe
+          files: out/hotkeys-${{  github.ref_name }}.exe
