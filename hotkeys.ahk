@@ -36,7 +36,6 @@ global _DEFAULTKEYBINDS := Map(
 	"QRGenerator_FromClipboard", "!#q",
 	"ClipboardUrl_Open", "#o",
 	"ClipboardUrl_OpenEditor", "^#o",
-	"OpenUrl", "+#o",
 	"QuickNotes_Create", "+#n",
 	"QuickNotes_Open", "^#n",
 	"SoftLock_Block", "+#l",
@@ -222,10 +221,6 @@ _UrlEncode(Url, Flags := 0x000C3000) {
 
 ReloadFiles(*) {
 	Reload()
-}
-
-OpenUrl(*) {
-	_OpenUrlEditor("https://")
 }
 
 CloseProcess(*) {
