@@ -431,7 +431,8 @@ _QRGenerator(data) {
 		Download("http://api.qrserver.com/v1/create-qr-code/?format=png&size=500x500&data=" newdata, A_WorkingDir "/data/qr/qrcode.png")
 		Download("http://api.qrserver.com/v1/create-qr-code/?format=svg&size=500x500&data=" newdata, A_WorkingDir "/data/qr/qrcode.svg")
 	} catch as e {
-		MsgBox("An error occured: " e.Message, "QRGenerator Error", 0)
+		MsgBox("An error occured: " e.Message "`n`nNote: This module requires an internet connection.", "QRGenerator Error", 0)
+		return
 	}
 
 	global _QRGeneratorGUI := Gui()
@@ -443,11 +444,11 @@ _QRGenerator(data) {
 
 	QRGeneratorFileMenu := Menu()
 	QRGeneratorFileMenu.Add("E&xit`tCtrl+W", _QRGenerator_GUIExit)
-	QRGeneratorMenuBar := Menu()
+	QRGeneratorMenuBar := MenuBar()
 	QRGeneratorMenuBar.Add("&File", QRGeneratorFileMenu)
 	
 	_QRGeneratorGUI.MenuBar := QRGeneratorMenuBar
-	_QRGeneratorGUI.Title := "QRGenerator (via .me)"
+	_QRGeneratorGUI.Title := "QRGenerator (via goqr.me)"
 	_QRGeneratorGUI.Show("Center w500")
 }
 
