@@ -159,7 +159,7 @@ _OpenUrl(url, *) {
 }
 
 _OpenUrlEditor(defaultUrl) {
-	IB := InputBox("Please enter your url:", "Open URL", , defaultUrl), url := IB.Value, ErrorLevel := IB.Result = "OK" ? 0 : IB.Result = "CANCEL" ? 1 : IB.Result = "Timeout" ? 2 : "ERROR"
+	IB := InputBox("Please enter your url:", "Open URL", , defaultUrl), url := IB.Value, ErrorLevel := IB.Result = "OK" ? 0 : IB.Result = "Cancel" ? 1 : IB.Result = "Timeout" ? 2 : "ERROR"
 	If !ErrorLevel
 		_OpenUrl(url)
 	return
@@ -224,7 +224,7 @@ ReloadFiles(*) {
 }
 
 CloseProcess(*) {
-	IB := InputBox("Please enter process name:", "Close Process", , "explorer.exe"), name := IB.Value, ErrorLevel := IB.Result = "OK" ? 0 : IB.Result = "CANCEL" ? 1 : IB.Result = "Timeout" ? 2 : "ERROR"
+	IB := InputBox("Please enter process name:", "Close Process", , "explorer.exe"), name := IB.Value, ErrorLevel := IB.Result = "OK" ? 0 : IB.Result = "Cancel" ? 1 : IB.Result = "Timeout" ? 2 : "ERROR"
 	if !ErrorLevel
 		_CloseProcess(name)
 	return
@@ -326,7 +326,7 @@ UrlShortcuts_Open(*) {
 ;; Insert urls (InputBox)
 
 UrlShortcuts_BoxInsert(*) {
-	IB := InputBox("Please enter shortcode:", "Insert URL"), key := IB.Value, ErrorLevel := IB.Result = "OK" ? 0 : IB.Result = "CANCEL" ? 1 : IB.Result = "Timeout" ? 2 : "ERROR"
+	IB := InputBox("Please enter shortcode:", "Insert URL"), key := IB.Value, ErrorLevel := IB.Result = "OK" ? 0 : IB.Result = "Cancel" ? 1 : IB.Result = "Timeout" ? 2 : "ERROR"
 	if _UrlShortcuts_Data.Has(key)
 		Send(_UrlShortcuts_Data[key])
 	else If key
@@ -337,7 +337,7 @@ UrlShortcuts_BoxInsert(*) {
 ;; Open urls (InputBox)
 
 UrlShortcuts_BoxOpen(*) {
-	IB := InputBox("Please enter shortcode:", "Open URL"), key := IB.Value, ErrorLevel := IB.Result = "OK" ? 0 : IB.Result = "CANCEL" ? 1 : IB.Result = "Timeout" ? 2 : "ERROR"
+	IB := InputBox("Please enter shortcode:", "Open URL"), key := IB.Value, ErrorLevel := IB.Result = "OK" ? 0 : IB.Result = "Cancel" ? 1 : IB.Result = "Timeout" ? 2 : "ERROR"
 	if _UrlShortcuts_Data.Has(key)
 		_OpenUrl(_UrlShortcuts_Data[key])
 	else If key
@@ -383,7 +383,7 @@ _InstantSearch(engineName, engineUrl, fromclipboard := false) {
 		search := A_Clipboard
 	} else {
 		IB := InputBox("Please enter your query:", "Search on " engineName)
-		if (IB.Result = "CANCEL" | IB.Result = "Timeout") 
+		if (IB.Result = "Cancel" || IB.Result = "Timeout") 
 			return
 		search := IB.Value
 	}
@@ -460,7 +460,7 @@ _QRGenerator(data) {
 }
 
 QRGenerator_InputBox(*) {
-	IB := InputBox("Please enter your data:", "Create a QR-Code"), data := IB.Value, ErrorLevel := IB.Result = "OK" ? 0 : IB.Result = "CANCEL" ? 1 : IB.Result = "Timeout" ? 2 : "ERROR"
+	IB := InputBox("Please enter your data:", "Create a QR-Code"), data := IB.Value, ErrorLevel := IB.Result = "OK" ? 0 : IB.Result = "Cancel" ? 1 : IB.Result = "Timeout" ? 2 : "ERROR"
 	if !ErrorLevel
 		_QRGenerator(data)
 	return
@@ -485,7 +485,7 @@ ClipboardUrl_OpenEditor(*) {
 ;;;; Quick-Notes
 
 QuickNotes_Create(*) {
-	IB := InputBox("Please enter a text to create a note:", "QuickNote"), note := IB.Value, ErrorLevel := IB.Result = "OK" ? 0 : IB.Result = "CANCEL" ? 1 : IB.Result = "Timeout" ? 2 : "ERROR"
+	IB := InputBox("Please enter a text to create a note:", "QuickNote"), note := IB.Value, ErrorLevel := IB.Result = "OK" ? 0 : IB.Result = "Cancel" ? 1 : IB.Result = "Timeout" ? 2 : "ERROR"
 	if note
 		FileAppend("`n" note, "config/hotkey-notes.txt")
 }
