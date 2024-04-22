@@ -31,12 +31,12 @@ You can modify the used search engines via [settings](#settings). Settings forma
 
 | Action                    | Description                         | Default shortcut |
 | ------------------------- | ----------------------------------- | ---------------- |
-| InstantSearch_1           | Search on DuckDuckGo                | `Win+Q`          |
-| InstantSearch_2           | Search on Google                    | `Shift+Win+Q`    |
-| InstantSearch_3           | Search on Wikipedia                 | -                |
-| InstantSearch_1_Clipboard | Search on DuckDuckGo from Clipboard | -                |
+| InstantSearch_1_Clipboard | Search on DuckDuckGo from Clipboard | `Win+Q`          |
+| InstantSearch_1           | Search on DuckDuckGo                | `Shift+Win+Q`    |
 | InstantSearch_2_Clipboard | Search on Google from Clipboard     | -                |
+| InstantSearch_2           | Search on Google                    | -                |
 | InstantSearch_3_Clipboard | Search on Wikipedia from Clipboard  | -                |
+| InstantSearch_3           | Search on Wikipedia                 | -                |
 
 ---
 
@@ -46,10 +46,10 @@ Generate a QRCode from any text.
 
 Note: Please use the clipboard action if you need to use multiline data.
 
-| Action                    | Description                         | Default shortcut |
-| ------------------------- | ----------------------------------- | ---------------- |
-| QRGenerator_InputBox      | Open Input-Window to enter text/url | `Ctrl+Win+Q`     |
-| QRGenerator_FromClipboard | Use data in Clipboard               | `Alt+Win+Q`      |
+| Action                    | Description                         | Default shortcut  |
+| ------------------------- | ----------------------------------- | ----------------- |
+| QRGenerator_FromClipboard | Use data in Clipboard               | `Alt+Win+Q`       |
+| QRGenerator_InputBox      | Open Input-Window to enter text/url | `Shift+Alt+Win+Q` |
 
 ---
 
@@ -60,7 +60,7 @@ Open the URL from the clipboard directly in your default browser.
 | Action                  | Description                                    | Default shortcut |
 | ----------------------- | ---------------------------------------------- | ---------------- |
 | ClipboardURL_Open       | Open Url directly                              | `Win+O`          |
-| ClipboardURL_OpenEditor | Open Input-Window to modify URL before opening | `Ctrl+Win+O`     |
+| ClipboardURL_OpenEditor | Open Input-Window to modify URL before opening | `Shift+Win+O`     |
 
 ---
 
@@ -75,9 +75,9 @@ This module needs some configuration. (see [here](#create-url-shortcodes))
 | Action                 | Description                                                                              | Default shortcut    |
 | ---------------------- | ---------------------------------------------------------------------------------------- | ------------------- |
 | UrlShortcuts_Insert    | Press and enter a 2-char shortcode during a 2-second-timeframe to **paste** url or text. | `Insert`            |
-| UrlShortcuts_Open      | Press and enter a 2-char shortcode during a 2-second-timeframe to **open** url.          | `Shift+Insert`      |
-| UrlShortcuts_BoxInsert | Open Input-Window and enter shortcode to **paste** url or text.                          | `Ctrl+Insert`       |
-| UrlShortcuts_BoxOpen   | Open Input-Window and enter shortcode to **open** url.                                   | `Ctrl+Shift+Insert` |
+| UrlShortcuts_Open      | Press and enter a 2-char shortcode during a 2-second-timeframe to **open** url or command.          | `Ctrl+Insert`      |
+| UrlShortcuts_BoxInsert | Open input window and enter shortcode to **paste** url or text.                          | `Shift+Insert`       |
+| UrlShortcuts_BoxOpen   | Open input window and enter shortcode to **open** url or command.                                   | `Shift+Ctrl+Insert` |
 
 ---
 
@@ -97,7 +97,7 @@ Quickly enter a character from the greek alphabet.
 
 | Action          | Description                                               | Default shortcut |
 | --------------- | --------------------------------------------------------- | ---------------- |
-| GreekAlphabet | Press and enter the name of the letter | `Shift+Win+G`    |
+| GreekAlphabet | Press and enter the name of the letter | -    |
 
 Example: `Shift+Win+G Pi Enter` or `Shift+Win+G pi Enter` (these are not the same)
 
@@ -111,8 +111,8 @@ Note: Please use the open action if you need to enter multiple lines.
 
 | Action            | Description                  | Default shortcut |
 | ----------------- | ---------------------------- | ---------------- |
-| QuickNotes_Create | Create e new note            | `Shift+Win+N`    |
-| QuickNotes_Open   | View and edit existing notes | `Ctrl+Win+N`     |
+| QuickNotes_Create | Create e new note            | -                |
+| QuickNotes_Open   | View and edit existing notes | -                |
 
 ---
 
@@ -138,12 +138,12 @@ This module needs some configuration. (see [here](#create-hostrings))
 
 | Action         | Description                      | Default shortcut |
 | -------------- | -------------------------------- | ---------------- |
-| CloseProcess   | Close a process by name          |                  |
-| ReloadFiles    | Reload the script and all files  | `Ctrl+Win+i`     |
+| CloseProcess   | Close a process by name          | `Shift+Win+Esc`  |
+| ReloadFiles    | Reload the script and all files  | -                |
 | Settings_Open  | Open the settings page           | `Shift+Win+i`    |
-| HoldRightMouse | Hold down the right mouse button |                  |
-| HoldLeftMouse  | Hold down the left mouse button  |                  |
-| PasteDateTime  | Paste the current date and time  |                  |
+| HoldRightMouse | Hold down the right mouse button | -                |
+| HoldLeftMouse  | Hold down the left mouse button  | -                |
+| PasteDateTime  | Paste the current date and time  | -                |
 
 ---
 
@@ -151,12 +151,12 @@ This module needs some configuration. (see [here](#create-hostrings))
 
 You can configurate and change some things in this little "app". You can open the settings via right click on the tray icon -> Settings or via the defined keybind (default: `Shift+Win+i`).
 
-You can also edit the settings in their corresponding files, but don't forget to reload afterwards if you edit the files directly. (default: `Ctrl+Win+i`)
+You can also edit the settings in their corresponding files, but don't forget to reload afterwards if you edit the files directly.
 If you edit them in the settings, this is automatically done for you after saving.
 
 ### Create URL-Shortcodes
 
-You can modify the shortcodes used for the [UrlShortcuts](#UrlShortcuts) module in the file called "hotkey-urls.txt" or in the settings. Use the following syntax: `shortcode|url`
+You can modify the shortcodes used for the [UrlShortcuts](#urlshortcuts) module in the file called "hotkey-urls.txt" or in the settings. Use the following syntax: `shortcode|url`
 
 Example:
 

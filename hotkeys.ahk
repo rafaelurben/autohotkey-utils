@@ -1,4 +1,4 @@
-; Rafael Urben, 2022-2024
+﻿; Rafael Urben, 2022-2024
 ; ------------------
 ;
 ; https://github.com/rafaelurben/autohotkey-utils
@@ -21,26 +21,26 @@ global _DEFAULTSETTINGS := Map(
 
 global _DEFAULTKEYBINDS := Map(
 	"UrlShortcuts_Insert", "Insert",
-	"UrlShortcuts_Open", "+Insert",
-	"UrlShortcuts_BoxInsert", "^Insert",
+	"UrlShortcuts_Open", "^Insert",
+	"UrlShortcuts_BoxInsert", "+Insert",
 	"UrlShortcuts_BoxOpen", "+^Insert",
 	"DriveLetterOpen", "+#e",
-	"GreekAlphabet", "+#g",
-	"InstantSearch_1", "#q",
-	"InstantSearch_2", "+#q",
+	"GreekAlphabet", "",
+	"InstantSearch_1", "+#q",
+	"InstantSearch_2", "",
 	"InstantSearch_3", "",
-	"InstantSearch_1_Clipboard", "",
+	"InstantSearch_1_Clipboard", "#q",
 	"InstantSearch_2_Clipboard", "",
 	"InstantSearch_3_Clipboard", "",
-	"QRGenerator_InputBox", "^#q",
+	"QRGenerator_InputBox", "+!#q",
 	"QRGenerator_FromClipboard", "!#q",
 	"ClipboardUrl_Open", "#o",
-	"ClipboardUrl_OpenEditor", "^#o",
-	"QuickNotes_Create", "+#n",
-	"QuickNotes_Open", "^#n",
+	"ClipboardUrl_OpenEditor", "+#o",
+	"QuickNotes_Create", "",
+	"QuickNotes_Open", "",
 	"SoftLock_Block", "+#l",
-	"CloseProcess", "",
-	"ReloadFiles", "^#i",
+	"CloseProcess", "+#Esc",
+	"ReloadFiles", "",
 	"Settings_Open", "+#i",
 	"HoldLeftMouse", "",
 	"HoldRightMouse", "",
