@@ -125,7 +125,7 @@ _CreateTrayMenu()
 _RegisterHotkeys()
 _RegisterHotstrings()
 _CleanupUpdate()
-CheckForUpdate(false)
+CheckForUpdate(false, false)
 
 ;;;; Debug
 ;; Auto-reload
@@ -230,9 +230,16 @@ CloseProcess(*) {
 	return
 }
 
-CheckForUpdate(shownonewupdatemessage := true, *) {
+CheckForUpdate(show_no_new_update_message := true, show_error_message := true, *) {
 	rand := Random(1, 10255)
-	Download("https://raw.githubusercontent.com/rafaelurben/autohotkey-utils/master/version.txt?randParam=" rand, ".hotkey-temp.txt")
+	try {
+		Download("https://raw.githubusercontent.com/rafaelurben/autohotkey-utils/master/version.txt?randParam=" rand, ".hotkey-temp.txt")
+	} catch OSError as e {
+		if (show_error_message) {
+			MsgBox("Couldn't check for new autohotkey-utils versions!`n`nError: " e.Message, "Checking for updates failed")
+		}
+		return
+	}
 	NewestVersion := Fileread(".hotkey-temp.txt")
 	NewestVersion := Trim(NewestVersion, OmitChars := " `t`n`r")
 	if (StrCompare(NewestVersion, CurrentVersion) > 0) {
@@ -254,7 +261,7 @@ CheckForUpdate(shownonewupdatemessage := true, *) {
 				MsgBox("The update to " NewestVersion " failed with error: " e.Message, "Update failed", 16)
 			}
 		}
-	} else if shownonewupdatemessage {
+	} else if show_no_new_update_message {
 		MsgBox("Your current version (" CurrentVersion ") is the newest version available.", "No Update available", 0)
 	}
 }
