@@ -1,0 +1,27 @@
+name: Compile script and attach to release
+
+on:
+  push:
+    tags:
+    - 'v*'
+
+jobs:
+  compile:
+    name: Compile autohotkey script
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Compile with Ahk2Exe
+        uses: cennis91/action-ahk2exe@main
+        id: ahk2exe
+        with:
+          in: hotkeys.ahk
+          out: out/hotkeys.exe
+          # icon: res/icon.ico
+
+      - name: Add to release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: out/hotkeys.exe
