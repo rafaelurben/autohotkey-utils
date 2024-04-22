@@ -149,7 +149,7 @@ CheckForUpdate(false, false)
 
 ;; Private
 
-_OpenUrl(url) {
+_OpenUrl(url, *) {
 	try {
 		Run(url)
 	} catch Error as e {
@@ -613,8 +613,13 @@ Settings_Open(*) {
 	SettingsFileMenu := Menu()
 	SettingsFileMenu.Add("&Save`tCtrl+S", _Settings_GUISave)
 	SettingsFileMenu.Add("E&xit`tCtrl+W", _Settings_GUIExit)
+	SettingsLinksMenu := Menu()
+	SettingsLinksMenu.Add("Repository (GitHub)", _OpenUrl.Bind("https://github.com/rafaelurben/autohotkey-utils/"))
+	SettingsLinksMenu.Add("Releases (GitHub)", _OpenUrl.Bind("https://github.com/rafaelurben/autohotkey-utils/releases"))
+	SettingsLinksMenu.Add("Author (GitHub)", _OpenUrl.Bind("https://github.com/rafaelurben/"))
 	SettingsMenuBar := MenuBar()
 	SettingsMenuBar.Add("&File", SettingsFileMenu)
+	SettingsMenuBar.Add("&Links", SettingsLinksMenu)
 	
 	_SettingsGUI.MenuBar := SettingsMenuBar
 	_SettingsGUI.Show()
