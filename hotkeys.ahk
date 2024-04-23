@@ -387,51 +387,62 @@ GreekAlphabet(*) {
 
 ;;;; Instant-Search
 
-_InstantSearch(engineName, engineUrl, fromclipboard := false) {
-	if fromclipboard {
-		search := A_Clipboard
-	} else {
-		IB := InputBox("Please enter your query:", "Search on " engineName)
-		if (IB.Result = "Cancel" || IB.Result = "Timeout") 
-			return
-		search := IB.Value
-	}
-	_search := _UrlEncode(search)
-	url := engineUrl . "" . _search
-	if url
-		_OpenUrl(url)
-	return
-}
+class SearchEngine extends Object {
+	static AllEngines := [
+		this.ParseFromSetting("SEARCHENGINE1"),
+		this.ParseFromSetting("SEARCHENGINE2"),
+		this.ParseFromSetting("SEARCHENGINE3"),
+	]
 
-_InstantSearch_FromSetting(key, fromclipboard := false) {
-	row := StrSplit(_GetSetting(key, _Settings_Data, _DEFAULTSETTINGS), "|")
-	name := row[1]
-	url := row[2]
-	_InstantSearch(name, url, fromclipboard)
+	static ParseFromSetting(setting_name) {
+		row := StrSplit(_GetSetting(setting_name, _Settings_Data, _DEFAULTSETTINGS), "|")
+		return SearchEngine(row[1], row[2])
+	}
+
+	__New(name, url) {
+		this.name := name
+		this.url := url
+	}
+
+	Search(query) {
+		_query := _UrlEncode(query)
+		url := this.url . "" . _query
+		_OpenUrl(url)
+	}
+
+	SearchFromMsgBox() {
+		IB := InputBox("Please enter your query:", "Search on " this.name)
+		if (IB.Result = "OK") 
+			this.Search(IB.Value)
+	}
+
+	SearchFromClipboard() {
+		this.Search(A_Clipboard)
+	}
 }
 
 InstantSearch_1(*) {
-	_InstantSearch_FromSetting("SEARCHENGINE1")
+	SearchEngine.AllEngines[1].SearchFromMsgBox()
 }
 
 InstantSearch_2(*) {
-	_InstantSearch_FromSetting("SEARCHENGINE2")
+	SearchEngine.AllEngines[2].SearchFromMsgBox()
 }
 
 InstantSearch_3(*) {
-	_InstantSearch_FromSetting("SEARCHENGINE3")
+	SearchEngine.AllEngines[3].SearchFromMsgBox()
 }
 
 InstantSearch_1_Clipboard(*) {
-	_InstantSearch_FromSetting("SEARCHENGINE1", true)
+	SearchEngine.AllEngines[1].SearchFromClipboard()
 }
 
 InstantSearch_2_Clipboard(*) {
-	_InstantSearch_FromSetting("SEARCHENGINE2", true)
+	SearchEngine.AllEngines[2].SearchFromClipboard()
 }
 
 InstantSearch_3_Clipboard(*) {
-	_InstantSearch_FromSetting("SEARCHENGINE3", true)
+	SearchEngine.AllEngines[3].SearchFromClipboard()
 }
 
 ;;;; QR-Generator
@@ -644,13 +655,14 @@ _CreateTrayMenu() {
 	QRGeneratorMenu.Add("Create from input", QRGenerator_InputBox)
 	QRGeneratorMenu.Add("Create from clipbaord", QRGenerator_FromClipboard)
 	InstantSearchMenu := Menu()
-	InstantSearchMenu.Add("Search 1", InstantSearch_1)
-	InstantSearchMenu.Add("Search 2", InstantSearch_2)
-	InstantSearchMenu.Add("Search 3", InstantSearch_3)
+	InstantSearchMenu.Add(SearchEngine.AllEngines[1].name, InstantSearch_1)
+	InstantSearchMenu.Add(SearchEngine.AllEngines[1].name " (clipboard)", InstantSearch_1_Clipboard)
 	InstantSearchMenu.Add()
-	InstantSearchMenu.Add("Search 1 from clipboard", InstantSearch_1_Clipboard)
-	InstantSearchMenu.Add("Search 2 from clipboard", InstantSearch_2_Clipboard)
-	InstantSearchMenu.Add("Search 3 from clipboard", InstantSearch_3_Clipboard)
+	InstantSearchMenu.Add(SearchEngine.AllEngines[2].name, InstantSearch_2)
+	InstantSearchMenu.Add(SearchEngine.AllEngines[2].name " (clipboard)", InstantSearch_2_Clipboard)
+	InstantSearchMenu.Add()
+	InstantSearchMenu.Add(SearchEngine.AllEngines[3].name, InstantSearch_3)
+	InstantSearchMenu.Add(SearchEngine.AllEngines[3].name " (clipboard)", InstantSearch_3_Clipboard)
 	global _ActionsMenu := Menu()
 	_ActionsMenu.Add("Close a Process", CloseProcess)
 	_ActionsMenu.Add()
