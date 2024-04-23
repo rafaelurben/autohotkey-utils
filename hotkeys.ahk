@@ -1,4 +1,4 @@
-﻿; Rafael Urben, 2022-2024
+; Rafael Urben, 2022-2024
 ; ------------------
 ;
 ; https://github.com/rafaelurben/autohotkey-utils
@@ -596,20 +596,10 @@ QuickNotes_Open(*) {
 
 ;;;; Soft-Lock (Only works when run as Admin)
 
-SoftLock_UnBlock(*) {
-	BlockInput("Off")
-	_ActionsMenu.Delete("[SoftLock] Block Input")
-	_ActionsMenu.Add("[SoftLock] Block Input", SoftLock_Block)
-}
-
 SoftLock_Block(*) {
 	Sleep(500)
-	_ActionsMenu.Delete("[SoftLock] Block Input")
-	_ActionsMenu.Add("[SoftLock] Block Input", SoftLock_UnBlock)
-	_ActionsMenu.Check("[SoftLock] Block Input")
 	BlockInput("On")
 }
-
 
 ;;;; Random
 
@@ -732,7 +722,7 @@ _CreateTrayMenu() {
 	_ActionsMenu.Add("[QuickNotes]", QuickNotesMenu)
 	if (A_IsAdmin) {
 		_ActionsMenu.Add()
-		_ActionsMenu.Add("* [SoftLock] Block Input`t" Config.GetKeybindHumanReadable("SoftLock_Block"), SoftLock_Block)
+		_ActionsMenu.Add("[SoftLock] Block Input`t" Config.GetKeybindHumanReadable("SoftLock_Block"), SoftLock_Block)
 	}
 	_ActionsMenu.Add()
 	_ActionsMenu.Add("Close process by name`t" Config.GetKeybindHumanReadable("CloseProcess"), CloseProcess)
