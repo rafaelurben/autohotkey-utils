@@ -96,7 +96,15 @@ class Config {
 		try {
 			Loop Read, filepath
 			{
+				if (A_LoopReadLine = "") 
+					continue
+			
 				row := StrSplit(A_LoopReadLine, separator)
+				if (row.length != 2) {
+					MsgBox("Invalid line in config file " filename ":`n`n" A_Index ": " A_LoopReadLine, "Configuration syntax error", 0)
+					continue
+				}
+
 				key := row[1]
 				val := row[2]
 				_dict[key] := val
@@ -104,6 +112,8 @@ class Config {
 		} catch OSError {
 			; create file (didn't exist)
 			FileAppend("", filepath)
+		} catch Error as e {
+			MsgBox("Failed to load config file " filename "! `n`nError: " e.Message, "Configuration error", 0)
 		}
 		return _dict
 	}
