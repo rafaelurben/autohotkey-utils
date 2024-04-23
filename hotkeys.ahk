@@ -1,9 +1,10 @@
-; Rafael Urben, 2022-2024
+﻿; Rafael Urben, 2022-2024
 ; ------------------
 ;
 ; https://github.com/rafaelurben/autohotkey-utils
 
 #Warn All ; Enable warnings to assist with detecting common errors.
+#SingleInstance Force
 #Requires AutoHotkey v2.0
 SendMode("Input")
 SetWorkingDir(A_ScriptDir)
