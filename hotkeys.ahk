@@ -3,100 +3,14 @@
 ;
 ; https://github.com/rafaelurben/autohotkey-utils
 
-; #Warn  ; Enable warnings to assist with detecting common errors.
+#Warn All ; Enable warnings to assist with detecting common errors.
 #Requires AutoHotkey v2.0
 SendMode("Input")
 SetWorkingDir(A_ScriptDir)
 
-;; Variables
+;; Version
 
 global CurrentVersion := "v2.0.0"
-
-global _DEFAULTSETTINGS := Map(
-	"SEARCHENGINE1", "DuckDuckGo|https://duckduckgo.com/?q=",
-	"SEARCHENGINE2", "Google|https://google.com/search?q=",
-	"SEARCHENGINE3", "Wikipedia|https://en.wikipedia.org/wiki/Special:Search?search=",
-	"DATETIMEFORMAT", ""
-)
-
-global _DEFAULTKEYBINDS := Map(
-	"UrlShortcuts_Insert", "Insert",
-	"UrlShortcuts_Open", "^Insert",
-	"UrlShortcuts_BoxInsert", "+Insert",
-	"UrlShortcuts_BoxOpen", "+^Insert",
-	"DriveLetterOpen", "+#e",
-	"GreekAlphabet", "",
-	"InstantSearch_1", "+#q",
-	"InstantSearch_2", "",
-	"InstantSearch_3", "",
-	"InstantSearch_1_Clipboard", "#q",
-	"InstantSearch_2_Clipboard", "",
-	"InstantSearch_3_Clipboard", "",
-	"QRGenerator_InputBox", "+!#q",
-	"QRGenerator_FromClipboard", "!#q",
-	"ClipboardUrl_Open", "#o",
-	"ClipboardUrl_OpenEditor", "+#o",
-	"QuickNotes_Create", "",
-	"QuickNotes_Open", "",
-	"SoftLock_Block", "+#l",
-	"CloseProcess", "+#Esc",
-	"ReloadFiles", "",
-	"Settings_Open", "+#i",
-	"HoldLeftMouse", "",
-	"HoldRightMouse", "",
-	"PasteDateTime", ""
-)
-
-global _GREEKALPHABET := Map(
-	"Alpha", "Α",
-	"Beta", "Β",
-	"Gamma", "Γ",
-	"Delta", "Δ",
-	"Epsilon", "Ε",
-	"Zeta", "Ζ",
-	"Eta", "Η",
-	"Theta", "Θ",
-	"Iota", "Ι",
-	"Kappa", "Κ",
-	"Lamda", "Λ",
-	"Mu", "Μ",
-	"Nu", "Ν",
-	"Xi", "Ξ",
-	"Omicron", "Ο",
-	"Pi", "Π",
-	"Rho", "Ρ",
-	"Sigma", "Σ",
-	"Tau", "Τ",
-	"Upsilon", "Υ",
-	"Phi", "Φ",
-	"Chi", "Χ",
-	"Psi", "Ψ",
-	"Omega", "Ω",
-	"alpha", "α",
-	"beta", "β",
-	"gamma", "γ",
-	"delta", "δ",
-	"epsilon", "ε",
-	"zeta", "ζ",
-	"eta", "η",
-	"theta", "θ",
-	"iota", "ι",
-	"kappa", "κ",
-	"lamda", "λ",
-	"mu", "μ",
-	"nu", "ν",
-	"xi", "ξ",
-	"omicron", "ο",
-	"pi", "π",
-	"rho", "ρ",
-	"sigma", "σ",
-	"tau", "τ",
-	"upsilon", "υ",
-	"phi", "φ",
-	"chi", "χ",
-	"psi", "ψ",
-	"omega", "ω"
-)
 
 ;; Directories
 
@@ -104,11 +18,105 @@ DirCreate(A_WorkingDir "/data")
 DirCreate(A_WorkingDir "/data/qr")
 DirCreate(A_WorkingDir "/config")
 
-;; Initialize config
+;; Config
 
-global _UrlShortcuts_Data := _LoadDictFromFile("config/hotkey-urls.txt", "|")
-global _Keybinds_Data := _LoadDictFromFile("config/hotkey-keybinds.txt", "|")
-global _Settings_Data := _LoadDictFromFile("config/hotkey-settings.txt", "||")
+class Config {
+	; Settings
+	static _SETTINGS_Default := Map(
+		"SEARCHENGINE1", "DuckDuckGo|https://duckduckgo.com/?q=",
+		"SEARCHENGINE2", "Google|https://google.com/search?q=",
+		"SEARCHENGINE3", "Wikipedia|https://en.wikipedia.org/wiki/Special:Search?search=",
+		"DATETIMEFORMAT", ""
+	)
+	static _SETTINGS_Custom := this.LoadMapFromFile("hotkey-settings.txt", "||")
+	
+	static GetSetting(name) {
+		return this._get(name, this._SETTINGS_Custom, this._SETTINGS_Default)
+	}
+
+	; Keybinds
+	static _KEYBINDS_Default := Map(
+		"UrlShortcuts_Insert", "Insert",
+		"UrlShortcuts_Open", "^Insert",
+		"UrlShortcuts_BoxInsert", "+Insert",
+		"UrlShortcuts_BoxOpen", "+^Insert",
+		"DriveLetterOpen", "+#e",
+		"GreekAlphabet", "",
+		"InstantSearch_1", "+#q",
+		"InstantSearch_2", "",
+		"InstantSearch_3", "",
+		"InstantSearch_1_Clipboard", "#q",
+		"InstantSearch_2_Clipboard", "",
+		"InstantSearch_3_Clipboard", "",
+		"QRGenerator_InputBox", "+!#q",
+		"QRGenerator_FromClipboard", "!#q",
+		"ClipboardUrl_Open", "#o",
+		"ClipboardUrl_OpenEditor", "+#o",
+		"QuickNotes_Create", "",
+		"QuickNotes_Open", "",
+		"SoftLock_Block", "+#l",
+		"CloseProcess", "+#Esc",
+		"ReloadFiles", "",
+		"Settings_Open", "+#i",
+		"HoldLeftMouse", "",
+		"HoldRightMouse", "",
+		"PasteDateTime", ""
+	)
+
+	static _KEYBINDS_Custom := this.LoadMapFromFile("hotkey-keybinds.txt", "|")
+
+	static GetKeybind(name) {
+		return this._get(name, this._KEYBINDS_Custom, this._KEYBINDS_Default)
+	}
+
+	; Utils
+	static _get(key, dict, default) {
+		try {
+			if dict.Has(key)
+				return dict[key]
+			else
+				return default[key]
+		} catch as e {
+			MsgBox("Failed to get config with name " key "! `n`nError: " e.Message, "Settings error", 0)
+		}
+	}
+	
+	static LoadMapFromFile(filename, separator := "|") {
+		filepath := A_WorkingDir . "/config/" . filename
+		_dict := Map()
+		try {
+			Loop Read, filepath
+			{
+				row := StrSplit(A_LoopReadLine, separator)
+				key := row[1]
+				val := row[2]
+				_dict[key] := val
+			}
+		} catch OSError {
+			; create file (didn't exist)
+			FileAppend("", filepath)
+		}
+		return _dict
+	}
+}
+
+class Settings {
+	; [InstantSearch]
+	static SearchEngine1 := SearchEngine.ParseFromString(Config.GetSetting("SEARCHENGINE1"))
+	static SearchEngine2 := SearchEngine.ParseFromString(Config.GetSetting("SEARCHENGINE2"))
+	static SearchEngine3 := SearchEngine.ParseFromString(Config.GetSetting("SEARCHENGINE3"))
+
+	; [UrlShortcodes]
+	static UrlShortcodes := Config.LoadMapFromFile("hotkey-urls.txt", "|")
+
+	; [HotStrings]
+	static HotStrings := Config.LoadMapFromFile("hotkey-hotstrings.txt")
+
+	; [Random]
+	static DateTimeFormat := Config.GetSetting("DATETIMEFORMAT")
+}
+
+;; Initialize
 
 _CreateTrayMenu()
 _RegisterHotkeys()
@@ -152,34 +160,6 @@ _OpenUrlEditor(defaultUrl) {
 	if IB.Result = "OK"
 		_OpenUrl(IB.Value)
 	return
-}
-
-_GetSetting(key, dict, defaultdict) {
-	try {
-		if dict.Has(key)
-			return dict[key]
-		else
-			return defaultdict[key]
-	} catch as e {
-		MsgBox("Failed to get setting with name " key "! `n`nError: " e.Message, "Settings error", 0)
-	}	
-}
-
-_LoadDictFromFile(filename, seperator := "|") {
-	_dict := Map()
-	try {
-		Loop Read, filename
-		{
-			row := StrSplit(A_LoopReadLine, seperator)
-			key := row[1]
-			val := row[2]
-			_dict[key] := val
-		}
-	} catch OSError {
-		; create file (didn't exist)
-		FileAppend("", filename)
-	}
-	return _dict
 }
 
 _OverwriteFile(filename, content := "") {
@@ -302,8 +282,8 @@ UrlShortcuts_Insert(*) {
 	SplashTextGui.Destroy()
 	if endReason = "Max" {
 		key := ihkey.Input
-		if _UrlShortcuts_Data.Has(key)
-			Send(_UrlShortcuts_Data[key])
+		if Settings.UrlShortcodes.Has(key)
+			Send(Settings.UrlShortcodes[key])
 		else If key
 			MsgBox("Unknown shortcut: `"" key "`"", "Insert URL failed", 0)
 	}
@@ -321,8 +301,8 @@ UrlShortcuts_Open(*) {
 	SplashTextGui.Destroy()
 	if endReason = "Max" {
 		key := ihkey.Input
-		if _UrlShortcuts_Data.Has(key)
-			_OpenUrl(_UrlShortcuts_Data[key])
+		if Settings.UrlShortcodes.Has(key)
+			_OpenUrl(Settings.UrlShortcodes[key])
 		else If key
 			MsgBox("Unknown shortcut: `"" key "`"", "Open URL failed", 0)
 	}
@@ -334,8 +314,8 @@ UrlShortcuts_BoxInsert(*) {
 	IB := InputBox("Please enter shortcode:", "Insert URL")
 	key := IB.Value
 	if IB.Result = "OK" && key {
-		if _UrlShortcuts_Data.Has(key)
-			Send(_UrlShortcuts_Data[key])
+		if Settings.UrlShortcodes.Has(key)
+			Send(Settings.UrlShortcodes[key])
 		else If key
 			MsgBox("Unknown key: `"" key "`"", "Insert URL failed", 0)
 	}
@@ -347,8 +327,8 @@ UrlShortcuts_BoxOpen(*) {
 	IB := InputBox("Please enter shortcode:", "Open URL")
 	key := IB.Value
 	if IB.Result = "OK" && key {
-		if _UrlShortcuts_Data.Has(key)
-			_OpenUrl(_UrlShortcuts_Data[key])
+		if Settings.UrlShortcodes.Has(key)
+			_OpenUrl(Settings.UrlShortcodes[key])
 		else If key
 			MsgBox("Unknown key: `"" key "`"", "Open URL", 0)
 	}
@@ -373,12 +353,63 @@ DriveLetterOpen(*) {
 
 ;;;; GreekAlphabet
 
+global GREEK_ALPHABET := Map(
+	"Alpha", "Α",
+	"Beta", "Β",
+	"Gamma", "Γ",
+	"Delta", "Δ",
+	"Epsilon", "Ε",
+	"Zeta", "Ζ",
+	"Eta", "Η",
+	"Theta", "Θ",
+	"Iota", "Ι",
+	"Kappa", "Κ",
+	"Lamda", "Λ",
+	"Mu", "Μ",
+	"Nu", "Ν",
+	"Xi", "Ξ",
+	"Omicron", "Ο",
+	"Pi", "Π",
+	"Rho", "Ρ",
+	"Sigma", "Σ",
+	"Tau", "Τ",
+	"Upsilon", "Υ",
+	"Phi", "Φ",
+	"Chi", "Χ",
+	"Psi", "Ψ",
+	"Omega", "Ω",
+	"alpha", "α",
+	"beta", "β",
+	"gamma", "γ",
+	"delta", "δ",
+	"epsilon", "ε",
+	"zeta", "ζ",
+	"eta", "η",
+	"theta", "θ",
+	"iota", "ι",
+	"kappa", "κ",
+	"lamda", "λ",
+	"mu", "μ",
+	"nu", "ν",
+	"xi", "ξ",
+	"omicron", "ο",
+	"pi", "π",
+	"rho", "ρ",
+	"sigma", "σ",
+	"tau", "τ",
+	"upsilon", "υ",
+	"phi", "φ",
+	"chi", "χ",
+	"psi", "ψ",
+	"omega", "ω"
+)
+
 GreekAlphabet(*) {
 	SplashTextGui := Gui("ToolWindow -Sysmenu Disabled", "Greek alphabet"), SplashTextGui.Add("Text", , "Please enter a letter..."), SplashTextGui.Show("w300 h50")
 	ihletter := InputHook("T5", "{Esc}{Enter}"), ihletter.Start(), ihletter.Wait(), letter := ihletter.Input
 	SplashTextGui.Destroy
-	if _GREEKALPHABET.Has(letter) {
-		greekletter := _GREEKALPHABET[letter]
+	if GREEK_ALPHABET.Has(letter) {
+		greekletter := GREEK_ALPHABET[letter]
 		Send(greekletter)
 	} else If letter
 		MsgBox("Unknown letter: `"" letter "`"", "Greek alphabet", 0)
@@ -388,14 +419,10 @@ GreekAlphabet(*) {
 ;;;; Instant-Search
 
 class SearchEngine extends Object {
-	static AllEngines := [
-		this.ParseFromSetting("SEARCHENGINE1"),
-		this.ParseFromSetting("SEARCHENGINE2"),
-		this.ParseFromSetting("SEARCHENGINE3"),
-	]
-
-	static ParseFromSetting(setting_name) {
-		row := StrSplit(_GetSetting(setting_name, _Settings_Data, _DEFAULTSETTINGS), "|")
+	static ParseFromString(str) {
+		; Format: "Name|Url" (query will be appended to the url)
+		; Example: "DuckDuckGo|https://duckduckgo.com/?q="
+		row := StrSplit(str, "|")
 		return SearchEngine(row[1], row[2])
 	}
 
@@ -422,27 +449,27 @@ class SearchEngine extends Object {
 }
 
 InstantSearch_1(*) {
-	SearchEngine.AllEngines[1].SearchFromMsgBox()
+	Settings.SearchEngine1.SearchFromMsgBox()
 }
 
 InstantSearch_2(*) {
-	SearchEngine.AllEngines[2].SearchFromMsgBox()
+	Settings.SearchEngine2.SearchFromMsgBox()
 }
 
 InstantSearch_3(*) {
-	SearchEngine.AllEngines[3].SearchFromMsgBox()
+	Settings.SearchEngine3.SearchFromMsgBox()
 }
 
 InstantSearch_1_Clipboard(*) {
-	SearchEngine.AllEngines[1].SearchFromClipboard()
+	Settings.SearchEngine1.SearchFromClipboard()
 }
 
 InstantSearch_2_Clipboard(*) {
-	SearchEngine.AllEngines[2].SearchFromClipboard()
+	Settings.SearchEngine2.SearchFromClipboard()
 }
 
 InstantSearch_3_Clipboard(*) {
-	SearchEngine.AllEngines[3].SearchFromClipboard()
+	Settings.SearchEngine3.SearchFromClipboard()
 }
 
 ;;;; QR-Generator
@@ -576,7 +603,7 @@ HoldRightMouse(*) {
 }
 
 PasteDateTime(*) {
-	_fmt := _GetSetting("DATETIMEFORMAT", _Settings_Data, _DEFAULTSETTINGS)
+	_fmt := Settings.DateTimeFormat
 	currentdatetime := FormatTime(, _fmt)
 	SendInput(currentdatetime)
 }
@@ -655,14 +682,14 @@ _CreateTrayMenu() {
 	QRGeneratorMenu.Add("Create from input", QRGenerator_InputBox)
 	QRGeneratorMenu.Add("Create from clipbaord", QRGenerator_FromClipboard)
 	InstantSearchMenu := Menu()
-	InstantSearchMenu.Add(SearchEngine.AllEngines[1].name, InstantSearch_1)
-	InstantSearchMenu.Add(SearchEngine.AllEngines[1].name " (clipboard)", InstantSearch_1_Clipboard)
+	InstantSearchMenu.Add(Settings.SearchEngine1.name, InstantSearch_1)
+	InstantSearchMenu.Add(Settings.SearchEngine1.name " (clipboard)", InstantSearch_1_Clipboard)
 	InstantSearchMenu.Add()
-	InstantSearchMenu.Add(SearchEngine.AllEngines[2].name, InstantSearch_2)
-	InstantSearchMenu.Add(SearchEngine.AllEngines[2].name " (clipboard)", InstantSearch_2_Clipboard)
+	InstantSearchMenu.Add(Settings.SearchEngine2.name, InstantSearch_2)
+	InstantSearchMenu.Add(Settings.SearchEngine2.name " (clipboard)", InstantSearch_2_Clipboard)
 	InstantSearchMenu.Add()
-	InstantSearchMenu.Add(SearchEngine.AllEngines[3].name, InstantSearch_3)
-	InstantSearchMenu.Add(SearchEngine.AllEngines[3].name " (clipboard)", InstantSearch_3_Clipboard)
+	InstantSearchMenu.Add(Settings.SearchEngine3.name, InstantSearch_3)
+	InstantSearchMenu.Add(Settings.SearchEngine3.name " (clipboard)", InstantSearch_3_Clipboard)
 	global _ActionsMenu := Menu()
 	_ActionsMenu.Add("Close a Process", CloseProcess)
 	_ActionsMenu.Add()
@@ -683,11 +710,11 @@ _CreateTrayMenu() {
 }
 
 _RegisterHotkeys() {
-	for func_name, _ in _DEFAULTKEYBINDS
+	for func_name, _ in Config._KEYBINDS_Default
 	{
 		func_obj := %func_name%
 		if func_obj is Func {
-			shortcut := _GetSetting(func_name, _Keybinds_Data, _DEFAULTKEYBINDS)
+			shortcut := Config.GetKeybind(func_name)
 
 			if (shortcut != "") {
 				try {
@@ -703,9 +730,7 @@ _RegisterHotkeys() {
 }
 
 _RegisterHotstrings() {
-	hotstrings := _LoadDictFromFile("config/hotkey-hotstrings.txt")
-
-	for key, value in hotstrings
+	for key, value in Settings.HotStrings
 	{
 		try {
 			Hotstring(key, value, "On")
