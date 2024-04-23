@@ -10,26 +10,23 @@ This script...
 - will update automatically if you accept its prompt to do so
 - is written in [AutoHotkey v2](https://www.autohotkey.com/)
 
-Jump to [config](#config).
-
-## Setup
-
-You can setup this script without AutoHotKey using the .exe files found under [Releases](https://github.com/rafaelurben/autohotkey-utils/releases).
-
-The first time you launch the script, it will ask you if you want it to automatically start everytime you log in. If you missed the chance to click yes, you can just delete the ".hotkey-temp.txt" file and reload the script.
-
-Everytime the script reloads, it will check if there is a newer version of it available on this page and will ask you if you want to update.
-
-Note: Windows may warn you that this script is insecure, but you can ignore this warning as long as you download the exe file from this repository. If you don't trust this exe file, you can also download the current .ahk file, but then you must also install AutoHotkey v2. But please note that the update engine doesn't work when using the .ahk file!
+Jump to [setup](#setup) or [config](#config).
 
 ## Current Modules
 
+Current modules are:
+
+<!-- no toc -->
 - [InstantSearch](#instantsearch)
 - [QRGenerator](#qrgenerator)
 - [ClipboardURL](#clipboardurl)
 - [UrlShortcuts](#urlshortcuts)
+- [Drive letter open](#drive-letter-open)
+- [Greek alphabet](#greek-alphabet)
 - [QuickNotes](#quicknotes)
 - [SoftLock](#softlock)
+- [Hotstrings](#hotstrings)
+- [General actions](#general-actions)
 
 ### InstantSearch
 
@@ -68,7 +65,7 @@ Open the URL from the clipboard directly in your default browser.
 | Action                  | Description                                    | Default shortcut |
 | ----------------------- | ---------------------------------------------- | ---------------- |
 | ClipboardURL_Open       | Open Url directly                              | `Win+O`          |
-| ClipboardURL_OpenEditor | Open Input-Window to modify URL before opening | `Shift+Win+O`     |
+| ClipboardURL_OpenEditor | Open Input-Window to modify URL before opening | `Shift+Win+O`    |
 
 ---
 
@@ -80,12 +77,12 @@ Save URLs to open easily via shortcodes.
 
 This module needs some configuration. (see [here](#create-url-shortcodes))
 
-| Action                 | Description                                                                              | Default shortcut    |
-| ---------------------- | ---------------------------------------------------------------------------------------- | ------------------- |
-| UrlShortcuts_Insert    | Press and enter a 2-char shortcode during a 2-second-timeframe to **paste** url or text. | `Insert`            |
-| UrlShortcuts_Open      | Press and enter a 2-char shortcode during a 2-second-timeframe to **open** url or command.          | `Ctrl+Insert`      |
-| UrlShortcuts_BoxInsert | Open input window and enter shortcode to **paste** url or text.                          | `Shift+Insert`       |
-| UrlShortcuts_BoxOpen   | Open input window and enter shortcode to **open** url or command.                                   | `Shift+Ctrl+Insert` |
+| Action                 | Description                                                                                | Default shortcut    |
+| ---------------------- | ------------------------------------------------------------------------------------------ | ------------------- |
+| UrlShortcuts_Insert    | Press and enter a 2-char shortcode during a 2-second-timeframe to **paste** url or text.   | `Insert`            |
+| UrlShortcuts_Open      | Press and enter a 2-char shortcode during a 2-second-timeframe to **open** url or command. | `Ctrl+Insert`       |
+| UrlShortcuts_BoxInsert | Open input window and enter shortcode to **paste** url or text.                            | `Shift+Insert`      |
+| UrlShortcuts_BoxOpen   | Open input window and enter shortcode to **open** url or command.                          | `Shift+Ctrl+Insert` |
 
 ---
 
@@ -103,9 +100,9 @@ Quickly open an explorer window with the desired drive.
 
 Quickly enter a character from the greek alphabet.
 
-| Action          | Description                                               | Default shortcut |
-| --------------- | --------------------------------------------------------- | ---------------- |
-| GreekAlphabet | Press and enter the name of the letter | -    |
+| Action        | Description                            | Default shortcut |
+| ------------- | -------------------------------------- | ---------------- |
+| GreekAlphabet | Press and enter the name of the letter | -                |
 
 Example: `Shift+Win+G Pi Enter` or `Shift+Win+G pi Enter` (these are not the same)
 
@@ -144,16 +141,26 @@ This module needs some configuration. (see [here](#create-hotstrings))
 
 ### General actions
 
-| Action         | Description                      | Default shortcut |
-| -------------- | -------------------------------- | ---------------- |
-| CloseProcess   | Close a process by name          | `Shift+Win+Esc`  |
-| ReloadFiles    | Reload the script and all files  | -                |
-| Settings_Open  | Open the settings page           | `Shift+Win+i`    |
-| HoldRightMouse | Hold down the right mouse button | -                |
-| HoldLeftMouse  | Hold down the left mouse button  | -                |
-| PasteDateTime  | Paste the current date and time  | -                |
+| Action         | Description                            | Default shortcut |
+| -------------- | -------------------------------------- | ---------------- |
+| CloseProcess   | Close a process by name                | `Shift+Win+Esc`  |
+| Settings_Open  | Open the settings page                 | `Shift+Win+i`    |
+| ReloadFiles    | Reload the script and all config files | -                |
+| PasteDateTime  | Paste the current date and time        | -                |
+| HoldRightMouse | Hold down the right mouse button       | -                |
+| HoldLeftMouse  | Hold down the left mouse button        | -                |
 
 ---
+
+## Setup
+
+You can setup this script without AutoHotKey using the .exe files found under [Releases](https://github.com/rafaelurben/autohotkey-utils/releases).
+
+The first time you launch the script, it will ask you if you want it to automatically start everytime you log in. If you missed the chance to click yes, you can just delete the ".hotkey-temp.txt" file and reload the script.
+
+Everytime the script reloads, it will check if there is a newer version of it available on this page and will ask you if you want to update.
+
+Note: Windows may warn you that this script is insecure, but you can ignore this warning as long as you download the exe file from this repository. If you don't trust this exe file, you can also download the current .ahk file, but then you must also install AutoHotkey v2. But please note that the update engine doesn't work when using the .ahk file!
 
 ## Config
 
@@ -164,7 +171,7 @@ If you edit them in the settings, this is automatically done for you after savin
 
 ### Create URL-Shortcodes
 
-You can modify the shortcodes used for the [UrlShortcuts](#urlshortcuts) module in the file called "hotkey-urls.txt" or in the settings. Use the following syntax: `shortcode|url`
+You can modify the shortcodes used for the [UrlShortcuts](#urlshortcuts) module in the settings. Use the following syntax: `shortcode|url`
 
 Example:
 
@@ -177,7 +184,7 @@ yt|https://youtube.com
 
 Hotstrings automatically replaces certain strings while you're typing. E.g. you type "btw" and an ending character (`-()[]{}:;'"/\,.?!`, tab or newline) and btw automatically gets replaced with "by the way".
 
-You can create hotstrings in the file called "hotkey-hotstrings.txt". Use the following syntax: `hotstring|replacement`
+You can create and modify hotstrings in the settings. Use the following syntax: `hotstring|replacement`
 
 The hotstring syntax can be found [here](https://www.autohotkey.com/docs/Hotstrings.htm#Options). Note: Replace "::" between hotstring and replacement with "|"!
 
@@ -201,11 +208,11 @@ Common options:
 
 ### Modify keybinds
 
-You can modify the keybinds used in this app in the file called "hotkey-keybinds.txt" or in the settings. Use the following syntax: `action|keybind`
+You can modify the keybinds used in this app in the settings. Use the following syntax: `action|keybind`
 
-Note: If the actions are not present in the file, the default values are used. If you want do disable a default hotkey, enter the action without a keybind. (e.g. 4th line in example)
+Note: If the actions are not present in the file, the default values are used. If you want do disable a default hotkey, enter the action without a keybind. (e.g. list line in example)
 
-The keybind syntax can be found [here](https://www.autohotkey.com/docs/Hotkeys.htm#Symbols), all actions are listed in the tables on this page. Common modifiers are also found in the table below.
+The keybind syntax can be found [here](https://www.autohotkey.com/docs/Hotkeys.htm#Symbols), all actions are listed in the tables on this page. Common modifiers can also found in the table below.
 
 Example:
 
@@ -213,6 +220,7 @@ Example:
 InstantSearch_1_Clipboard|#Numpad1
 InstantSearch_2_Clipboard|#Numpad2
 InstantSearch_3_Clipboard|#Numpad3
+GreekAlphabet|+#g
 ReloadFiles|
 ```
 
@@ -229,7 +237,7 @@ Common modifiers:
 
 ### Settings
 
-Some things like the search engines can be changed via settings. These are found in the settings page or the file called "hotkey-settings.txt". Use the following format: `Key||Value` Note: Use "||" here!
+Some things like the search engines can be changed via settings. Use the following format: `Key||Value` Note: Use "||" here!
 
 Note: If the keys are not present in the file, the default values are used.
 

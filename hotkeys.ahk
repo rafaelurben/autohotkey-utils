@@ -69,6 +69,15 @@ class Config {
 		return this._get(name, this._KEYBINDS_Custom, this._KEYBINDS_Default)
 	}
 
+	static GetKeybindHumanReadable(name) {
+		keybind := this.GetKeybind(name)
+		keybind := StrReplace(keybind, "+", "Shift+",,, 1)
+		keybind := StrReplace(keybind, "^", "Ctrl+",,, 1)
+		keybind := StrReplace(keybind, "#", "Win+",,, 1)
+		keybind := StrReplace(keybind, "!", "Alt+",,, 1)
+		return keybind
+	}
+
 	; Utils
 	static _get(key, dict, default) {
 		try {
@@ -675,35 +684,55 @@ Settings_Open(*) {
 ;;;;;;;;;;; Main
 
 _CreateTrayMenu() {
-	UrlShortcutsMenu := Menu()
-	UrlShortcutsMenu.Add("Insert", UrlShortcuts_BoxInsert)
-	UrlShortcutsMenu.Add("Open", UrlShortcuts_BoxOpen)
+	UrlShortcodesMenu := Menu()
+	UrlShortcodesMenu.Add("Insert`t" Config.GetKeybindHumanReadable("UrlShortcuts_Insert"), UrlShortcuts_BoxInsert)
+	UrlShortcodesMenu.Add("Open`t" Config.GetKeybindHumanReadable("UrlShortcuts_Open"), UrlShortcuts_Open)
+	UrlShortcodesMenu.Add("Insert (Box)`t" Config.GetKeybindHumanReadable("UrlShortcuts_BoxInsert"), UrlShortcuts_BoxInsert)
+	UrlShortcodesMenu.Add("Open (Box)`t" Config.GetKeybindHumanReadable("UrlShortcuts_BoxOpen"), UrlShortcuts_BoxOpen)
+
 	QRGeneratorMenu := Menu()
-	QRGeneratorMenu.Add("Create from input", QRGenerator_InputBox)
-	QRGeneratorMenu.Add("Create from clipbaord", QRGenerator_FromClipboard)
+	QRGeneratorMenu.Add("Create from input`t" Config.GetKeybindHumanReadable("QRGenerator_InputBox"), QRGenerator_InputBox)
+	QRGeneratorMenu.Add("Create from clipbaord`t" Config.GetKeybindHumanReadable("QRGenerator_FromClipboard"), QRGenerator_FromClipboard)
+
+	QuickNotesMenu := Menu()
+	QuickNotesMenu.Add("Create`t" Config.GetKeybindHumanReadable("QuickNotes_Create"), QuickNotes_Create)
+	QuickNotesMenu.Add("Open all`t" Config.GetKeybindHumanReadable("QuickNotes_Open"), QuickNotes_Open)
+
+	ClipboardUrlMenu := Menu()
+	ClipboardUrlMenu.Add("Open`t" Config.GetKeybindHumanReadable("ClipboardUrl_Open"), ClipboardUrl_Open)
+	ClipboardUrlMenu.Add("Open with editor`t" Config.GetKeybindHumanReadable("ClipboardUrl_OpenEditor"), ClipboardUrl_OpenEditor)
+
 	InstantSearchMenu := Menu()
-	InstantSearchMenu.Add(Settings.SearchEngine1.name, InstantSearch_1)
-	InstantSearchMenu.Add(Settings.SearchEngine1.name " (clipboard)", InstantSearch_1_Clipboard)
+	InstantSearchMenu.Add(Settings.SearchEngine1.name "`t" Config.GetKeybindHumanReadable("InstantSearch_1"), InstantSearch_1)
+	InstantSearchMenu.Add(Settings.SearchEngine1.name " (clipboard) `t" Config.GetKeybindHumanReadable("InstantSearch_1_Clipboard"), InstantSearch_1_Clipboard)
 	InstantSearchMenu.Add()
-	InstantSearchMenu.Add(Settings.SearchEngine2.name, InstantSearch_2)
-	InstantSearchMenu.Add(Settings.SearchEngine2.name " (clipboard)", InstantSearch_2_Clipboard)
+	InstantSearchMenu.Add(Settings.SearchEngine2.name "`t" Config.GetKeybindHumanReadable("InstantSearch_2"), InstantSearch_2)
+	InstantSearchMenu.Add(Settings.SearchEngine2.name " (clipboard) `t" Config.GetKeybindHumanReadable("InstantSearch_2_Clipboard"), InstantSearch_2_Clipboard)
 	InstantSearchMenu.Add()
-	InstantSearchMenu.Add(Settings.SearchEngine3.name, InstantSearch_3)
-	InstantSearchMenu.Add(Settings.SearchEngine3.name " (clipboard)", InstantSearch_3_Clipboard)
+	InstantSearchMenu.Add(Settings.SearchEngine3.name "`t" Config.GetKeybindHumanReadable("InstantSearch_3"), InstantSearch_3)
+	InstantSearchMenu.Add(Settings.SearchEngine3.name " (clipboard) `t" Config.GetKeybindHumanReadable("InstantSearch_3_Clipboard"), InstantSearch_3_Clipboard)
+	
 	global _ActionsMenu := Menu()
-	_ActionsMenu.Add("Close a Process", CloseProcess)
-	_ActionsMenu.Add()
-	_ActionsMenu.Add("[QRGenerator]", QRGeneratorMenu)
 	_ActionsMenu.Add("[InstantSearch]", InstantSearchMenu)
-	_ActionsMenu.Add("[UrlShortcuts]", UrlShortcutsMenu)
+	_ActionsMenu.Add("[QRGenerator]", QRGeneratorMenu)
+	_ActionsMenu.Add("[ClipboardURL]", ClipboardUrlMenu)
+	_ActionsMenu.Add("[UrlShortcuts]", UrlShortcodesMenu)
+	_ActionsMenu.Add("[DriveLetterOpen] Open`t" Config.GetKeybindHumanReadable("DriveLetterOpen"), DriveLetterOpen)
+	_ActionsMenu.Add("[GreekAlphabet] Insert`t" Config.GetKeybindHumanReadable("GreekAlphabet"), GreekAlphabet)
+	_ActionsMenu.Add("[QuickNotes]", QuickNotesMenu)
+	if (A_IsAdmin) {
+		_ActionsMenu.Add()
+		_ActionsMenu.Add("* [SoftLock] Block Input`t" Config.GetKeybindHumanReadable("SoftLock_Block"), SoftLock_Block)
+	}
 	_ActionsMenu.Add()
-	_ActionsMenu.Add("[QuickNotes] Open", QuickNotes_Open)
-	_ActionsMenu.Add("[SoftLock] Block Input", SoftLock_Block)
+	_ActionsMenu.Add("Close process by name`t" Config.GetKeybindHumanReadable("CloseProcess"), CloseProcess)
+	_ActionsMenu.Add("Paste date and time`t" Config.GetKeybindHumanReadable("PasteDateTime"), PasteDateTime)
+
 	Tray := A_TrayMenu
 	Tray.Add()
-	Tray.Add("Reload", ReloadFiles)
-	Tray.Add("Settings", Settings_Open)
 	Tray.Add("Check for updates", CheckForUpdate)
+	Tray.Add("Reload`t" Config.GetKeybindHumanReadable("ReloadFiles"), ReloadFiles)
+	Tray.Add("Settings`t" Config.GetKeybindHumanReadable("Settings_Open"), Settings_Open)
 	Tray.Add()
 	Tray.Add("Actions", _ActionsMenu)
 	Tray.Add("Screenshot", Screenshot)
