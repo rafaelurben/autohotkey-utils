@@ -188,6 +188,14 @@ _OverwriteFile(filename, content := "") {
 	_file.Close()
 }
 
+_ReadFileWithDefault(filename, default := "") {
+	try {
+		return Fileread(filename)
+	} catch OSError {
+		return default
+	}
+}
+
 _CloseProcess(name) {
 	try {
 		ProcessClose(name)
@@ -229,7 +237,7 @@ CheckForUpdate(show_no_new_update_message := true, show_error_message := true, *
 		}
 		return
 	}
-	NewestVersion := Fileread(".hotkey-temp.txt")
+	NewestVersion := _ReadFileWithDefault(".hotkey-temp.txt")
 	NewestVersion := Trim(NewestVersion, OmitChars := " `t`n`r")
 	if (StrCompare(NewestVersion, CurrentVersion) > 0) {
 		msgResult := MsgBox("Your current version: " CurrentVersion " `nNewest version available: " NewestVersion "`n`nWould you like to download the new version?", "Update available", 292)
@@ -256,18 +264,14 @@ CheckForUpdate(show_no_new_update_message := true, show_error_message := true, *
 }
 
 _CleanupUpdate() {
-	try {
-		TempData := Fileread(".hotkey-temp.txt")
-	} catch OSError {
-		TempData := false
-	}
-
 	command := "@echo off`nstart `"" A_ScriptFullPath "`""
 	_OverwriteFile("hotkey-run.bat", command)
+	
+	TempData := _ReadFileWithDefault(".hotkey-temp.txt", false)
 	if (TempData = "UpdateDone") {
 		_OverwriteFile(".hotkey-temp.txt", "-")
-		msgResult := MsgBox("Your script has been updated to the newest version (" CurrentVersion "). You can delete the old version now.`n`nWould you like to open the folder?", "Update successful", 65)
-		if (msgResult = "Ok")
+		msgResult := MsgBox("Your script has been updated to the newest version (" CurrentVersion "). You can delete the old version now.`n`nWould you like to open the folder?", "Update successful", 68)
+		if (msgResult = "Yes")
 			Run(A_ScriptDir)
 	} else if (!TempData) {
 		msgResult := MsgBox("Welcome to autohotkey-utils!`n`nDo you want to add this script to autostart?", "Welcome!", 68)
@@ -501,7 +505,7 @@ QuickNotes_Open(*) {
 	QuickNotesGUI.Add("Text", , "Edit your notes:")
 
 	QuickNotesGUI_TextEdit := QuickNotesGUI.Add("Edit", "R20 W500")
-	FileContent := Fileread("config/hotkey-notes.txt")
+	FileContent := _ReadFileWithDefault("config/hotkey-notes.txt")
 	QuickNotesGUI_TextEdit.Value := FileContent
 
 	_QuickNotes_GUISave(*) {
@@ -511,8 +515,7 @@ QuickNotes_Open(*) {
 
 	_QuickNotes_GUIReset(*) {
 		oSaved := QuickNotesGUI.Submit()
-		_file := FileOpen("config/hotkey-notes.txt", "w")
-		_file.Close()
+		_OverwriteFile("config/hotkey-notes.txt")
 		QuickNotes_Open()
 	}
 	
@@ -579,24 +582,24 @@ Settings_Open(*) {
 
 	SettingsGUI.Add("Link", "Y5 X5", "Edit URL shortcodes: <a href=`"https://github.com/rafaelurben/autohotkey-utils/#create-url-shortcodes`">Syntax and Infos</a>")
 	SettingsGUI_UrlShortcutEdit := SettingsGUI.Add("Edit", "R15 W500")
-	FileContent := Fileread("config/hotkey-urls.txt")
+	FileContent := _ReadFileWithDefault("config/hotkey-urls.txt")
 	SettingsGUI_UrlShortcutEdit.Value := FileContent
 
 	SettingsGUI.Add("Link", , "Edit Keybinds: <a href=`"https://github.com/rafaelurben/autohotkey-utils/#modify-keybinds`">Syntax and Infos</a>")
 	SettingsGUI_HotkeyEdit := SettingsGUI.Add("Edit", "R15 W500")
-	FileContent := Fileread("config/hotkey-keybinds.txt")
+	FileContent := _ReadFileWithDefault("config/hotkey-keybinds.txt")
 	SettingsGUI_HotkeyEdit.Value := FileContent
 
 	SettingsGUI.Add("Text", , "Press Ctrl+S to save and reload or Ctrl+W to exit without saving.")
 
 	SettingsGUI.Add("Link", "Y5 X515", "Edit Hotstrings: <a href=`"https://github.com/rafaelurben/autohotkey-utils/#create-hotstrings`">Syntax and Infos</a>")
 	SettingsGUI_HotstringEdit := SettingsGUI.Add("Edit", "R15 W500")
-	FileContent := Fileread("config/hotkey-hotstrings.txt")
+	FileContent := _ReadFileWithDefault("config/hotkey-hotstrings.txt")
 	SettingsGUI_HotstringEdit.Value := FileContent
 
 	SettingsGUI.Add("Link", , "Edit Settings: <a href=`"https://github.com/rafaelurben/autohotkey-utils/#settings`">Syntax and Infos</a>")
 	SettingsGUI_SettingsEdit := SettingsGUI.Add("Edit", "R15 W500")
-	FileContent := Fileread("config/hotkey-settings.txt")
+	FileContent := _ReadFileWithDefault("config/hotkey-settings.txt")
 	SettingsGUI_SettingsEdit.Value := FileContent
 
 	SettingsGUI.Add("Link", , "<a href=`"" . A_WorkingDir . "/config`">Open Config Folder</a> (Please do NOT edit files while the settings are opened!)")
