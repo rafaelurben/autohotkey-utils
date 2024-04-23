@@ -159,9 +159,9 @@ _OpenUrl(url, *) {
 }
 
 _OpenUrlEditor(defaultUrl) {
-	IB := InputBox("Please enter your url:", "Open URL", , defaultUrl), url := IB.Value, ErrorLevel := IB.Result = "OK" ? 0 : IB.Result = "Cancel" ? 1 : IB.Result = "Timeout" ? 2 : "ERROR"
-	If !ErrorLevel
-		_OpenUrl(url)
+	IB := InputBox("Please enter your url:", "Open URL", , defaultUrl)
+	if IB.Result = "OK"
+		_OpenUrl(IB.Value)
 	return
 }
 
@@ -224,9 +224,9 @@ ReloadFiles(*) {
 }
 
 CloseProcess(*) {
-	IB := InputBox("Please enter process name:", "Close Process", , "explorer.exe"), name := IB.Value, ErrorLevel := IB.Result = "OK" ? 0 : IB.Result = "Cancel" ? 1 : IB.Result = "Timeout" ? 2 : "ERROR"
-	if !ErrorLevel
-		_CloseProcess(name)
+	IB := InputBox("Please enter process name:", "Close Process", , "explorer.exe")
+	if IB.Result = "OK"
+		_CloseProcess(IB.Value)
 	return
 }
 
@@ -300,49 +300,65 @@ _CleanupUpdate() {
 ;; Insert Urls (L=2, Input)
 
 UrlShortcuts_Insert(*) {
-	SplashTextGui := Gui("ToolWindow -Sysmenu Disabled", "Insert shortcut"), SplashTextGui.Add("Text", , "Please enter a shortcode..."), SplashTextGui.Show("w300 h50")
-	ihkey := InputHook("L2 T2", "{Esc}"), ihkey.Start(), ihkey.Wait(), key := ihkey.Input
-	SplashTextGui.Destroy
-	if _UrlShortcuts_Data.Has(key)
-		Send(_UrlShortcuts_Data[key])
-	else If key
-		MsgBox("Unknown shortcut: `"" key "`"", "Insert URL", 0)
-	return
+	SplashTextGui := Gui("ToolWindow -Sysmenu Disabled", "Insert shortcut")
+	SplashTextGui.Add("Text", , "Please enter a shortcode...")
+	SplashTextGui.Show("w300 h50")
+	ihkey := InputHook("L2 T2", "{Esc}")
+	ihkey.Start()
+	endReason := ihkey.Wait()
+	SplashTextGui.Destroy()
+	if endReason = "Max" {
+		key := ihkey.Input
+		if _UrlShortcuts_Data.Has(key)
+			Send(_UrlShortcuts_Data[key])
+		else If key
+			MsgBox("Unknown shortcut: `"" key "`"", "Insert URL failed", 0)
+	}
 }
 
 ;; Open Urls (L=2, Input)
 
 UrlShortcuts_Open(*) {
-	SplashTextGui := Gui("ToolWindow -Sysmenu Disabled", "Open shortcut"), SplashTextGui.Add("Text", , "Please enter a shortcode..."), SplashTextGui.Show("w300 h50")
-	ihkey := InputHook("L2 T2", "{Esc}"), ihkey.Start(), ihkey.Wait(), key := ihkey.Input
-	SplashTextGui.Destroy
-	if _UrlShortcuts_Data.Has(key)
-		_OpenUrl(_UrlShortcuts_Data[key])
-	else If key
-		MsgBox("Unknown shortcut: `"" key "`"", "Open URL", 0)
-	return
+	SplashTextGui := Gui("ToolWindow -Sysmenu Disabled", "Open shortcut")
+	SplashTextGui.Add("Text", , "Please enter a shortcode...")
+	SplashTextGui.Show("w300 h50")
+	ihkey := InputHook("L2 T2", "{Esc}")
+	ihkey.Start()
+	endReason := ihkey.Wait()
+	SplashTextGui.Destroy()
+	if endReason = "Max" {
+		key := ihkey.Input
+		if _UrlShortcuts_Data.Has(key)
+			_OpenUrl(_UrlShortcuts_Data[key])
+		else If key
+			MsgBox("Unknown shortcut: `"" key "`"", "Open URL failed", 0)
+	}
 }
 
 ;; Insert urls (InputBox)
 
 UrlShortcuts_BoxInsert(*) {
-	IB := InputBox("Please enter shortcode:", "Insert URL"), key := IB.Value, ErrorLevel := IB.Result = "OK" ? 0 : IB.Result = "Cancel" ? 1 : IB.Result = "Timeout" ? 2 : "ERROR"
-	if _UrlShortcuts_Data.Has(key)
-		Send(_UrlShortcuts_Data[key])
-	else If key
-		MsgBox("Unknown key: `"" key "`"", "Insert URL", 0)
-	return
+	IB := InputBox("Please enter shortcode:", "Insert URL")
+	key := IB.Value
+	if IB.Result = "OK" && key {
+		if _UrlShortcuts_Data.Has(key)
+			Send(_UrlShortcuts_Data[key])
+		else If key
+			MsgBox("Unknown key: `"" key "`"", "Insert URL failed", 0)
+	}
 }
 
 ;; Open urls (InputBox)
 
 UrlShortcuts_BoxOpen(*) {
-	IB := InputBox("Please enter shortcode:", "Open URL"), key := IB.Value, ErrorLevel := IB.Result = "OK" ? 0 : IB.Result = "Cancel" ? 1 : IB.Result = "Timeout" ? 2 : "ERROR"
-	if _UrlShortcuts_Data.Has(key)
-		_OpenUrl(_UrlShortcuts_Data[key])
-	else If key
-		MsgBox("Unknown key: `"" key "`"", "Open URL", 0)
-	return
+	IB := InputBox("Please enter shortcode:", "Open URL")
+	key := IB.Value
+	if IB.Result = "OK" && key {
+		if _UrlShortcuts_Data.Has(key)
+			_OpenUrl(_UrlShortcuts_Data[key])
+		else If key
+			MsgBox("Unknown key: `"" key "`"", "Open URL", 0)
+	}
 }
 
 
@@ -460,9 +476,9 @@ _QRGenerator(data) {
 }
 
 QRGenerator_InputBox(*) {
-	IB := InputBox("Please enter your data:", "Create a QR-Code"), data := IB.Value, ErrorLevel := IB.Result = "OK" ? 0 : IB.Result = "Cancel" ? 1 : IB.Result = "Timeout" ? 2 : "ERROR"
-	if !ErrorLevel
-		_QRGenerator(data)
+	IB := InputBox("Please enter your data:", "Create a QR-Code")
+	if IB.Result = "OK"
+		_QRGenerator(IB.Value)
 	return
 }
 
@@ -485,8 +501,9 @@ ClipboardUrl_OpenEditor(*) {
 ;;;; Quick-Notes
 
 QuickNotes_Create(*) {
-	IB := InputBox("Please enter a text to create a note:", "QuickNote"), note := IB.Value, ErrorLevel := IB.Result = "OK" ? 0 : IB.Result = "Cancel" ? 1 : IB.Result = "Timeout" ? 2 : "ERROR"
-	if note
+	IB := InputBox("Please enter a text to create a note:", "QuickNote")
+	note := IB.Value
+	if IB.Result = "OK" && note
 		FileAppend("`n" note, "config/hotkey-notes.txt")
 }
 
