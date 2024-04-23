@@ -98,18 +98,7 @@ global _GREEKALPHABET := Map(
 	"omega", "ω"
 )
 
-
-;; GUI Veriables
-
-global _SettingsGUI
-global _QRGeneratorGUI
-global _QuickNotes_GUITextEdit
-global _Settings_GUIUrlShortcutEdit
-global _Settings_GUIHotkeyEdit
-global _Settings_GUIHotstringEdit
-global _Settings_GUISettingsEdit
-
-;;;; Directories
+;; Directories
 
 DirCreate(A_WorkingDir "/data")
 DirCreate(A_WorkingDir "/data/qr")
@@ -443,10 +432,6 @@ InstantSearch_3_Clipboard(*) {
 
 ;;;; QR-Generator
 
-_QRGenerator_GUIExit(*) {
-	_QRGeneratorGUI.Destroy()
-}
-
 _QRGenerator(data) {
 	newdata := _UrlEncode(data)
 
@@ -458,21 +443,24 @@ _QRGenerator(data) {
 		return
 	}
 
-	global _QRGeneratorGUI := Gui()
-	_QRGeneratorGUI.Opt("+AlwaysOnTop +Resize -MaximizeBox")
+	QRGeneratorGUI := Gui()
+	QRGeneratorGUI.Title := "autohotkey-utils by @rafaelurben - QR-Generator (via goqr.me)"
 
-	_QRGeneratorGUI.Add("Picture", "x0 y0 w500 h500", A_WorkingDir . "/data/qr/qrcode.png")
-	_QRGeneratorGUI.Add("Link", , "<a href=`"" . A_WorkingDir . "/data/qr/qrcode.svg`">Open svg</a> - <a href=`"" . A_WorkingDir . "/data/qr/qrcode.png`">Open Image</a> - <a href=`"" . A_WorkingDir . "/data/qr`">Open Folder</a> - <a href=`"http://api.qrserver.com/v1/create-qr-code/?format=svg&size=500x500&data=" . newdata . "`">Open in Browser</a>")
-	_QRGeneratorGUI.Add("Text", , "Data: `"" . data . "`"")
+	QRGeneratorGUI.Add("Picture", "x0 y0 w500 h500", A_WorkingDir . "/data/qr/qrcode.png")
+	QRGeneratorGUI.Add("Link", , "<a href=`"" . A_WorkingDir . "/data/qr/qrcode.svg`">Open svg</a> - <a href=`"" . A_WorkingDir . "/data/qr/qrcode.png`">Open Image</a> - <a href=`"" . A_WorkingDir . "/data/qr`">Open Folder</a> - <a href=`"http://api.qrserver.com/v1/create-qr-code/?format=svg&size=500x500&data=" . newdata . "`">Open in Browser</a>")
+	QRGeneratorGUI.Add("Text", , "Data: `"" . data . "`"")
+
+	QRGeneratorGUI_Exit(*) {
+		QRGeneratorGUI.Destroy()
+	}
 
 	QRGeneratorFileMenu := Menu()
-	QRGeneratorFileMenu.Add("E&xit`tCtrl+W", _QRGenerator_GUIExit)
+	QRGeneratorFileMenu.Add("E&xit`tCtrl+W", QRGeneratorGUI_Exit)
 	QRGeneratorMenuBar := MenuBar()
 	QRGeneratorMenuBar.Add("&File", QRGeneratorFileMenu)
 	
-	_QRGeneratorGUI.MenuBar := QRGeneratorMenuBar
-	_QRGeneratorGUI.Title := "QRGenerator (via goqr.me)"
-	_QRGeneratorGUI.Show("Center w500")
+	QRGeneratorGUI.MenuBar := QRGeneratorMenuBar
+	QRGeneratorGUI.Show("Center w500")
 }
 
 QRGenerator_InputBox(*) {
@@ -507,42 +495,42 @@ QuickNotes_Create(*) {
 		FileAppend("`n" note, "config/hotkey-notes.txt")
 }
 
-_QuickNotes_GUISave(*) {
-	oSaved := _QuickNotesGUI.Submit()
-	_OverwriteFile("config/hotkey-notes.txt", _QuickNotes_GUITextEdit)
-}
-
-_QuickNotes_GUIReset(*) {
-	oSaved := _QuickNotesGUI.Submit()
-	_file := FileOpen("config/hotkey-notes.txt", "w")
-	_file.Close()
-	QuickNotes_Open()
-}
-
-_QuickNotes_GUIExit(*) {
-	_QuickNotesGUI.Destroy()
-}
-
 QuickNotes_Open(*) {
-	global _QuickNotesGUI := Gui()
-	_QuickNotesGUI.Opt("+AlwaysOnTop")
-	_QuickNotesGUI.Add("Text", , "Edit your notes:")
+	QuickNotesGUI := Gui()
+	QuickNotesGUI.Title := "autohotkey-utils by @rafaelurben - QuickNotes"
+	QuickNotesGUI.Add("Text", , "Edit your notes:")
 
-	global _QuickNotes_GUITextEdit := _QuickNotesGUI.Add("Edit", "R20 W500 v_QuickNotes_GUITextEdit")
+	QuickNotesGUI_TextEdit := QuickNotesGUI.Add("Edit", "R20 W500")
 	FileContent := Fileread("config/hotkey-notes.txt")
-	_QuickNotes_GUITextEdit.Value := FileContent
+	QuickNotesGUI_TextEdit.Value := FileContent
 
-	_QuickNotesGUI.Add("Text", , "Press Ctrl+S to save and exit or Ctrl+W to exit without saving.`nPress Ctrl+R to reset the file. (irreversible)")
+	_QuickNotes_GUISave(*) {
+		oSaved := QuickNotesGUI.Submit()
+		_OverwriteFile("config/hotkey-notes.txt", QuickNotesGUI_TextEdit.Value)
+	}
 
+	_QuickNotes_GUIReset(*) {
+		oSaved := QuickNotesGUI.Submit()
+		_file := FileOpen("config/hotkey-notes.txt", "w")
+		_file.Close()
+		QuickNotes_Open()
+	}
+	
+	_QuickNotes_GUIExit(*) {
+		QuickNotesGUI.Destroy()
+	}
+
+	QuickNotesGUI.Add("Text", , "Press Ctrl+S to save and exit or Ctrl+W to exit without saving.`nPress Ctrl+R to reset the file. (irreversible)")
+	
 	QuickNotesFileMenu := Menu()
 	QuickNotesFileMenu.Add("&Save`tCtrl+S", _QuickNotes_GUISave)
 	QuickNotesFileMenu.Add("&Reset`tCtrl+R", _QuickNotes_GUIReset)
 	QuickNotesFileMenu.Add("E&xit`tCtrl+W", _QuickNotes_GUIExit)
 	QuickNotesMenuBar := MenuBar()
 	QuickNotesMenuBar.Add("&File", QuickNotesFileMenu)
-	_QuickNotesGUI.MenuBar := QuickNotesMenuBar
+	QuickNotesGUI.MenuBar := QuickNotesMenuBar
 
-	_QuickNotesGUI.Show()
+	QuickNotesGUI.Show()
 }
 
 
@@ -585,51 +573,51 @@ Screenshot(*) {
 
 ;;;; Settings
 
-_Settings_GUISave(*) {
-	_SettingsGUI.Submit()
-	_OverwriteFile("config/hotkey-urls.txt", _Settings_GUIUrlShortcutEdit.Value)
-	_OverwriteFile("config/hotkey-keybinds.txt", _Settings_GUIHotkeyEdit.Value)
-	_OverwriteFile("config/hotkey-hotstrings.txt", _Settings_GUIHotstringEdit.Value)
-	_OverwriteFile("config/hotkey-settings.txt", _Settings_GUISettingsEdit.Value)
-	Reload()
-}
-
-_Settings_GUIExit(*) {
-	_SettingsGUI.Destroy()
-}
-
 Settings_Open(*) {
-	global _SettingsGUI := Gui()
-	_SettingsGUI.Title := "autohotkey-utils by @rafaelurben - settings"
-	_SettingsGUI.Opt("+AlwaysOnTop")
+	SettingsGUI := Gui()
+	SettingsGUI.Title := "autohotkey-utils by @rafaelurben - settings"
 
-	_SettingsGUI.Add("Link", "Y5 X5", "Edit URL shortcodes: <a href=`"https://github.com/rafaelurben/autohotkey-utils/#create-url-shortcodes`">Syntax and Infos</a>")
-	global _Settings_GUIUrlShortcutEdit := _SettingsGUI.Add("Edit", "R15 W500")
+	SettingsGUI.Add("Link", "Y5 X5", "Edit URL shortcodes: <a href=`"https://github.com/rafaelurben/autohotkey-utils/#create-url-shortcodes`">Syntax and Infos</a>")
+	SettingsGUI_UrlShortcutEdit := SettingsGUI.Add("Edit", "R15 W500")
 	FileContent := Fileread("config/hotkey-urls.txt")
-	_Settings_GUIUrlShortcutEdit.Value := FileContent
+	SettingsGUI_UrlShortcutEdit.Value := FileContent
 
-	_SettingsGUI.Add("Link", , "Edit Keybinds: <a href=`"https://github.com/rafaelurben/autohotkey-utils/#modify-keybinds`">Syntax and Infos</a>")
-	global _Settings_GUIHotkeyEdit := _SettingsGUI.Add("Edit", "R15 W500")
+	SettingsGUI.Add("Link", , "Edit Keybinds: <a href=`"https://github.com/rafaelurben/autohotkey-utils/#modify-keybinds`">Syntax and Infos</a>")
+	SettingsGUI_HotkeyEdit := SettingsGUI.Add("Edit", "R15 W500")
 	FileContent := Fileread("config/hotkey-keybinds.txt")
-	_Settings_GUIHotkeyEdit.Value := FileContent
+	SettingsGUI_HotkeyEdit.Value := FileContent
 
-	_SettingsGUI.Add("Text", , "Press Ctrl+S to save and reload or Ctrl+W to exit without saving.")
+	SettingsGUI.Add("Text", , "Press Ctrl+S to save and reload or Ctrl+W to exit without saving.")
 
-	_SettingsGUI.Add("Link", "Y5 X515", "Edit Hotstrings: <a href=`"https://github.com/rafaelurben/autohotkey-utils/#create-hotstrings`">Syntax and Infos</a>")
-	global _Settings_GUIHotstringEdit := _SettingsGUI.Add("Edit", "R15 W500")
+	SettingsGUI.Add("Link", "Y5 X515", "Edit Hotstrings: <a href=`"https://github.com/rafaelurben/autohotkey-utils/#create-hotstrings`">Syntax and Infos</a>")
+	SettingsGUI_HotstringEdit := SettingsGUI.Add("Edit", "R15 W500")
 	FileContent := Fileread("config/hotkey-hotstrings.txt")
-	_Settings_GUIHotstringEdit.Value := FileContent
+	SettingsGUI_HotstringEdit.Value := FileContent
 
-	_SettingsGUI.Add("Link", , "Edit Settings: <a href=`"https://github.com/rafaelurben/autohotkey-utils/#settings`">Syntax and Infos</a>")
-	global _Settings_GUISettingsEdit := _SettingsGUI.Add("Edit", "R15 W500")
+	SettingsGUI.Add("Link", , "Edit Settings: <a href=`"https://github.com/rafaelurben/autohotkey-utils/#settings`">Syntax and Infos</a>")
+	SettingsGUI_SettingsEdit := SettingsGUI.Add("Edit", "R15 W500")
 	FileContent := Fileread("config/hotkey-settings.txt")
-	_Settings_GUISettingsEdit.Value := FileContent
+	SettingsGUI_SettingsEdit.Value := FileContent
 
-	_SettingsGUI.Add("Link", , "<a href=`"" . A_WorkingDir . "/config`">Open Config Folder</a> (Please do NOT edit files while the settings are opened!)")
+	SettingsGUI.Add("Link", , "<a href=`"" . A_WorkingDir . "/config`">Open Config Folder</a> (Please do NOT edit files while the settings are opened!)")
+
+	
+	_SettingsGUI_Save(*) {
+		SettingsGUI.Submit()
+		_OverwriteFile("config/hotkey-urls.txt", SettingsGUI_UrlShortcutEdit.Value)
+		_OverwriteFile("config/hotkey-keybinds.txt", SettingsGUI_HotkeyEdit.Value)
+		_OverwriteFile("config/hotkey-hotstrings.txt", SettingsGUI_HotstringEdit.Value)
+		_OverwriteFile("config/hotkey-settings.txt", SettingsGUI_SettingsEdit.Value)
+		Reload()
+	}
+
+	_SettingsGUI_Exit(*) {
+		SettingsGUI.Destroy()
+	}
 
 	SettingsFileMenu := Menu()
-	SettingsFileMenu.Add("&Save`tCtrl+S", _Settings_GUISave)
-	SettingsFileMenu.Add("E&xit`tCtrl+W", _Settings_GUIExit)
+	SettingsFileMenu.Add("&Save`tCtrl+S", _SettingsGUI_Save)
+	SettingsFileMenu.Add("E&xit`tCtrl+W", _SettingsGUI_Exit)
 	SettingsLinksMenu := Menu()
 	SettingsLinksMenu.Add("Repository (GitHub)", _OpenUrl.Bind("https://github.com/rafaelurben/autohotkey-utils/"))
 	SettingsLinksMenu.Add("Releases (GitHub)", _OpenUrl.Bind("https://github.com/rafaelurben/autohotkey-utils/releases"))
@@ -638,8 +626,8 @@ Settings_Open(*) {
 	SettingsMenuBar.Add("&File", SettingsFileMenu)
 	SettingsMenuBar.Add("&Links", SettingsLinksMenu)
 	
-	_SettingsGUI.MenuBar := SettingsMenuBar
-	_SettingsGUI.Show()
+	SettingsGUI.MenuBar := SettingsMenuBar
+	SettingsGUI.Show()
 }
 
 
