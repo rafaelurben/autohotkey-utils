@@ -4,8 +4,8 @@ Autohotkey-utils gives you some useful utils as shortcuts in Windows.
 
 This script...
 
-- is completely portable (requires no installation)
-- does not ask you for admin permissions
+- is portable (requires no installation, except for autostart)
+- does not ask you for admin permissions (except to a₫d it to autostart)
 - allows you to use AutoHotkey hotkeys and hotstrings with no code knowledge and no AutoHotkey installation
 - will update automatically if you accept its prompt to do so
 - is written in [AutoHotkey v2](https://www.autohotkey.com/)
@@ -154,7 +154,7 @@ This module needs some configuration. (see [here](#create-hotstrings))
 
 ## Setup
 
-You can setup this script without AutoHotKey using the .exe files found under [Releases](https://github.com/rafaelurben/autohotkey-utils/releases).
+You can install this script without AutoHotKey using the `*.exe` files found under [Releases](https://github.com/rafaelurben/autohotkey-utils/releases). I recommend storing the `*.exe` in a seperate folder as your configuration files will be stored in the same folder as the `*.exe`.
 
 The first time you launch the script, it will ask you if you want it to automatically start everytime you log in. If you missed the chance to click yes, you can just delete the ".hotkey-temp.txt" file and reload the script.
 
