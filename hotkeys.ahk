@@ -151,7 +151,7 @@ CheckForUpdate(false, false)
 {
 	if WinActive(A_ScriptName)
 	{
-		SplashTextGui := Gui("ToolWindow -Sysmenu Disabled", "Reloading Script")
+		SplashTextGui := Gui("-Sysmenu +ToolWindow +Disabled", "Reloading Script")
 		SplashTextGui.Add("Text", , "Script is reloading...")
 		SplashTextGui.Show("w120 h30")
 		Sleep(500)
@@ -290,12 +290,12 @@ _CleanupUpdate() {
 
 ;;;; Url-Shortcuts
 
-;; Insert Urls (L=2, Input)
+;; Insert Urls (L=2, InputHook)
 
 UrlShortcuts_Insert(*) {
-	SplashTextGui := Gui("ToolWindow -Sysmenu Disabled", "Insert shortcut")
+	SplashTextGui := Gui("-Sysmenu +ToolWindow +AlwaysOnTop +Disabled", "Insert shortcut")
 	SplashTextGui.Add("Text", , "Please enter a shortcode...")
-	SplashTextGui.Show("w300 h50")
+	SplashTextGui.Show("w300 h50 NA")
 	ihkey := InputHook("L2 T2", "{Esc}")
 	ihkey.Start()
 	endReason := ihkey.Wait()
@@ -305,16 +305,16 @@ UrlShortcuts_Insert(*) {
 		if Settings.UrlShortcodes.Has(key)
 			Send(Settings.UrlShortcodes[key])
 		else If key
-			MsgBox("Unknown shortcut: `"" key "`"", "Insert URL failed", 0)
+			MsgBox("Unknown shortcode: `"" key "`"", "Insert URL failed", 0)
 	}
 }
 
-;; Open Urls (L=2, Input)
+;; Open Urls (L=2, InputHook)
 
 UrlShortcuts_Open(*) {
-	SplashTextGui := Gui("ToolWindow -Sysmenu Disabled", "Open shortcut")
+	SplashTextGui := Gui("-Sysmenu +ToolWindow +AlwaysOnTop +Disabled", "Open shortcut")
 	SplashTextGui.Add("Text", , "Please enter a shortcode...")
-	SplashTextGui.Show("w300 h50")
+	SplashTextGui.Show("w300 h50 NA")
 	ihkey := InputHook("L2 T2", "{Esc}")
 	ihkey.Start()
 	endReason := ihkey.Wait()
@@ -324,33 +324,33 @@ UrlShortcuts_Open(*) {
 		if Settings.UrlShortcodes.Has(key)
 			_OpenUrl(Settings.UrlShortcodes[key])
 		else If key
-			MsgBox("Unknown shortcut: `"" key "`"", "Open URL failed", 0)
+			MsgBox("Unknown shortcode: `"" key "`"", "Open URL failed", 0)
 	}
 }
 
 ;; Insert urls (InputBox)
 
 UrlShortcuts_BoxInsert(*) {
-	IB := InputBox("Please enter shortcode:", "Insert URL")
+	IB := InputBox("Please enter a shortcode:", "Insert URL")
 	key := IB.Value
 	if IB.Result = "OK" && key {
 		if Settings.UrlShortcodes.Has(key)
 			Send(Settings.UrlShortcodes[key])
 		else If key
-			MsgBox("Unknown key: `"" key "`"", "Insert URL failed", 0)
+			MsgBox("Unknown shortcode: `"" key "`"", "Insert URL failed", 0)
 	}
 }
 
 ;; Open urls (InputBox)
 
 UrlShortcuts_BoxOpen(*) {
-	IB := InputBox("Please enter shortcode:", "Open URL")
+	IB := InputBox("Please enter a shortcode:", "Open URL")
 	key := IB.Value
 	if IB.Result = "OK" && key {
 		if Settings.UrlShortcodes.Has(key)
 			_OpenUrl(Settings.UrlShortcodes[key])
 		else If key
-			MsgBox("Unknown key: `"" key "`"", "Open URL", 0)
+			MsgBox("Unknown shortcode: `"" key "`"", "Open URL", 0)
 	}
 }
 
@@ -358,7 +358,7 @@ UrlShortcuts_BoxOpen(*) {
 ;;;; DriveLetterOpen
 
 DriveLetterOpen(*) {
-	SplashTextGui := Gui("ToolWindow -Sysmenu Disabled", "Open drive"), SplashTextGui.Add("Text", , "Please enter a drive letter..."), SplashTextGui.Show("w300 h50")
+	SplashTextGui := Gui("-Sysmenu +ToolWindow +Disabled", "Open drive"), SplashTextGui.Add("Text", , "Please enter a drive letter..."), SplashTextGui.Show("w300 h50")
 	ihdrive := InputHook("L1 T2", "{Esc}"), ihdrive.Start(), ihdrive.Wait(), drive := ihdrive.Input
 	SplashTextGui.Destroy
 	if drive
@@ -425,7 +425,7 @@ global GREEK_ALPHABET := Map(
 )
 
 GreekAlphabet(*) {
-	SplashTextGui := Gui("ToolWindow -Sysmenu Disabled", "Greek alphabet"), SplashTextGui.Add("Text", , "Please enter a letter..."), SplashTextGui.Show("w300 h50")
+	SplashTextGui := Gui("-Sysmenu +ToolWindow +Disabled", "Greek alphabet"), SplashTextGui.Add("Text", , "Please enter a letter..."), SplashTextGui.Show("w300 h50")
 	ihletter := InputHook("T5", "{Esc}{Enter}"), ihletter.Start(), ihletter.Wait(), letter := ihletter.Input
 	SplashTextGui.Destroy
 	if GREEK_ALPHABET.Has(letter) {
