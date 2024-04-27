@@ -1,5 +1,4 @@
-# AutoHotKey Utils
-
+# autohotkey-utils
 Autohotkey-utils gives you some useful utils as shortcuts in Windows.
 
 This script...
