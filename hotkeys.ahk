@@ -425,15 +425,24 @@ global GREEK_ALPHABET := Map(
 )
 
 GreekAlphabet(*) {
-	SplashTextGui := Gui("-Sysmenu +ToolWindow +Disabled", "Greek alphabet"), SplashTextGui.Add("Text", , "Please enter a letter..."), SplashTextGui.Show("w300 h50")
-	ihletter := InputHook("T5", "{Esc}{Enter}"), ihletter.Start(), ihletter.Wait(), letter := ihletter.Input
-	SplashTextGui.Destroy
-	if GREEK_ALPHABET.Has(letter) {
-		greekletter := GREEK_ALPHABET[letter]
-		Send(greekletter)
-	} else If letter
-		MsgBox("Unknown letter: `"" letter "`"", "Greek alphabet", 0)
-	return
+	prompt := "Please enter the name of the greek letter to be inserted.`n`nAvailable letters: `n"
+	for letterName, greekLetter in GREEK_ALPHABET {
+		letterName2 := StrLower(letterName)
+		greekLetter2 := GREEK_ALPHABET[letterName2]
+		prompt .= Format("{} / {} = {} / {}`n", greekLetter, greekLetter2, letterName, letterName2)
+		if A_Index >= GREEK_ALPHABET.Count / 2
+			break
+	}
+	IB := InputBox(prompt, "Greek alphabet", "H" (130 + 19 * GREEK_ALPHABET.Count / 2))
+	letter := IB.Value
+	if IB.Result = "OK" && letter {
+		if GREEK_ALPHABET.Has(letter) {
+			greekletter := GREEK_ALPHABET[letter]
+			Send(greekletter)
+		} else If letter
+			MsgBox("Unknown letter: `"" letter "`"", "Greek alphabet", 0)
+		return
+	}
 }
 
 ;;;; Instant-Search
