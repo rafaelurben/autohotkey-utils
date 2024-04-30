@@ -358,16 +358,31 @@ UrlShortcuts_BoxOpen(*) {
 ;;;; DriveLetterOpen
 
 DriveLetterOpen(*) {
-	SplashTextGui := Gui("-Sysmenu +ToolWindow +Disabled", "Open drive"), SplashTextGui.Add("Text", , "Please enter a drive letter..."), SplashTextGui.Show("w300 h50")
-	ihdrive := InputHook("L1 T2", "{Esc}"), ihdrive.Start(), ihdrive.Wait(), drive := ihdrive.Input
-	SplashTextGui.Destroy
-	if drive
-		try {
-			Run("`"" drive ":/`"")
-		} catch {
-			MsgBox("Couldn't open drive `"" drive "`"", "Drive not found", 0)
+	SplashTextGui := Gui("-Sysmenu +ToolWindow +Disabled", "Open explorer")
+	SplashTextGui.Add("Text", , "Please enter a drive letter...")
+	SplashTextGui.Add("Text", , "You can also use one of the special keys:"
+								"`n.`tOpen autohotkey-utils directory"
+								"`n~/-`tOpen user profile directory")
+	SplashTextGui.Show("w300 h100")
+	ihdrive := InputHook("L1 T5", "{Esc}")
+	ihdrive.Start()
+	endReason := ihdrive.Wait()
+	SplashTextGui.Destroy()
+	if endReason = "Max" {
+		drive := ihdrive.Input
+		if (drive == ".") {
+			Run("`"" A_WorkingDir "`"")
+		} else if (drive == "~" || drive == "-") {
+			A_UserProfile := EnvGet("UserProfile")
+			Run("`"" A_UserProfile "`"")
+		} else {
+			try {
+				Run("`"" drive ":/`"")
+			} catch {
+				MsgBox("Couldn't open drive `"" drive "`"", "Drive not found", 0)
+			}
 		}
-	return
+	}
 }
 
 

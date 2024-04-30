@@ -93,6 +93,13 @@ Quickly open an explorer window with the desired drive.
 | --------------- | --------------------------------------------------------- | ---------------- |
 | DriveLetterOpen | Press and enter a drive letter to open it in the explorer | `Shift+Win+E`    |
 
+Example: `Shift+Win+E c` opens the C: drive in the explorer.
+
+Beside the drive letters, there are also some special keys for special folders:
+
+- `.` opens the autohotkey-utils folder
+- `~` or `-` opens the user folder
+
 ---
 
 ### Greek alphabet
