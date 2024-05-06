@@ -1,10 +1,11 @@
 # autohotkey-utils
+
 Autohotkey-utils gives you some useful utils as shortcuts in Windows.
 
 This script...
 
 - is portable (requires no installation, except for autostart)
-- does not ask you for admin permissions (except to a₫d it to autostart)
+- does not ask you for admin permissions (except to add it to autostart)
 - allows you to use AutoHotkey hotkeys and hotstrings with no code knowledge and no AutoHotkey installation
 - will update automatically if you accept its prompt to do so
 - is written in [AutoHotkey v2](https://www.autohotkey.com/)
