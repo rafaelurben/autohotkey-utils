@@ -264,7 +264,7 @@ CheckForUpdate(show_no_new_update_message := true, show_error_message := true, *
 }
 
 _CleanupUpdate() {
-	command := "@echo off`nstart `"" A_ScriptFullPath "`""
+	command := "@echo off`nstart `"autohotkey-utils`" /b `"" A_ScriptFullPath "`""
 	_OverwriteFile("hotkey-run.bat", command)
 	
 	TempData := _ReadFileWithDefault(".hotkey-temp.txt", false)
