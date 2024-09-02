@@ -245,7 +245,7 @@ CheckForUpdate(show_no_new_update_message := true, show_error_message := true, *
 		{
 			try {
 				Download("https://github.com/rafaelurben/autohotkey-utils/releases/download/" NewestVersion "/hotkeys-" NewestVersion ".exe?randParam=" rand, "hotkey-" NewestVersion ".exe")
-				command := "`"" A_ScriptDir . "/hotkeys-" NewestVersion . ".exe`""
+				command := "@echo off`nstart `"autohotkey-utils`" /b `"" A_ScriptDir "/hotkeys-" NewestVersion ".exe`""
 				_OverwriteFile("hotkey-run.bat", command)
 				msgResult := MsgBox("The newest version has been downloaded.`n`nDo you want to update now?", "Downloaded " NewestVersion, 291)
 				if (msgResult = "Yes")
