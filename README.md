@@ -25,6 +25,7 @@ Current modules are:
 - [Greek alphabet](#greek-alphabet)
 - [QuickNotes](#quicknotes)
 - [SoftLock](#softlock)
+- [PasteDateTime](#pastedatetime)
 - [Hotstrings](#hotstrings)
 - [General actions](#general-actions)
 
@@ -143,6 +144,18 @@ Press `Win+L` or `Ctrl+Alt+Delete` to exit.
 
 ---
 
+### PasteDateTime
+
+Paste the current date and time in a customizable format.
+
+Uses the datetime format defined in the [settings](#settings).
+
+| Action        | Description                      | Default shortcut |
+| ------------- | -------------------------------- | ---------------- |
+| PasteDateTime | Pastes the current date and time | -                |
+
+---
+
 ### Hotstrings
 
 This module needs some configuration. (see [here](#create-hotstrings))
@@ -156,7 +169,6 @@ This module needs some configuration. (see [here](#create-hotstrings))
 | CloseProcess   | Close a process by name                | `Shift+Win+Esc`  |
 | Settings_Open  | Open the settings page                 | `Shift+Win+i`    |
 | ReloadFiles    | Reload the script and all config files | -                |
-| PasteDateTime  | Paste the current date and time        | -                |
 | HoldRightMouse | Hold down the right mouse button       | -                |
 | HoldLeftMouse  | Hold down the left mouse button        | -                |
 
@@ -164,7 +176,7 @@ This module needs some configuration. (see [here](#create-hotstrings))
 
 ## Setup
 
-You can install this script without AutoHotKey using the `*.exe` files found under [Releases](https://github.com/rafaelurben/autohotkey-utils/releases). I recommend storing the `*.exe` in a seperate folder as your configuration files will be stored in the same folder as the `*.exe`.
+You can install this script without AutoHotKey using the `*.exe` files found under [Releases](https://github.com/rafaelurben/autohotkey-utils/releases). I recommend storing the `*.exe` in a separate folder as your configuration files will be stored in the same folder as the `*.exe`.
 
 The first time you launch the script, it will ask you if you want it to automatically start everytime you log in. If you missed the chance to click yes, you can just delete the ".hotkey-temp.txt" file and reload the script.
 

@@ -631,6 +631,13 @@ QuickNotes_Open(*) {
 	QuickNotesGUI.Show()
 }
 
+;;;; PasteDateTime
+
+PasteDateTime(*) {
+	_fmt := Settings.DateTimeFormat
+	currentdatetime := FormatTime(, _fmt)
+	SendInput(currentdatetime)
+}
 
 ;;;; Soft-Lock (Only works when run as Admin)
 
@@ -647,12 +654,6 @@ HoldLeftMouse(*) {
 
 HoldRightMouse(*) {
 	Click("Down Right")
-}
-
-PasteDateTime(*) {
-	_fmt := Settings.DateTimeFormat
-	currentdatetime := FormatTime(, _fmt)
-	SendInput(currentdatetime)
 }
 
 Screenshot(*) {
