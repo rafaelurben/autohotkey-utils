@@ -262,5 +262,5 @@ Default:
 SEARCHENGINE_1||DuckDuckGo|https://duckduckgo.com/?q=
 SEARCHENGINE_2||Google|https://google.com/search?q=
 SEARCHENGINE_3||Wikipedia|https://en.wikipedia.org/wiki/Special:Search?search=
-DATETIMEFORMAT||
+DATETIMEFORMAT||yyyy-MM-dd HH-mm-ss
 ```

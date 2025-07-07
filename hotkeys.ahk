@@ -27,7 +27,7 @@ class Config {
 		"SEARCHENGINE1", "DuckDuckGo|https://duckduckgo.com/?q=",
 		"SEARCHENGINE2", "Google|https://google.com/search?q=",
 		"SEARCHENGINE3", "Wikipedia|https://en.wikipedia.org/wiki/Special:Search?search=",
-		"DATETIMEFORMAT", ""
+		"DATETIMEFORMAT", "yyyy-MM-dd HH-mm-ss"
 	)
 	static _SETTINGS_Custom := this.LoadMapFromFile("hotkey-settings.txt", "||")
 	
