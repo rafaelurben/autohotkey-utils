@@ -244,17 +244,23 @@ Common modifiers:
 
 ### Settings
 
-Some things like the search engines can be changed via settings. Use the following format: `Key||Value` Note: Use "||" here!
+The search engines and datetime format can be changed via settings. The app provides a simple GUI to edit these settings.
+
+Check [this page](https://www.autohotkey.com/docs/v2/lib/FormatTime.htm#Date_Formats) for date formats.
+
+#### Edit settings manually
+
+If you want to edit the settings manually, you can find them in the `config/hotkey-settings.txt` file.
+
+Use the following format: `Key||Value` (Note: Use "||" as a separator!)
 
 Note: If the keys are not present in the file, the default values are used.
 
 Default:
 
 ```txt
-SEARCHENGINE_1||DuckDuckGo|https://duckduckgo.com/?q
+SEARCHENGINE_1||DuckDuckGo|https://duckduckgo.com/?q=
 SEARCHENGINE_2||Google|https://google.com/search?q=
 SEARCHENGINE_3||Wikipedia|https://en.wikipedia.org/wiki/Special:Search?search=
 DATETIMEFORMAT||
 ```
-
-Check [this page](https://www.autohotkey.com/docs/commands/FormatTime.htm#Date_Formats) for date formats.

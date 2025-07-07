@@ -1,4 +1,4 @@
-﻿; Rafael Urben, 2022-2024
+﻿; Rafael Urben, 2022-2025
 ; ------------------
 ;
 ; https://github.com/rafaelurben/autohotkey-utils
@@ -117,6 +117,19 @@ class Config {
 			MsgBox("Failed to load config file " filename "! `n`nError: " e.Message, "Configuration error", 0)
 		}
 		return _dict
+	}
+
+	static StoreMapToFile(dict, filename, separator := "|") {
+		filepath := A_WorkingDir . "/config/" . filename
+		try {
+			_file := FileOpen(filepath, "w")
+			for key, value in dict {
+				_file.WriteLine(key . separator . value)
+			}
+			_file.Close()
+		} catch OSError as e {
+			MsgBox("Failed to store config file " filename "! `n`nError: " e.Message, "Configuration error", 0)
+		}
 	}
 }
 
@@ -652,37 +665,70 @@ Settings_Open(*) {
 	SettingsGUI := Gui()
 	SettingsGUI.Title := "autohotkey-utils by @rafaelurben - settings"
 
+	; [UrlShortcuts] settings (top left)
+	SettingsGUI.SetFont("bold")
 	SettingsGUI.Add("Link", "Y5 X5", "Edit URL shortcodes: <a href=`"https://github.com/rafaelurben/autohotkey-utils/#create-url-shortcodes`">Syntax and Infos</a>")
+	SettingsGUI.SetFont("norm")
 	SettingsGUI_UrlShortcutEdit := SettingsGUI.Add("Edit", "R15 W500")
 	FileContent := _ReadFileWithDefault("config/hotkey-urls.txt")
 	SettingsGUI_UrlShortcutEdit.Value := FileContent
 
+	; Keybinds settings (bottom left)
+	SettingsGUI.SetFont("bold")
 	SettingsGUI.Add("Link", , "Edit Keybinds: <a href=`"https://github.com/rafaelurben/autohotkey-utils/#modify-keybinds`">Syntax and Infos</a>")
+	SettingsGUI.SetFont("norm")
 	SettingsGUI_HotkeyEdit := SettingsGUI.Add("Edit", "R15 W500")
 	FileContent := _ReadFileWithDefault("config/hotkey-keybinds.txt")
 	SettingsGUI_HotkeyEdit.Value := FileContent
 
-	SettingsGUI.Add("Text", , "Press Ctrl+S to save and reload or Ctrl+W to exit without saving.")
-
+	; Hotstrings settings (top right)
+	SettingsGUI.SetFont("bold")
 	SettingsGUI.Add("Link", "Y5 X515", "Edit Hotstrings: <a href=`"https://github.com/rafaelurben/autohotkey-utils/#create-hotstrings`">Syntax and Infos</a>")
+	SettingsGUI.SetFont("norm")
 	SettingsGUI_HotstringEdit := SettingsGUI.Add("Edit", "R15 W500")
 	FileContent := _ReadFileWithDefault("config/hotkey-hotstrings.txt")
 	SettingsGUI_HotstringEdit.Value := FileContent
 
-	SettingsGUI.Add("Link", , "Edit Settings: <a href=`"https://github.com/rafaelurben/autohotkey-utils/#settings`">Syntax and Infos</a>")
-	SettingsGUI_SettingsEdit := SettingsGUI.Add("Edit", "R15 W500")
-	FileContent := _ReadFileWithDefault("config/hotkey-settings.txt")
-	SettingsGUI_SettingsEdit.Value := FileContent
+	; Util Settings
+	SettingsGUI.SetFont("bold")
+	SettingsGUI.Add("Link",, "Edit Settings: <a href=`"https://github.com/rafaelurben/autohotkey-utils/#settings`">Infos</a>")
+	SettingsGUI.SetFont("norm")
 
-	SettingsGUI.Add("Link", , "<a href=`"" . A_WorkingDir . "/config`">Open Config Folder</a> (Please do NOT edit files while the settings are opened!)")
+	SettingsGUI.Add("Text", "yp+20", "[InstantSearch]: Search engines")
+	SettingsGUI.Add("Text", "xp+0", "No.")
+	SettingsGUI.Add("Text", "xp+20", "Engine Name:")
+	SettingsGUI.Add("Text", "xp+200", "Engine URL:")
 
+	SettingsGUI.Add("Text", "xp-220 yp+22", "1")
+	SettingsSearchEngine1_Name := SettingsGUI.Add("Edit", "r1 w200 xp+20", Settings.SearchEngine1.name)
+	SettingsSearchEngine1_URL := SettingsGUI.Add("Edit", "r1 w280 xp+200", Settings.SearchEngine1.url)
+	
+	SettingsGUI.Add("Text", "xp-220 yp+22", "2")
+	SettingsSearchEngine2_Name := SettingsGUI.Add("Edit", "r1 w200 xp+20", Settings.SearchEngine2.name)
+	SettingsSearchEngine2_URL := SettingsGUI.Add("Edit", "r1 w280 xp+200", Settings.SearchEngine2.url)
+	
+	SettingsGUI.Add("Text", "xp-220 yp+22", "3")
+	SettingsSearchEngine3_Name := SettingsGUI.Add("Edit", "r1 w200 xp+20", Settings.SearchEngine3.name)
+	SettingsSearchEngine3_URL := SettingsGUI.Add("Edit", "r1 w280 xp+200", Settings.SearchEngine3.url)
+
+	SettingsGUI.Add("Link", "xp-220 yp+25", "[PasteDateTime]: Date time format - See <a href=`"https://www.autohotkey.com/docs/v2/lib/FormatTime.htm#Date_Formats`">here</a> for syntax")
+	SettingsDateTimeFormat := SettingsGUI.Add("Edit", "r1 w500", Settings.DateTimeFormat)
+
+	; Settings status bar
+	SettingsStatusBar := SettingsGUI.Add("StatusBar", "xp-220 yp+25", "Press Ctrl+S to save and reload or Ctrl+W to exit without saving.")
 	
 	_SettingsGUI_Save(*) {
+		SettingsStatusBar.Text := "Saving settings... Please wait."
 		SettingsGUI.Submit()
 		_OverwriteFile("config/hotkey-urls.txt", SettingsGUI_UrlShortcutEdit.Value)
 		_OverwriteFile("config/hotkey-keybinds.txt", SettingsGUI_HotkeyEdit.Value)
 		_OverwriteFile("config/hotkey-hotstrings.txt", SettingsGUI_HotstringEdit.Value)
-		_OverwriteFile("config/hotkey-settings.txt", SettingsGUI_SettingsEdit.Value)
+		Config.StoreMapToFile(Map(
+			"SEARCHENGINE1", SettingsSearchEngine1_Name.Value . "|" . SettingsSearchEngine1_URL.Value,
+			"SEARCHENGINE2", SettingsSearchEngine2_Name.Value . "|" . SettingsSearchEngine2_URL.Value,
+			"SEARCHENGINE3", SettingsSearchEngine3_Name.Value . "|" . SettingsSearchEngine3_URL.Value,
+			"DATETIMEFORMAT", SettingsDateTimeFormat.Value
+		), "hotkey-settings.txt", "||")
 		Reload()
 	}
 
@@ -697,9 +743,12 @@ Settings_Open(*) {
 	SettingsLinksMenu.Add("Repository (GitHub)", _OpenUrl.Bind("https://github.com/rafaelurben/autohotkey-utils/"))
 	SettingsLinksMenu.Add("Releases (GitHub)", _OpenUrl.Bind("https://github.com/rafaelurben/autohotkey-utils/releases"))
 	SettingsLinksMenu.Add("Author (GitHub)", _OpenUrl.Bind("https://github.com/rafaelurben/"))
+	SettingsAdvancedMenu := Menu()
+	SettingsAdvancedMenu.Add("Open config folder (Please close this window before editing files!)", _OpenUrl.Bind(A_WorkingDir . "/config"))
 	SettingsMenuBar := MenuBar()
 	SettingsMenuBar.Add("&File", SettingsFileMenu)
 	SettingsMenuBar.Add("&Links", SettingsLinksMenu)
+	SettingsMenuBar.Add("&AdvancedI", SettingsAdvancedMenu)
 	
 	SettingsGUI.MenuBar := SettingsMenuBar
 	SettingsGUI.Show()
