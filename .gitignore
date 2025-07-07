@@ -4,3 +4,7 @@ data/*
 .hotkey-temp.txt
 hotkey-run.bat
 Thumbs.db
+
+# IDE
+.idea/
+.vscode/
