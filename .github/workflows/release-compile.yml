@@ -2,11 +2,11 @@ name: Compile script
 
 on:
   push:
-    branches: [ master ]
+    branches: [ main ]
     tags:
     - 'v*'
   pull_request:
-    branches: [ master ]
+    branches: [ main ]
   workflow_dispatch:
 
 jobs:
@@ -17,24 +17,26 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Rename source file
-        run: |
-          mv hotkeys.ahk hotkeys-${{  github.ref_name }}.ahk
-
-      - name: Build with AHK v2.0.13
-        uses: nukdokplex/autohotkey-build@v1
+      - name: Build with latest AutoHotkey release
+        uses: benmusson/ahk2exe-action@v1
         with:
-          version: v2.0.13
-          x64: true
-          x86: true
-          x64_suffix: ""
-          x86_suffix: "_x86"
-          out: "out"
-          
-      - name: Attach to release
-        if: startsWith(github.ref, 'refs/tags/v')
+          in: hotkeys.ahk
+          out: out/hotkeys-${{ github.ref_name }}.exe
+          target: x64
+          compression: upx
+          ahk-tag: v2.0.19
+          ahk2exe-tag: latest
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload executable as artifact
+        if: github.ref_type != 'tag'
+        uses: actions/upload-artifact@v4
+        with:
+          name: hotkeys-${{ github.ref_name }}.exe
+          path: out/hotkeys-${{  github.ref_name }}.exe
+
+      - name: Create release and attach executable
+        if: github.ref_type == 'tag'
         uses: softprops/action-gh-release@v2
         with:
-          files: |
-            out/hotkeys-${{  github.ref_name }}.exe
-            out/hotkeys-${{  github.ref_name }}_x86.exe
+          files: out/hotkeys-${{  github.ref_name }}.exe
