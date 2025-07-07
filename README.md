@@ -30,9 +30,12 @@ Current modules are:
 
 ### InstantSearch
 
-Enter a query to open it in a search engine.
+Enter a query to open it in a search engine. Can also take the query from the clipboard.
 
-You can modify the used search engines via [settings](#settings). Settings format: `SEARCHENGINE?||EngineName|EngineUrl` (where ? in [1,2,3])
+You can modify the used search engines via [settings](#settings).
+Settings format: `SEARCHENGINE?||EngineName|EngineUrl` (where ? in [1,2,3])
+
+When searching, the query is appended to the end of the URL, so it should end with `?q=` or similar.
 
 | Action                    | Description                         | Default shortcut |
 | ------------------------- | ----------------------------------- | ---------------- |
@@ -171,10 +174,9 @@ Note: Windows may warn you that this script is insecure, but you can ignore this
 
 ## Config
 
-You can configurate and change some things in this little "app". You can open the settings via right click on the tray icon -> Settings or via the defined keybind (default: `Shift+Win+i`).
+You can configure and change some things in this little "app". You can open the settings via `right click on the tray icon -> Settings` or via the defined keybind (default: `Shift+Win+i`).
 
-You can also edit the settings in their corresponding files, but don't forget to reload afterwards if you edit the files directly.
-If you edit them in the settings, this is automatically done for you after saving.
+You can also edit the settings in their corresponding config files. If you want to edit the settings manually, you can find them in the `config` folder, which lies in the same folder as this script and can be opened via the settings dialog > "Advanced" > "Open config folder". If you edit files manually, you must reload the script after saving to apply the changes via `right click on the tray icon -> Reload` or via the defined keybind (default: `Shift+Win+R`).
 
 ### Create URL-Shortcodes
 
@@ -189,9 +191,9 @@ yt|https://youtube.com
 
 ### Create Hotstrings
 
-Hotstrings automatically replaces certain strings while you're typing. E.g. you type "btw" and an ending character (`-()[]{}:;'"/\,.?!`, tab or newline) and btw automatically gets replaced with "by the way".
+Hotstrings automatically replace certain strings while you're typing. E.g. you type "btw" and an ending character (`-()[]{}:;'"/\,.?!`, tab or newline) and "btw" automatically gets replaced with "by the way".
 
-You can create and modify hotstrings in the settings. Use the following syntax: `hotstring|replacement`
+You can create and modify hotstrings in the settings using the following syntax: `hotstring|replacement`
 
 The hotstring syntax can be found [here](https://www.autohotkey.com/docs/Hotstrings.htm#Options). Note: Replace "::" between hotstring and replacement with "|"!
 
@@ -217,9 +219,9 @@ Common options:
 
 You can modify the keybinds used in this app in the settings. Use the following syntax: `action|keybind`
 
-Note: If the actions are not present in the file, the default values are used. If you want do disable a default hotkey, enter the action without a keybind. (e.g. list line in example)
+Note: If the actions are not present in the file, the default values are used. If you want do disable a default hotkey, enter the action without a keybind. (e.g. last line in example)
 
-The keybind syntax can be found [here](https://www.autohotkey.com/docs/Hotkeys.htm#Symbols), all actions are listed in the tables on this page. Common modifiers can also found in the table below.
+The keybind syntax can be found [here](https://www.autohotkey.com/docs/Hotkeys.htm#Symbols). All available actions are listed in the tables on this page. Common modifiers can also found in the table below.
 
 Example:
 

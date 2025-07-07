@@ -748,7 +748,7 @@ Settings_Open(*) {
 	SettingsMenuBar := MenuBar()
 	SettingsMenuBar.Add("&File", SettingsFileMenu)
 	SettingsMenuBar.Add("&Links", SettingsLinksMenu)
-	SettingsMenuBar.Add("&AdvancedI", SettingsAdvancedMenu)
+	SettingsMenuBar.Add("&Advanced", SettingsAdvancedMenu)
 	
 	SettingsGUI.MenuBar := SettingsMenuBar
 	SettingsGUI.Show()
