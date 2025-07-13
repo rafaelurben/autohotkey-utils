@@ -87,7 +87,7 @@ class Config {
 			else
 				return default[key]
 		} catch as e {
-			MsgBox("Failed to get config with name " key "! `n`nError: " e.Message, "Settings error", 0)
+			MsgBox("Failed to get config with name " key "! `n`nError: " e.Message, "[autohotkey-utils] Settings error", 0)
 		}
 	}
 	
@@ -102,7 +102,7 @@ class Config {
 			
 				row := StrSplit(A_LoopReadLine, separator)
 				if (row.length != 2) {
-					MsgBox("Invalid line in config file " filename ":`n`n" A_Index ": " A_LoopReadLine, "Configuration syntax error", 0)
+					MsgBox("Invalid line in config file " filename ":`n`n" A_Index ": " A_LoopReadLine, "[autohotkey-utils] Configuration syntax error", 0)
 					continue
 				}
 
@@ -114,7 +114,7 @@ class Config {
 			; create file (didn't exist)
 			FileAppend("", filepath)
 		} catch Error as e {
-			MsgBox("Failed to load config file " filename "! `n`nError: " e.Message, "Configuration error", 0)
+			MsgBox("Failed to load config file " filename "! `n`nError: " e.Message, "[autohotkey-utils] Configuration error", 0)
 		}
 		return _dict
 	}
@@ -128,7 +128,7 @@ class Config {
 			}
 			_file.Close()
 		} catch OSError as e {
-			MsgBox("Failed to store config file " filename "! `n`nError: " e.Message, "Configuration error", 0)
+			MsgBox("Failed to store config file " filename "! `n`nError: " e.Message, "[autohotkey-utils] Configuration error", 0)
 		}
 	}
 }
@@ -183,13 +183,13 @@ _OpenUrl(url, *) {
 	try {
 		Run(url)
 	} catch Error as e {
-		MsgBox("Can't open `"" url "`"! Is this a valid url? `n`nError: `"" e.Message, "Opening URL failed", 0)
+		MsgBox("Can't open `"" url "`"! Is this a valid url? `n`nError: `"" e.Message, "[autohotkey-utils] Opening URL failed", 0)
 	}
 	return
 }
 
 _OpenUrlEditor(defaultUrl) {
-	IB := InputBox("Please enter your url:", "Open URL", , defaultUrl)
+	IB := InputBox("Please enter your url:", "[autohotkey-utils] Open URL", , defaultUrl)
 	if IB.Result = "OK"
 		_OpenUrl(IB.Value)
 	return
@@ -213,7 +213,7 @@ _CloseProcess(name) {
 	try {
 		ProcessClose(name)
 	} catch {
-		MsgBox("Couldn't close process `"" name "`"", "Error", 0)
+		MsgBox("Couldn't close process `"" name "`"", "[autohotkey-utils] Error", 0)
 	}
 }
 
@@ -234,7 +234,7 @@ ReloadFiles(*) {
 }
 
 CloseProcess(*) {
-	IB := InputBox("Please enter process name:", "Close Process", , "explorer.exe")
+	IB := InputBox("Please enter process name:", "[autohotkey-utils] Close Process", , "explorer.exe")
 	if IB.Result = "OK"
 		_CloseProcess(IB.Value)
 	return
@@ -246,21 +246,21 @@ CheckForUpdate(show_no_new_update_message := true, show_error_message := true, *
 		Download("https://raw.githubusercontent.com/rafaelurben/autohotkey-utils/master/version.txt?randParam=" rand, ".hotkey-temp.txt")
 	} catch OSError as e {
 		if (show_error_message) {
-			MsgBox("Couldn't check for new autohotkey-utils versions!`n`nError: " e.Message, "Checking for updates failed")
+			MsgBox("Couldn't check for new autohotkey-utils versions!`n`nError: " e.Message, "[autohotkey-utils] Checking for updates failed")
 		}
 		return
 	}
 	NewestVersion := _ReadFileWithDefault(".hotkey-temp.txt")
 	NewestVersion := Trim(NewestVersion, OmitChars := " `t`n`r")
 	if (StrCompare(NewestVersion, CurrentVersion) > 0) {
-		msgResult := MsgBox("Your current version: " CurrentVersion " `nNewest version available: " NewestVersion "`n`nWould you like to download the new version?", "Update available", 292)
+		msgResult := MsgBox("Your current version: " CurrentVersion " `nNewest version available: " NewestVersion "`n`nWould you like to download the new version?", "[autohotkey-utils] Update available", 292)
 		if (msgResult = "Yes")
 		{
 			try {
 				Download("https://github.com/rafaelurben/autohotkey-utils/releases/download/" NewestVersion "/hotkeys-" NewestVersion ".exe?randParam=" rand, "hotkey-" NewestVersion ".exe")
 				command := "@echo off`nstart `"autohotkey-utils`" /b `"" A_ScriptDir "/hotkeys-" NewestVersion ".exe`""
 				_OverwriteFile("hotkey-run.bat", command)
-				msgResult := MsgBox("The newest version has been downloaded.`n`nDo you want to update now?", "Downloaded " NewestVersion, 291)
+				msgResult := MsgBox("The newest version has been downloaded.`n`nDo you want to update now?", "[autohotkey-utils] Downloaded " NewestVersion, 291)
 				if (msgResult = "Yes")
 				{
 					_OverwriteFile(".hotkey-temp.txt", "UpdateDone")
@@ -268,11 +268,11 @@ CheckForUpdate(show_no_new_update_message := true, show_error_message := true, *
 					ExitApp()
 				}
 			} catch Error as e {
-				MsgBox("The update to " NewestVersion " failed with error: " e.Message, "Update failed", 16)
+				MsgBox("The update to " NewestVersion " failed with error: " e.Message, "[autohotkey-utils] Update failed", 16)
 			}
 		}
 	} else if show_no_new_update_message {
-		MsgBox("Your current version (" CurrentVersion ") is the newest version available.", "No Update available", 0)
+		MsgBox("Your current version (" CurrentVersion ") is the newest version available.", "[autohotkey-utils] No Update available", 0)
 	}
 }
 
@@ -283,18 +283,18 @@ _CleanupUpdate() {
 	TempData := _ReadFileWithDefault(".hotkey-temp.txt", false)
 	if (TempData = "UpdateDone") {
 		_OverwriteFile(".hotkey-temp.txt", "-")
-		msgResult := MsgBox("Your script has been updated to the newest version (" CurrentVersion "). You can delete the old version now.`n`nWould you like to open the folder?", "Update successful", 68)
+		msgResult := MsgBox("Your script has been updated to the newest version (" CurrentVersion "). You can delete the old version now.`n`nWould you like to open the folder?", "[autohotkey-utils] Update successful", 68)
 		if (msgResult = "Yes")
 			Run(A_ScriptDir)
 	} else if (!TempData) {
-		msgResult := MsgBox("Welcome to autohotkey-utils!`n`nDo you want to add this script to autostart?", "Welcome!", 68)
+		msgResult := MsgBox("Welcome to autohotkey-utils!`n`nDo you want to add this script to autostart?`n`nNote: This requires administrator privileges.", "[autohotkey-utils] Welcome!", 68)
 		if (msgResult = "Yes")
 		{
 			A_UserProfile := EnvGet("UserProfile")
 			cmd := "mklink `"" A_UserProfile . "\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup\Run autohotkey-utils by rafaelurben`" `"" A_ScriptDir "\hotkey-run.bat`""
 			_OverwriteFile(".hotkey-add-to-autostart.bat", cmd)
 			RunWait("*RunAs `".hotkey-add-to-autostart.bat`"")
-			MsgBox("The script has been added to autostart.", "Added to autostart", 64)
+			MsgBox("The script has been added to autostart.", "[autohotkey-utils] Added to autostart", 64)
 			FileDelete(".hotkey-add-to-autostart.bat")
 		}
 		_OverwriteFile(".hotkey-temp.txt", "-")
@@ -306,7 +306,7 @@ _CleanupUpdate() {
 ;; Insert Urls (L=2, InputHook)
 
 UrlShortcuts_Insert(*) {
-	SplashTextGui := Gui("-Sysmenu +ToolWindow +AlwaysOnTop +Disabled", "Insert shortcut")
+	SplashTextGui := Gui("-Sysmenu +ToolWindow +AlwaysOnTop +Disabled", "[autohotkey-utils] Insert shortcut")
 	SplashTextGui.Add("Text", , "Please enter a shortcode...")
 	SplashTextGui.Show("w300 h50 NA")
 	ihkey := InputHook("L2 T2", "{Esc}")
@@ -318,14 +318,14 @@ UrlShortcuts_Insert(*) {
 		if Settings.UrlShortcodes.Has(key)
 			Send(Settings.UrlShortcodes[key])
 		else If key
-			MsgBox("Unknown shortcode: `"" key "`"", "Insert URL failed", 0)
+			MsgBox("Unknown shortcode: `"" key "`"", "[autohotkey-utils] Insert URL failed", 0)
 	}
 }
 
 ;; Open Urls (L=2, InputHook)
 
 UrlShortcuts_Open(*) {
-	SplashTextGui := Gui("-Sysmenu +ToolWindow +AlwaysOnTop +Disabled", "Open shortcut")
+	SplashTextGui := Gui("-Sysmenu +ToolWindow +AlwaysOnTop +Disabled", "[autohotkey-utils] Open shortcut")
 	SplashTextGui.Add("Text", , "Please enter a shortcode...")
 	SplashTextGui.Show("w300 h50 NA")
 	ihkey := InputHook("L2 T2", "{Esc}")
@@ -337,33 +337,33 @@ UrlShortcuts_Open(*) {
 		if Settings.UrlShortcodes.Has(key)
 			_OpenUrl(Settings.UrlShortcodes[key])
 		else If key
-			MsgBox("Unknown shortcode: `"" key "`"", "Open URL failed", 0)
+			MsgBox("Unknown shortcode: `"" key "`"", "[autohotkey-utils] Open URL failed", 0)
 	}
 }
 
 ;; Insert urls (InputBox)
 
 UrlShortcuts_BoxInsert(*) {
-	IB := InputBox("Please enter a shortcode:", "Insert URL")
+	IB := InputBox("Please enter a shortcode:", "[autohotkey-utils] Insert URL")
 	key := IB.Value
 	if IB.Result = "OK" && key {
 		if Settings.UrlShortcodes.Has(key)
 			Send(Settings.UrlShortcodes[key])
 		else If key
-			MsgBox("Unknown shortcode: `"" key "`"", "Insert URL failed", 0)
+			MsgBox("Unknown shortcode: `"" key "`"", "[autohotkey-utils] Insert URL failed", 0)
 	}
 }
 
 ;; Open urls (InputBox)
 
 UrlShortcuts_BoxOpen(*) {
-	IB := InputBox("Please enter a shortcode:", "Open URL")
+	IB := InputBox("Please enter a shortcode:", "[autohotkey-utils] Open URL")
 	key := IB.Value
 	if IB.Result = "OK" && key {
 		if Settings.UrlShortcodes.Has(key)
 			_OpenUrl(Settings.UrlShortcodes[key])
 		else If key
-			MsgBox("Unknown shortcode: `"" key "`"", "Open URL", 0)
+			MsgBox("Unknown shortcode: `"" key "`"", "[autohotkey-utils] Open URL", 0)
 	}
 }
 
@@ -371,7 +371,7 @@ UrlShortcuts_BoxOpen(*) {
 ;;;; DriveLetterOpen
 
 DriveLetterOpen(*) {
-	SplashTextGui := Gui("-Sysmenu +ToolWindow +Disabled", "Open explorer")
+	SplashTextGui := Gui("-Sysmenu +ToolWindow +Disabled", "[autohotkey-utils] Open explorer")
 	SplashTextGui.Add("Text", , "Please enter a drive letter...")
 	SplashTextGui.Add("Text", , "You can also use one of the special keys:"
 								"`n.`tOpen autohotkey-utils directory"
@@ -392,7 +392,7 @@ DriveLetterOpen(*) {
 			try {
 				Run("`"" drive ":/`"")
 			} catch {
-				MsgBox("Couldn't open drive `"" drive "`"", "Drive not found", 0)
+				MsgBox("Couldn't open drive `"" drive "`"", "[autohotkey-utils] Drive not found", 0)
 			}
 		}
 	}
@@ -461,14 +461,14 @@ GreekAlphabet(*) {
 		if A_Index >= GREEK_ALPHABET.Count / 2
 			break
 	}
-	IB := InputBox(prompt, "Greek alphabet", "H" (130 + 19 * GREEK_ALPHABET.Count / 2))
+	IB := InputBox(prompt, "[autohotkey-utils] Greek alphabet", "H" (130 + 19 * GREEK_ALPHABET.Count / 2))
 	letter := IB.Value
 	if IB.Result = "OK" && letter {
 		if GREEK_ALPHABET.Has(letter) {
 			greekletter := GREEK_ALPHABET[letter]
 			Send(greekletter)
 		} else If letter
-			MsgBox("Unknown letter: `"" letter "`"", "Greek alphabet", 0)
+			MsgBox("Unknown letter: `"" letter "`"", "[autohotkey-utils] Greek alphabet", 0)
 		return
 	}
 }
@@ -495,7 +495,7 @@ class SearchEngine extends Object {
 	}
 
 	SearchFromMsgBox() {
-		IB := InputBox("Please enter your query:", "Search on " this.name)
+		IB := InputBox("Please enter your query:", "[autohotkey-utils] Search on " this.name)
 		if (IB.Result = "OK") 
 			this.Search(IB.Value)
 	}
@@ -538,7 +538,7 @@ _QRGenerator(data) {
 		Download("http://api.qrserver.com/v1/create-qr-code/?format=png&size=500x500&data=" newdata, A_WorkingDir "/data/qr/qrcode.png")
 		Download("http://api.qrserver.com/v1/create-qr-code/?format=svg&size=500x500&data=" newdata, A_WorkingDir "/data/qr/qrcode.svg")
 	} catch as e {
-		MsgBox("An error occured: " e.Message "`n`nNote: This module requires an internet connection.", "QRGenerator Error", 0)
+		MsgBox("An error occured: " e.Message "`n`nNote: This module requires an internet connection.", "[autohotkey-utils] QRGenerator Error", 0)
 		return
 	}
 
@@ -563,7 +563,7 @@ _QRGenerator(data) {
 }
 
 QRGenerator_InputBox(*) {
-	IB := InputBox("Please enter your data:", "Create a QR-Code")
+	IB := InputBox("Please enter your data:`n`NOTE: Your data will be sent to api.qrserver.net!", "[autohotkey-utils] Create a QR-Code")
 	if IB.Result = "OK"
 		_QRGenerator(IB.Value)
 	return
@@ -588,10 +588,10 @@ ClipboardUrl_OpenEditor(*) {
 ;;;; Quick-Notes
 
 QuickNotes_Create(*) {
-	IB := InputBox("Please enter a text to create a note:", "QuickNote")
+	IB := InputBox("Please enter a text to create a note:", "[autohotkey-utils] QuickNote")
 	note := IB.Value
 	if IB.Result = "OK" && note
-		FileAppend("`n" note, "config/hotkey-notes.txt")
+		FileAppend("`n`n" note, "config/hotkey-notes.txt")
 }
 
 QuickNotes_Open(*) {
@@ -664,7 +664,7 @@ Screenshot(*) {
 
 Settings_Open(*) {
 	SettingsGUI := Gui()
-	SettingsGUI.Title := "autohotkey-utils by @rafaelurben - settings"
+	SettingsGUI.Title := "autohotkey-utils by @rafaelurben - " . CurrentVersion . " - settings"
 
 	; [UrlShortcuts] settings (top left)
 	SettingsGUI.SetFont("bold")
@@ -803,6 +803,8 @@ _CreateTrayMenu() {
 	_ActionsMenu.Add("Close process by name`t" Config.GetKeybindHumanReadable("CloseProcess"), CloseProcess)
 	_ActionsMenu.Add("Paste date and time`t" Config.GetKeybindHumanReadable("PasteDateTime"), PasteDateTime)
 
+    _InfoText := "autohotkey-utils " . CurrentVersion
+
 	Tray := A_TrayMenu
 	Tray.Add()
 	Tray.Add("Check for updates", CheckForUpdate)
@@ -811,6 +813,11 @@ _CreateTrayMenu() {
 	Tray.Add()
 	Tray.Add("Actions", _ActionsMenu)
 	Tray.Add("Screenshot", Screenshot)
+	Tray.Add()
+	Tray.Add(_InfoText, Screenshot)
+	Tray.Disable(_InfoText)
+
+	A_IconTip := "autohotkey-utils by @rafaelurben`n`nRight-click for actions and settings.`n`nVersion: " CurrentVersion
 }
 
 _RegisterHotkeys() {
@@ -824,11 +831,11 @@ _RegisterHotkeys() {
 				try {
 					Hotkey(shortcut, func_obj, "On")
 				} catch {
-					MsgBox("Couldn't create shortcut `"" shortcut "`" for action `"" func_name "`".", "Hotkey Error", 0)
+					MsgBox("Couldn't create shortcut `"" shortcut "`" for action `"" func_name "`".", "[autohotkey-utils] Hotkey Error", 0)
 				}
 			}
 		} else {
-			MsgBox("Unknown action: `"" func_name "`".", "Hotkey Error", 0)
+			MsgBox("Unknown action: `"" func_name "`".", "[autohotkey-utils] Hotkey Error", 0)
 		}
 	}
 }
@@ -839,7 +846,7 @@ _RegisterHotstrings() {
 		try {
 			Hotstring(key, value, "On")
 		} catch as e {
-			MsgBox("Invalid hostring: (`"" key "`" -> `"" value "`") `n`nError: " e.Message, "Hotstring Error", 0)
+			MsgBox("Invalid hostring: (`"" key "`" -> `"" value "`") `n`nError: " e.Message, "[autohotkey-utils] Hotstring Error", 0)
 		}
 	}
 }
