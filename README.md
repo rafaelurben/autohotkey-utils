@@ -17,6 +17,7 @@ Jump to [setup](#setup) or [config](#config).
 Current modules are:
 
 <!-- no toc -->
+
 - [InstantSearch](#instantsearch)
 - [QRGenerator](#qrgenerator)
 - [ClipboardURL](#clipboardurl)
@@ -39,7 +40,7 @@ Settings format: `SEARCHENGINE?||EngineName|EngineUrl` (where ? in [1,2,3])
 When searching, the query is appended to the end of the URL, so it should end with `?q=` or similar.
 
 | Action                    | Description                         | Default shortcut |
-| ------------------------- | ----------------------------------- | ---------------- |
+|---------------------------|-------------------------------------|------------------|
 | InstantSearch_1_Clipboard | Search on DuckDuckGo from Clipboard | `Win+Q`          |
 | InstantSearch_1           | Search on DuckDuckGo                | `Shift+Win+Q`    |
 | InstantSearch_2_Clipboard | Search on Google from Clipboard     | -                |
@@ -56,7 +57,7 @@ Generate a QRCode from any text.
 Note: Please use the clipboard action if you need to use multiline data.
 
 | Action                    | Description                         | Default shortcut  |
-| ------------------------- | ----------------------------------- | ----------------- |
+|---------------------------|-------------------------------------|-------------------|
 | QRGenerator_FromClipboard | Use data in Clipboard               | `Alt+Win+Q`       |
 | QRGenerator_InputBox      | Open Input-Window to enter text/url | `Shift+Alt+Win+Q` |
 
@@ -67,7 +68,7 @@ Note: Please use the clipboard action if you need to use multiline data.
 Open the URL from the clipboard directly in your default browser.
 
 | Action                  | Description                                    | Default shortcut |
-| ----------------------- | ---------------------------------------------- | ---------------- |
+|-------------------------|------------------------------------------------|------------------|
 | ClipboardURL_Open       | Open Url directly                              | `Win+O`          |
 | ClipboardURL_OpenEditor | Open Input-Window to modify URL before opening | `Shift+Win+O`    |
 
@@ -82,7 +83,7 @@ Save URLs to open easily via shortcodes.
 This module needs some configuration. (see [here](#create-url-shortcodes))
 
 | Action                 | Description                                                                                | Default shortcut    |
-| ---------------------- | ------------------------------------------------------------------------------------------ | ------------------- |
+|------------------------|--------------------------------------------------------------------------------------------|---------------------|
 | UrlShortcuts_Insert    | Press and enter a 2-char shortcode during a 2-second-timeframe to **paste** url or text.   | `Insert`            |
 | UrlShortcuts_Open      | Press and enter a 2-char shortcode during a 2-second-timeframe to **open** url or command. | `Ctrl+Insert`       |
 | UrlShortcuts_BoxInsert | Open input window and enter shortcode to **paste** url or text.                            | `Shift+Insert`      |
@@ -95,7 +96,7 @@ This module needs some configuration. (see [here](#create-url-shortcodes))
 Quickly open an explorer window with the desired drive.
 
 | Action          | Description                                               | Default shortcut |
-| --------------- | --------------------------------------------------------- | ---------------- |
+|-----------------|-----------------------------------------------------------|------------------|
 | DriveLetterOpen | Press and enter a drive letter to open it in the explorer | `Shift+Win+E`    |
 
 Example: `Shift+Win+E c` opens the C: drive in the explorer.
@@ -112,7 +113,7 @@ Beside the drive letters, there are also some special keys for special folders:
 Quickly enter a character from the greek alphabet.
 
 | Action        | Description                            | Default shortcut |
-| ------------- | -------------------------------------- | ---------------- |
+|---------------|----------------------------------------|------------------|
 | GreekAlphabet | Press and enter the name of the letter | -                |
 
 Example: `Shift+Win+G Pi Enter` or `Shift+Win+G pi Enter` (these are not the same)
@@ -126,7 +127,7 @@ Create notes on the fly or paste your clipboard for later use.
 Note: Please use the open action if you need to enter multiple lines.
 
 | Action            | Description                  | Default shortcut |
-| ----------------- | ---------------------------- | ---------------- |
+|-------------------|------------------------------|------------------|
 | QuickNotes_Create | Create e new note            | -                |
 | QuickNotes_Open   | View and edit existing notes | -                |
 
@@ -139,7 +140,7 @@ Disable mouse and keyboard input via shortcut. (Note: This only works when the s
 Press `Win+L` or `Ctrl+Alt+Delete` to exit.
 
 | Action         | Description     | Default shortcut |
-| -------------- | --------------- | ---------------- |
+|----------------|-----------------|------------------|
 | SoftLock_Block | Block the input | `Shift+Win+L`    |
 
 ---
@@ -151,7 +152,7 @@ Paste the current date and time in a customizable format.
 Uses the datetime format defined in the [settings](#settings).
 
 | Action        | Description                      | Default shortcut |
-| ------------- | -------------------------------- | ---------------- |
+|---------------|----------------------------------|------------------|
 | PasteDateTime | Pastes the current date and time | -                |
 
 ---
@@ -165,7 +166,7 @@ This module needs some configuration. (see [here](#create-hotstrings))
 ### General actions
 
 | Action         | Description                            | Default shortcut |
-| -------------- | -------------------------------------- | ---------------- |
+|----------------|----------------------------------------|------------------|
 | CloseProcess   | Close a process by name                | `Shift+Win+Esc`  |
 | Settings_Open  | Open the settings page                 | `Shift+Win+i`    |
 | ReloadFiles    | Reload the script and all config files | -                |
@@ -176,23 +177,34 @@ This module needs some configuration. (see [here](#create-hotstrings))
 
 ## Setup
 
-You can install this script without AutoHotKey using the `*.exe` files found under [Releases](https://github.com/rafaelurben/autohotkey-utils/releases). I recommend storing the `*.exe` in a separate folder as your configuration files will be stored in the same folder as the `*.exe`.
+You can install this script without AutoHotKey using the `*.exe` files found
+under [Releases](https://github.com/rafaelurben/autohotkey-utils/releases). I recommend storing the `*.exe` in a
+separate folder as your configuration files will be stored in the same folder as the `*.exe`.
 
-The first time you launch the script, it will ask you if you want it to automatically start everytime you log in. If you missed the chance to click yes, you can just delete the ".hotkey-temp.txt" file and reload the script.
+The first time you launch the script, it will ask you if you want it to automatically start everytime you log in. If you
+missed the chance to click yes, you can just delete the ".hotkey-temp.txt" file and reload the script.
 
-Everytime the script reloads, it will check if there is a newer version of it available on this page and will ask you if you want to update.
+Everytime the script reloads, it will check if there is a newer version of it available on this page and will ask you if
+you want to update.
 
-Note: Windows may warn you that this script is insecure, but you can ignore this warning as long as you download the exe file from this repository. If you don't trust this exe file, you can also download the current .ahk file, but then you must also install AutoHotkey v2. But please note that the update engine doesn't work when using the .ahk file!
+Note: Windows may warn you that this script is insecure, but you can ignore this warning as long as you download the exe
+file from this repository. If you don't trust this exe file, you can also download the current .ahk file, but then you
+must also install AutoHotkey v2. But please note that the update engine doesn't work when using the .ahk file!
 
 ## Config
 
-You can configure and change some things in this little "app". You can open the settings via `right click on the tray icon -> Settings` or via the defined keybind (default: `Shift+Win+i`).
+You can configure and change some things in this little "app". You can open the settings via
+`right click on the tray icon -> Settings` or via the defined keybind (default: `Shift+Win+i`).
 
-You can also edit the settings in their corresponding config files. If you want to edit the settings manually, you can find them in the `config` folder, which lies in the same folder as this script and can be opened via the settings dialog > "Advanced" > "Open config folder". If you edit files manually, you must reload the script after saving to apply the changes via `right click on the tray icon -> Reload` or via the defined keybind (default: `Shift+Win+R`).
+You can also edit the settings in their corresponding config files. If you want to edit the settings manually, you can
+find them in the `config` folder, which lies in the same folder as this script and can be opened via the settings
+dialog > "Advanced" > "Open config folder". If you edit files manually, you must reload the script after saving to apply
+the changes via `right click on the tray icon -> Reload` or via the defined keybind (default: `Shift+Win+R`).
 
 ### Create URL-Shortcodes
 
-You can modify the shortcodes used for the [UrlShortcuts](#urlshortcuts) module in the settings. Use the following syntax: `shortcode|url`
+You can modify the shortcodes used for the [UrlShortcuts](#urlshortcuts) module in the settings. Use the following
+syntax: `shortcode|url`
 
 Example:
 
@@ -203,11 +215,13 @@ yt|https://youtube.com
 
 ### Create Hotstrings
 
-Hotstrings automatically replace certain strings while you're typing. E.g. you type "btw" and an ending character (`-()[]{}:;'"/\,.?!`, tab or newline) and "btw" automatically gets replaced with "by the way".
+Hotstrings automatically replace certain strings while you're typing. E.g. you type "btw" and an ending character (
+`-()[]{}:;'"/\,.?!`, tab or newline) and "btw" automatically gets replaced with "by the way".
 
 You can create and modify hotstrings in the settings using the following syntax: `hotstring|replacement`
 
-The hotstring syntax can be found [here](https://www.autohotkey.com/docs/Hotstrings.htm#Options). Note: Replace "::" between hotstring and replacement with "|"!
+The hotstring syntax can be found [here](https://www.autohotkey.com/docs/v2/Hotstrings.htm). Note: Replace "::"
+between hotstring and replacement with "|"!
 
 Example:
 
@@ -220,7 +234,7 @@ Example:
 Common options:
 
 | Option | Behaviour                                                |
-| ------ | -------------------------------------------------------- |
+|--------|----------------------------------------------------------|
 | o      | Automatically removes ending character after replacement |
 | ?      | Allows hotstring to be IN a word                         |
 | \*     | Doesn't require ending character to trigger              |
@@ -231,9 +245,11 @@ Common options:
 
 You can modify the keybinds used in this app in the settings. Use the following syntax: `action|keybind`
 
-Note: If the actions are not present in the file, the default values are used. If you want do disable a default hotkey, enter the action without a keybind. (e.g. last line in example)
+Note: If the actions are not present in the file, the default values are used. If you want to disable a default hotkey,
+enter the action without a keybind. (e.g. last line in example)
 
-The keybind syntax can be found [here](https://www.autohotkey.com/docs/Hotkeys.htm#Symbols). All available actions are listed in the tables on this page. Common modifiers can also found in the table below.
+The keybind syntax can be found [here](https://www.autohotkey.com/docs/v2/Hotkeys.htm#Symbols). All available actions
+are listed in the tables on this page. Common modifiers can also found in the table below.
 
 Example:
 
@@ -248,7 +264,7 @@ ReloadFiles|
 Common modifiers:
 
 | Modifier | Meaning           |
-| -------- | ----------------- |
+|----------|-------------------|
 | #        | Windows-Key (Win) |
 | +        | Shift             |
 | ^        | Control (Ctrl)    |
@@ -258,7 +274,8 @@ Common modifiers:
 
 ### Settings
 
-The search engines and datetime format can be changed via settings. The app provides a simple GUI to edit these settings.
+The search engines and datetime format can be changed via settings. The app provides a simple GUI to edit these
+settings.
 
 Check [this page](https://www.autohotkey.com/docs/v2/lib/FormatTime.htm#Date_Formats) for date formats.
 
