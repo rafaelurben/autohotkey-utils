@@ -37,3 +37,5 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           files: out/hotkeys-${{  github.ref_name }}.exe
+          draft: true
+          generate_release_notes: true
