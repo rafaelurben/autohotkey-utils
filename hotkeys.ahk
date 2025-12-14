@@ -11,7 +11,7 @@ SetWorkingDir(A_ScriptDir)
 
 ;; Version
 
-global CurrentVersion := "v2.2.0"
+global CurrentVersion := "v2.2.1"
 
 ;; Directories
 
