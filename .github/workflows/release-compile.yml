@@ -12,7 +12,7 @@ jobs:
     runs-on: windows-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Build with latest AutoHotkey release
         uses: benmusson/ahk2exe-action@v1
@@ -27,7 +27,7 @@ jobs:
 
       - name: Upload executable as artifact
         if: github.ref_type != 'tag'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: hotkeys-${{ github.ref_name }}.exe
           path: out/hotkeys-${{  github.ref_name }}.exe
