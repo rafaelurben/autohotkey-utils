@@ -43,6 +43,7 @@ class Config {
 		"UrlShortcuts_BoxOpen", "+^Insert",
 		"DriveLetterOpen", "+#e",
 		"GreekAlphabet", "",
+		"AnyShortcut", "",
 		"InstantSearch_1", "+#q",
 		"InstantSearch_2", "",
 		"InstantSearch_3", "",
@@ -473,6 +474,22 @@ GreekAlphabet(*) {
 	}
 }
 
+;;;; Any shortcut - even if your keyboard is missing keys
+
+AnyShortcut(*) {
+	prompt := "Enter a shortcut to be entered.`n`nKey names, literal modifier symbols, and literal curly braces must be wrapped in curly braces: {!} {#} {+} {^} {{} {}}`n"
+	IB := InputBox(prompt, "[autohotkey-utils] Any Shortcut")
+	shortcut := IB.Value
+	if IB.Result = "OK" && shortcut {
+		SplashTextGui := Gui("-Sysmenu +ToolWindow +Disabled", "[autohotkey-utils] Entering shortcut")
+		SplashTextGui.Add("Text", , "Waiting 1s so you can focus your desired window/field...")
+		SplashTextGui.Show("w120 h30")
+		Sleep(1000)
+		SplashTextGui.Destroy
+		SendInput(shortcut)
+	}
+}
+
 ;;;; Instant-Search
 
 class SearchEngine extends Object {
@@ -794,6 +811,7 @@ _CreateTrayMenu() {
 	_ActionsMenu.Add("[UrlShortcuts]", UrlShortcodesMenu)
 	_ActionsMenu.Add("[DriveLetterOpen] Open`t" Config.GetKeybindHumanReadable("DriveLetterOpen"), DriveLetterOpen)
 	_ActionsMenu.Add("[GreekAlphabet] Insert`t" Config.GetKeybindHumanReadable("GreekAlphabet"), GreekAlphabet)
+	_ActionsMenu.Add("[AnyShortcut] Enter`t" Config.GetKeybindHumanReadable("AnyShortcut"), AnyShortcut)
 	_ActionsMenu.Add("[QuickNotes]", QuickNotesMenu)
 	if (A_IsAdmin) {
 		_ActionsMenu.Add()

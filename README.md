@@ -18,17 +18,18 @@ Current modules are:
 
 <!-- no toc -->
 
-- [InstantSearch](#instantsearch)
-- [QRGenerator](#qrgenerator)
-- [ClipboardURL](#clipboardurl)
-- [UrlShortcuts](#urlshortcuts)
-- [Drive letter open](#drive-letter-open)
-- [Greek alphabet](#greek-alphabet)
-- [QuickNotes](#quicknotes)
-- [SoftLock](#softlock)
-- [PasteDateTime](#pastedatetime)
-- [Hotstrings](#hotstrings)
-- [General actions](#general-actions)
+- [InstantSearch](#instantsearch) - quickly open search queries in different search engines
+- [QRGenerator](#qrgenerator) - generate qrcodes from clipboard or input (using an online service)
+- [ClipboardURL](#clipboardurl) - open url from clipboard
+- [UrlShortcuts](#urlshortcuts) - save and open urls or run commands via shortcodes
+- [Drive letter open](#drive-letter-open) - quickly open drives in explorer
+- [Greek alphabet](#greek-alphabet) - quickly enter greek letters
+- [AnyShortcut](#anyshortcut) - enter any shortcut as keyboard input, even if your keyboard lacks required keys
+- [QuickNotes](#quicknotes) - create and manage quick notes
+- [SoftLock](#softlock) - temporarily disable mouse and keyboard input via shortcut
+- [PasteDateTime](#pastedatetime) - paste current date and time in a customizable format
+- [Hotstrings](#hotstrings) - create custom hotstrings to replace text while typing
+- [General actions](#general-actions) - some general useful actions
 
 ### InstantSearch
 
@@ -117,6 +118,20 @@ Quickly enter a character from the greek alphabet.
 | GreekAlphabet | Press and enter the name of the letter | -                |
 
 Example: `Shift+Win+G Pi Enter` or `Shift+Win+G pi Enter` (these are not the same)
+
+---
+
+### AnyShortcut
+
+Lets you enter any shortcut, which will be sent as keyboard input.
+Especially useful for entering special characters via their Alt-Code or function keys like F13-F24.
+
+After confirming the input, the script will wait for 1 second so you have time to focus the desired input field or
+window.
+
+| Action      | Description                  | Default shortcut |
+|-------------|------------------------------|------------------|
+| AnyShortcut | Press and enter the shortcut | -                |
 
 ---
 
