@@ -15,7 +15,7 @@ jobs:
         uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
 
       - name: Build with latest AutoHotkey release
-        uses: benmusson/ahk2exe-action@v1
+        uses: benmusson/ahk2exe-action@d779a7d7b2b3dcb238b8ad8bdbca986cf4f75356 # v1
         with:
           in: hotkeys.ahk
           out: out/hotkeys-${{ github.ref_name }}.exe
@@ -27,14 +27,14 @@ jobs:
 
       - name: Upload executable as artifact
         if: github.ref_type != 'tag'
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
         with:
           name: hotkeys-${{ github.ref_name }}.exe
           path: out/hotkeys-${{  github.ref_name }}.exe
 
       - name: Create release and attach executable
         if: github.ref_type == 'tag'
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@a06a81a03ee405af7f2048a818ed3f03bbf83c7b # v2
         with:
           files: out/hotkeys-${{  github.ref_name }}.exe
           draft: true
