@@ -15,7 +15,7 @@ jobs:
         uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
 
       - name: Build with latest AutoHotkey release
-        uses: benmusson/ahk2exe-action@d779a7d7b2b3dcb238b8ad8bdbca986cf4f75356 # v1
+        uses: benmusson/ahk2exe-action@d779a7d7b2b3dcb238b8ad8bdbca986cf4f75356 # v1.2.0
         with:
           in: hotkeys.ahk
           out: out/hotkeys-${{ github.ref_name }}.exe
